@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: #050505;
+    color: #ffffff;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #050505;
+    color: #e5e5e5;
+    font-feature-settings: "cv02", "cv03", "cv04";
+  }
+
+  * {
+    border-color: #202020;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 1px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 6px;
+    border: 2px solid #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-raised;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite];
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
+  }
+
+  .card {
+    @apply rounded-lg border border-line bg-card;
+  }
+
+  .table-row-hover {
+    @apply transition-colors hover:bg-raised/60;
+  }
+}

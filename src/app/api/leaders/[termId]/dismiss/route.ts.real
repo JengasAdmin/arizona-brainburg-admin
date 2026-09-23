@@ -1,0 +1,41 @@
+import { NextResponse } from "next/server";
+import { sql } from "drizzle-orm";
+import { z } from "zod";
+import { guard, errors } from "@/server/guard";
+import { getClientIp } from "@/server/http";
+import { can } from "@/lib/rbac/engine";
+import { db } from "@/db";
+import { dismissTerm, dismissSchema } from "@/server/services/leadership";
+import { departmentOfTerm } from "@/server/services/scope";
+
+/**
+ * POST /api/leaders/:termId/dismiss — closes an active term (confirmation-required).
+ * Permission: DISMISS_LEADER for leaders, MANAGE_DEPUTIES for deputies.
+ */
+export const POST = guard(
+  {
+    method: "POST",
+    auth: true,
+    schema: dismissSchema,
+    scope: async ({ params }) => ({ departmentId: await departmentOfTerm(Number(params.termId)) }),
+  },
+  async ({ params, body, auth, req, scope }) => {
+    const termId = Number(params.termId);
+
+    const kindRows = await db.execute<{ kind: string }>(sql`
+      SELECT fp.kind FROM leadership_terms lt
+      JOIN faction_positions fp ON fp.id = lt.position_id
+      WHERE lt.id = ${termId} LIMIT 1
+    `);
+    const kind = ((kindRows as unknown as { rows?: { kind: string }[] }).rows ?? [])[0]?.kind;
+
+    const permission = kind === "deputy" ? "MANAGE_DEPUTIES" : "DISMISS_LEADER";
+    const decision = can(auth.actor, permission, scope);
+    if (!decision.allowed) {
+      throw errors.forbidden(`Missing permission: ${permission}.`, decision.reason ?? "FORBIDDEN");
+    }
+
+    const result = await dismissTerm(termId, body, auth.actor, getClientIp(req));
+    return NextResponse.json(result);
+  },
+);
