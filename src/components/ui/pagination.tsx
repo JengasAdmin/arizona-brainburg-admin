@@ -22,7 +22,7 @@ export function Pagination({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3">
       <span className="text-xs text-neutral-500">
-        {from}–{to} of {total}
+        {from}–{to} из {total}
       </span>
       <div className="flex items-center gap-1.5">
         <Button
@@ -30,19 +30,19 @@ export function Pagination({
           variant="ghost"
           disabled={page <= 1}
           onClick={() => onPage(page - 1)}
-          aria-label="Previous page"
+          aria-label="Назад"
         >
           <ChevronLeft className="h-3.5 w-3.5" />
         </Button>
         <span className="px-1 text-xs text-neutral-400">
-          {page} / {pages}
+          Стр. {page} из {pages}
         </span>
         <Button
           size="sm"
           variant="ghost"
           disabled={page >= pages}
           onClick={() => onPage(page + 1)}
-          aria-label="Next page"
+          aria-label="Далее"
         >
           <ChevronRight className="h-3.5 w-3.5" />
         </Button>

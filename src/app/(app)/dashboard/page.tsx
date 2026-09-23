@@ -18,66 +18,66 @@ export default async function DashboardPage() {
   return (
     <div>
       <PageHeader
-        title="Dashboard"
-        description={`Overview of Server #5 — ${auth.user.nickname ?? auth.user.displayName}`}
+        title="Обзор"
+        description={`Обзор Сервера #5 — ${auth.user.nickname ?? auth.user.displayName}`}
       />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-        <StatCard label="Registered Users" value={stats.registeredUsers.toLocaleString("en-US")} href="/users" />
+        <StatCard label="Зарегистрированные пользователи" value={stats.registeredUsers.toLocaleString("en-US")} href="/users" />
         <StatCard
-          label="Online Users"
+          label="Пользователи в сети"
           value={stats.onlineUsers.toLocaleString("en-US")}
-          hint="Active in the last 15 minutes"
+          hint="Активны за последние 15 минут"
         />
-        <StatCard label="Active Leaders" value={stats.activeLeaders} href="/leaders?status=active" />
-        <StatCard label="Active Deputies" value={stats.activeDeputies} href="/deputies?status=active" />
-        <StatCard label="Total Factions" value={stats.totalFactions} href="/factions" />
+        <StatCard label="Активные руководители" value={stats.activeLeaders} href="/leaders?status=active" />
+        <StatCard label="Активные заместители" value={stats.activeDeputies} href="/deputies?status=active" />
+        <StatCard label="Всего фракций" value={stats.totalFactions} href="/factions" />
         <StatCard
-          label="Pending Actions"
+          label="Ожидающие проверки"
           value={stats.pendingActions}
-          hint="Game IDs awaiting verification"
+          hint="Game ID, ожидающие подтверждения"
           href="/users?unverifiedGameId=true"
         />
-        <StatCard label="Unread Notifications" value={stats.unreadNotifications} href="/notifications" />
+        <StatCard label="Непрочитанные уведомления" value={stats.unreadNotifications} href="/notifications" />
       </div>
 
       <div className="mt-5">
         <Card>
           <CardHeader
-            title="Recent Activity"
-            description="Who did what, to whom, and when — including old and new values."
+            title="Последняя активность"
+            description="Кто, что, кому и когда — со старыми и новыми значениями."
             actions={
               <a
                 href="/audit"
                 className="inline-flex items-center gap-1.5 text-xs text-neutral-500 transition-colors hover:text-white"
               >
-                <FileClock className="h-3.5 w-3.5" /> Audit Log
+                <FileClock className="h-3.5 w-3.5" /> Журнал аудита
               </a>
             }
           />
           {recent.length === 0 ? (
             <EmptyState
               icon={<UserPlus className="h-8 w-8" />}
-              title="No activity recorded yet"
-              description="Administrative actions will appear here as soon as they are performed."
+              title="Активность ещё не записана"
+              description="Административные действия появятся здесь по мере выполнения."
             />
           ) : (
             <div className="overflow-x-auto">
               <Table className="min-w-[560px]">
                 <THead>
                   <TR>
-                    <TH>Actor</TH>
-                    <TH>Action</TH>
-                    <TH>Target</TH>
-                    <TH>Reason</TH>
-                    <TH align="right">Date</TH>
+                    <TH>Исполнитель</TH>
+                    <TH>Действие</TH>
+                    <TH>Цель</TH>
+                    <TH>Причина</TH>
+                    <TH align="right">Дата</TH>
                   </TR>
                 </THead>
                 <TBody>
                   {recent.map((row) => (
                     <TR key={row.id}>
                       <TD>
-                        <div className="text-neutral-200">{row.actorName ?? "System"}</div>
+                        <div className="text-neutral-200">{row.actorName ?? "Система"}</div>
                         {row.actorRole ? (
                           <div className="text-[11px] text-neutral-600">{row.actorRole}</div>
                         ) : null}

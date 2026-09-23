@@ -34,7 +34,7 @@ export function Dialog({
     // Focus the first interactive element for keyboard users.
     const timer = window.setTimeout(() => {
       const focusable = panelRef.current?.querySelector<HTMLElement>(
-        "input, textarea, select, button:not([aria-label='Close'])",
+        "input, textarea, select, button:not([aria-label='Закрыть'])",
       );
       focusable?.focus();
     }, 30);
@@ -60,7 +60,7 @@ export function Dialog({
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === "string" ? title : "Dialog"}
+        aria-label={typeof title === "string" ? title : "Диалог"}
         className={cn(
           "relative z-10 w-full animate-fade rounded-t-lg border border-line bg-card shadow-popover sm:rounded-lg",
           width,
@@ -76,7 +76,7 @@ export function Dialog({
           </div>
           <button
             type="button"
-            aria-label="Close"
+            aria-label="Закрыть"
             onClick={onClose}
             className="rounded p-1 text-neutral-500 transition-colors hover:bg-raised hover:text-white"
           >

@@ -49,7 +49,7 @@ export function DisciplinaryDialog({
   async function submit() {
     const trimmed = reason.trim();
     if (trimmed.length < 3 || trimmed.length > 500) {
-      setError("Reason must be 3–500 characters.");
+      setError("Поле «Причина»: 3–500 символов.");
       return;
     }
     setError(null);
@@ -60,7 +60,7 @@ export function DisciplinaryDialog({
         body: { type, reason: trimmed },
       });
       toast({
-        title: type === "warning" ? "Warning issued" : "Reprimand issued",
+        title: type === "warning" ? "Предупреждение выдано" : "Выговор вынесен",
         description: `${term.displayName} — ${term.positionTitle}`,
         variant: "success",
       });
@@ -68,7 +68,7 @@ export function DisciplinaryDialog({
       onClose();
       router.refresh();
     } catch (err) {
-      toast({ title: "Action failed", description: errorMessage(err), variant: "error" });
+      toast({ title: "Действие не выполнено", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -78,35 +78,35 @@ export function DisciplinaryDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      title="Issue disciplinary action"
-      description={`${term.displayName} — ${term.positionTitle}. Active terms only.`}
+      title="Дисциплинарное взыскание"
+      description={`${term.displayName} — ${term.positionTitle}. Только для активных сроков.`}
       footer={
         <>
           <Button variant="ghost" onClick={handleClose} disabled={pending}>
-            Cancel
+            Отмена
           </Button>
           <Button variant="danger" onClick={() => void submit()} loading={pending}>
-            Issue action
+            Выдать взыскание
           </Button>
         </>
       }
     >
       <div className="space-y-4">
-        <Field label="Type" htmlFor="disciplinary-type">
+        <Field label="Тип" htmlFor="disciplinary-type">
           <Select
             id="disciplinary-type"
             value={type}
             onChange={(e) => setType(e.target.value === "reprimand" ? "reprimand" : "warning")}
           >
-            <option value="warning">Warning</option>
-            <option value="reprimand">Reprimand</option>
+            <option value="warning">Предупреждение</option>
+            <option value="reprimand">Выговор</option>
           </Select>
         </Field>
 
-        <Field label="Reason" htmlFor="disciplinary-reason" hint="3–500 characters" error={error}>
+        <Field label="Причина" htmlFor="disciplinary-reason" hint="3–500 символов" error={error}>
           <Textarea
             id="disciplinary-reason"
-            placeholder="What happened?"
+            placeholder="Что произошло?"
             value={reason}
             onChange={(e) => {
               setReason(e.target.value);

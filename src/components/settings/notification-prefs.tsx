@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils";
 
 /** Human labels for the keys of DEFAULT_USER_PREFERENCES (fallback: humanized key). */
 const PREFERENCE_LABELS: Record<string, string> = {
-  notify_leader_events: "Leader events",
-  notify_disciplinary: "Disciplinary actions",
-  notify_points: "Leadership points",
-  notify_roles: "Role changes",
-  notify_budget: "Budget changes",
-  notify_system: "System notifications",
-  digest_unread_badge: "Unread badge counter",
+  notify_leader_events: "События руководителей",
+  notify_disciplinary: "Дисциплинарные взыскания",
+  notify_points: "Баллы руководства",
+  notify_roles: "Изменения ролей",
+  notify_budget: "Изменения бюджета",
+  notify_system: "Системные уведомления",
+  digest_unread_badge: "Счётчик непрочитанных",
 };
 
 function labelFor(key: string): string {
@@ -75,11 +75,7 @@ export function NotificationPrefs() {
         if (alive) setPrefs(res.preferences);
       } catch (err) {
         if (alive) {
-          toast({
-            title: "Could not load preferences.",
-            description: errorMessage(err),
-            variant: "error",
-          });
+          toast({ title: "Не удалось загрузить настройки.", description: errorMessage(err), variant: "error" });
         }
       }
     })();
@@ -97,11 +93,7 @@ export function NotificationPrefs() {
       });
       setPrefs(res.preferences);
     } catch (err) {
-      toast({
-        title: "Could not save the preference.",
-        description: errorMessage(err),
-        variant: "error",
-      });
+      toast({ title: "Не удалось сохранить настройку.", description: errorMessage(err), variant: "error" });
       // Re-sync with the server state on failure.
       try {
         const fresh = await api<{ preferences: Record<string, unknown> }>("/api/me/preferences");
@@ -119,14 +111,14 @@ export function NotificationPrefs() {
   return (
     <Card>
       <CardHeader
-        title="Notification preferences"
-        description="Choose which events should raise a notification for your account."
+        title="Настройки уведомлений"
+        description="Выберите события, которые должны вызывать уведомление для вашего аккаунта."
       />
       <CardBody padded={false}>
         {!prefs ? (
           <SkeletonRows rows={5} cols={2} />
         ) : entries.length === 0 ? (
-          <p className="px-4 py-4 text-[13px] text-neutral-500">No preferences available.</p>
+          <p className="px-4 py-4 text-[13px] text-neutral-500">Настройки недоступны.</p>
         ) : (
           <div className="divide-y divide-line">
             {entries.map(([key, value]) => {

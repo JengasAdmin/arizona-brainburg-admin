@@ -59,7 +59,7 @@ export function FactionAudit({ factionId }: { factionId: number }) {
     return (
       <EmptyState
         icon={<FileClock className="h-8 w-8" />}
-        title="Audit log unavailable"
+        title="Журнал аудита недоступен"
         description={error}
       />
     );
@@ -71,8 +71,8 @@ export function FactionAudit({ factionId }: { factionId: number }) {
     return (
       <EmptyState
         icon={<FileClock className="h-8 w-8" />}
-        title="No audit entries"
-        description="Changes to this faction will be recorded here."
+        title="Записей аудита нет"
+        description="Изменения этой фракции будут записаны здесь."
       />
     );
   }
@@ -81,17 +81,17 @@ export function FactionAudit({ factionId }: { factionId: number }) {
     <Table className="min-w-[560px]">
       <THead>
         <TR>
-          <TH>Actor</TH>
-          <TH>Action</TH>
-          <TH>Entry</TH>
-          <TH align="right">Date</TH>
+          <TH>Автор</TH>
+          <TH>Действие</TH>
+          <TH>Запись</TH>
+          <TH align="right">Дата</TH>
         </TR>
       </THead>
       <TBody>
         {items.map((row) => (
           <TR key={row.id}>
             <TD>
-              <div className="text-neutral-200">{row.actorName ?? "System"}</div>
+              <div className="text-neutral-200">{row.actorName ?? "Система"}</div>
               {row.actorRole ? (
                 <div className="text-[11px] text-neutral-600">{row.actorRole}</div>
               ) : null}

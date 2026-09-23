@@ -58,13 +58,13 @@ export default async function LeadersPage({
   return (
     <div>
       <PageHeader
-        title="Leadership"
-        description="Current and historical leadership terms — immutable records"
+        title="Руководители"
+        description="Действующие и прошлые сроки полномочий — неизменяемые записи"
         actions={
           canAppoint ? (
             <AppointLeaderDialog
               mode="leader"
-              label="Appoint leader"
+              label="Назначить руководителя"
               factions={factionOptions}
               positions={positions}
             />
@@ -73,11 +73,11 @@ export default async function LeadersPage({
       />
 
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-        <StatCard label="Active leaders" value={activeStats.total} href="/leaders?status=active" />
+        <StatCard label="Активные руководители" value={activeStats.total} href="/leaders?status=active" />
         <StatCard
-          label="Total terms"
+          label="Всего сроков"
           value={totalStats.total}
-          hint="Leadership terms on record"
+          hint="Сроки полномочий в системе"
           href="/leaders"
         />
       </div>

@@ -57,7 +57,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       <div
         className="pointer-events-none fixed bottom-4 right-4 z-[100] flex w-[min(380px,calc(100vw-2rem))] flex-col gap-2"
         role="region"
-        aria-label="Notifications"
+        aria-label="Уведомления"
       >
         {items.map((item) => (
           <div
@@ -76,7 +76,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               </div>
               <button
                 type="button"
-                aria-label="Dismiss"
+                aria-label="Скрыть уведомление"
                 onClick={() => setItems((prev) => prev.filter((t) => t.id !== item.id))}
                 className="rounded p-1 text-neutral-500 transition-colors hover:bg-raised hover:text-neutral-300"
               >

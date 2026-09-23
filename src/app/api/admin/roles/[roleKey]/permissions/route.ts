@@ -12,7 +12,7 @@ export const PUT = guard(
     rateLimit: { limit: 20, windowMs: 60_000 },
   },
   async ({ params, body, auth, req }) => {
-    if (!params.roleKey) throw errors.notFound("Role not found.");
+    if (!params.roleKey) throw errors.notFound("Роль не найдена.");
     const fwd = req.headers.get("x-forwarded-for");
     const result = await updateRolePermissionSet(
       params.roleKey,

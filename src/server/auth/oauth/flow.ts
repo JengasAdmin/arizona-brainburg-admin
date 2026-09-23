@@ -76,7 +76,7 @@ export function beginOAuth(params: {
     params.provider === "discord"
       ? process.env.DISCORD_REDIRECT_URI ?? ""
       : process.env.VK_REDIRECT_URI ?? "";
-  if (!redirectUri) throw errors.serviceUnavailable(`OAuth provider ${params.provider} is not configured.`, "OAUTH_NOT_CONFIGURED");
+  if (!redirectUri) throw errors.serviceUnavailable(`OAuth-провайдер ${params.provider} не настроен.`, "OAUTH_NOT_CONFIGURED");
 
   const url = provider.authorizeUrl({
     redirectUri,
@@ -214,7 +214,7 @@ export async function completeOAuth(params: {
       const server = await ensureServer();
       const playerRole = await db.select().from(roles).where(eq(roles.key, "player")).limit(1);
       if (!playerRole[0]) {
-        throw errors.serviceUnavailable("Database is not seeded. Run `npm run db:seed`.", "SEED_REQUIRED");
+        throw errors.serviceUnavailable("База данных не инициализирована. Выполните `npm run db:seed`.", "SEED_REQUIRED");
       }
 
       const inserted = await db

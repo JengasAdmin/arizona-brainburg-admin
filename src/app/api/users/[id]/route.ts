@@ -12,7 +12,7 @@ export const GET = guard(
     if (userId !== auth.user.id) {
       const decision = can(auth.actor, "VIEW_PROFILES");
       if (!decision.allowed) {
-        throw errors.forbidden("Missing permission: VIEW_PROFILES.", decision.reason ?? "FORBIDDEN");
+        throw errors.forbidden("Нет разрешения: VIEW_PROFILES.", decision.reason ?? "FORBIDDEN");
       }
     }
     const detail = await getUserDetail(userId, auth.actor);

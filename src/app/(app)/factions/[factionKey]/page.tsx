@@ -61,7 +61,7 @@ export default async function FactionDetailPage({ params }: { params: FactionPar
                 href="#positions"
                 className="inline-flex h-7 items-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
               >
-                <Settings2 className="h-3.5 w-3.5" /> Manage positions
+                <Settings2 className="h-3.5 w-3.5" /> Управление должностями
               </a>
             ) : null}
           </>
@@ -70,7 +70,7 @@ export default async function FactionDetailPage({ params }: { params: FactionPar
 
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
         <Card>
-          <CardHeader title="Description" />
+          <CardHeader title="Описание" />
           <CardBody>
             <p className="text-[13px] leading-relaxed text-neutral-300">
               {faction.description ?? "—"}
@@ -79,69 +79,69 @@ export default async function FactionDetailPage({ params }: { params: FactionPar
         </Card>
 
         <Card>
-          <CardHeader title="Metadata" />
+          <CardHeader title="Метаданные" />
           <CardBody>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:grid-cols-3">
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Key</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Ключ</dt>
                 <dd className="text-[13px] text-neutral-200">{faction.key}</dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Short name</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Короткое имя</dt>
                 <dd className="text-[13px] text-neutral-200">{faction.shortName}</dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Category</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Категория</dt>
                 <dd className="text-[13px] text-neutral-200">
                   <Badge>{faction.categoryName}</Badge>
                 </dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Direction</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Направление</dt>
                 <dd className="text-[13px] text-neutral-200">
                   {departmentName(faction.departmentKey)}
                 </dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Created</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Создана</dt>
                 <dd className="text-[13px] text-neutral-200">{formatDate(faction.createdAt)}</dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Status</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Статус</dt>
                 <dd className="text-[13px] text-neutral-200">
                   <StatusBadge status={faction.status} />
                 </dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Members</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-neutral-600">Участники</dt>
                 <dd className="text-[13px] text-neutral-200">{faction.members}</dd>
               </div>
               <div>
                 <dt className="text-[11px] uppercase tracking-wide text-neutral-600">
-                  Active leaders
+                  Активные руководители
                 </dt>
                 <dd className="text-[13px] text-neutral-200">{faction.activeLeaders}</dd>
               </div>
               <div>
                 <dt className="text-[11px] uppercase tracking-wide text-neutral-600">
-                  Active deputies
+                  Активные заместители
                 </dt>
                 <dd className="text-[13px] text-neutral-200">{faction.activeDeputies}</dd>
               </div>
               <div>
                 <dt className="text-[11px] uppercase tracking-wide text-neutral-600">
-                  Multiple leaders
+                  Несколько руководителей
                 </dt>
                 <dd className="text-[13px] text-neutral-200">
-                  {faction.allowMultipleLeaders ? "Allowed" : "Not allowed"}
+                  {faction.allowMultipleLeaders ? "Разрешено" : "Запрещено"}
                 </dd>
               </div>
               <div>
                 <dt className="text-[11px] uppercase tracking-wide text-neutral-600">
-                  Cross-faction leadership
+                  Межфракционное руководство
                 </dt>
                 <dd className="text-[13px] text-neutral-200">
-                  {faction.allowCrossFactionLeadership ? "Allowed" : "Not allowed"}
+                  {faction.allowCrossFactionLeadership ? "Разрешено" : "Запрещено"}
                 </dd>
               </div>
             </dl>
@@ -161,14 +161,14 @@ export default async function FactionDetailPage({ params }: { params: FactionPar
         <div className="mt-3">
           <Card>
             <CardHeader
-              title="Budget"
-              description="Ledger-derived balance — every change requires a transaction."
+              title="Бюджет"
+              description="Баланс, вычисленный по регистру — каждое изменение требует транзакции."
               actions={
                 <Link
                   href={`/budgets/${faction.key}`}
                   className="inline-flex items-center gap-1.5 text-xs text-neutral-500 transition-colors hover:text-white"
                 >
-                  Open ledger <ArrowRight className="h-3.5 w-3.5" />
+                  Открыть регистр <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               }
             />
@@ -184,11 +184,11 @@ export default async function FactionDetailPage({ params }: { params: FactionPar
       <div className="mt-3">
         <Card>
           <CardHeader
-            title="Audit Log"
-            description="Immutable history of changes to this faction."
+            title="Журнал аудита"
+            description="Неизменяемая история изменений этой фракции."
             actions={
               <span className="inline-flex items-center gap-1.5 text-xs text-neutral-500">
-                <ScrollText className="h-3.5 w-3.5" /> Audit
+                <ScrollText className="h-3.5 w-3.5" /> Аудит
               </span>
             }
           />

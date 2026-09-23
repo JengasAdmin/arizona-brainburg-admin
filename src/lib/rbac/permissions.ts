@@ -11,18 +11,18 @@ export interface PermissionDefinition {
   key: PermissionKey;
   name: string;
   group:
-    | "Dashboard"
-    | "Users"
-    | "Leadership"
-    | "Deputies"
-    | "Factions"
-    | "Budget"
-    | "Activity"
-    | "Logs"
-    | "Notifications"
-    | "Administration"
-    | "System"
-    | "Integration";
+    | "Обзор"
+    | "Пользователи"
+    | "Руководство"
+    | "Заместители"
+    | "Фракции"
+    | "Бюджет"
+    | "Активность"
+    | "Журналы"
+    | "Уведомления"
+    | "Администрирование"
+    | "Система"
+    | "Интеграция";
   description: string;
   scoped: boolean;
   critical: boolean;
@@ -85,77 +85,77 @@ const p = (
 });
 
 export const PERMISSIONS: PermissionDefinition[] = [
-  p("VIEW_DASHBOARD", "View dashboard", "Dashboard", "Open the administration dashboard.", {
+  p("VIEW_DASHBOARD", "Просмотр обзора", "Обзор", "Открывать панель администрирования.", {
     scoped: false,
   }),
-  p("VIEW_USERS", "View users", "Users", "See the user list and filters."),
-  p("EDIT_USERS", "Edit users", "Users", "Change profile data, status and Game ID."),
-  p("BLOCK_USERS", "Block users", "Users", "Suspend or block user accounts."),
-  p("VIEW_PROFILES", "View profiles", "Users", "Open full user profiles."),
-  p("EDIT_PROFILES", "Edit profiles", "Users", "Edit nicknames, branches and profile fields."),
-  p("VERIFY_GAME_ID", "Verify Game ID", "Users", "Confirm a user's Arizona RP Game ID."),
+  p("VIEW_USERS", "Просмотр пользователей", "Пользователи", "Видеть список пользователей и фильтры."),
+  p("EDIT_USERS", "Редактирование пользователей", "Пользователи", "Изменять данные профиля, статус и Game ID."),
+  p("BLOCK_USERS", "Блокировка пользователей", "Пользователи", "Приостанавливать и блокировать учётные записи."),
+  p("VIEW_PROFILES", "Просмотр профилей", "Пользователи", "Открывать полные профили пользователей."),
+  p("EDIT_PROFILES", "Редактирование профилей", "Пользователи", "Изменять ники, ветки и поля профиля."),
+  p("VERIFY_GAME_ID", "Подтверждение Game ID", "Пользователи", "Подтверждать Arizona RP Game ID пользователя."),
 
-  p("VIEW_LEADERS", "View leaders", "Leadership", "See leadership positions and terms."),
-  p("APPOINT_LEADER", "Appoint leader", "Leadership", "Create a new leadership term."),
-  p("DISMISS_LEADER", "Dismiss leader", "Leadership", "Close an active leadership term."),
-  p("EDIT_LEADER", "Edit leader", "Leadership", "Edit rank and details of a term."),
-  p("EDIT_LEADER_POINTS", "Manage leadership points", "Leadership", "Add or remove leadership points."),
-  p("GIVE_WARNING", "Issue warning", "Leadership", "Issue a warning to a leader/deputy."),
-  p("GIVE_REPRIMAND", "Issue reprimand", "Leadership", "Issue a reprimand to a leader/deputy."),
+  p("VIEW_LEADERS", "Просмотр руководителей", "Руководство", "Видеть должности и сроки полномочий."),
+  p("APPOINT_LEADER", "Назначение руководителя", "Руководство", "Создавать новый срок полномочий."),
+  p("DISMISS_LEADER", "Отстранение руководителя", "Руководство", "Закрывать действующий срок полномочий."),
+  p("EDIT_LEADER", "Редактирование руководителя", "Руководство", "Изменять ранг и данные срока."),
+  p("EDIT_LEADER_POINTS", "Управление баллами руководства", "Руководство", "Начислять и снимать баллы руководства."),
+  p("GIVE_WARNING", "Выдача предупреждения", "Руководство", "Выдавать предупреждение руководителю или заместителю."),
+  p("GIVE_REPRIMAND", "Выдача выговора", "Руководство", "Выдавать выговор руководителю или заместителю."),
 
-  p("VIEW_DEPUTIES", "View deputies", "Deputies", "See deputy terms and history."),
-  p("MANAGE_DEPUTIES", "Manage deputies", "Deputies", "Appoint and dismiss deputies."),
+  p("VIEW_DEPUTIES", "Просмотр заместителей", "Заместители", "Видеть сроки полномочий заместителей и историю."),
+  p("MANAGE_DEPUTIES", "Управление заместителями", "Заместители", "Назначать и отстранять заместителей."),
 
-  p("VIEW_FACTIONS", "View factions", "Factions", "See all factions."),
-  p("CREATE_FACTION", "Create faction", "Factions", "Create new factions."),
-  p("EDIT_FACTION", "Edit faction", "Factions", "Edit faction data and positions."),
-  p("DELETE_FACTION", "Delete faction", "Factions", "Delete a faction (critical).", {
+  p("VIEW_FACTIONS", "Просмотр фракций", "Фракции", "Видеть все фракции."),
+  p("CREATE_FACTION", "Создание фракции", "Фракции", "Создавать новые фракции."),
+  p("EDIT_FACTION", "Редактирование фракции", "Фракции", "Изменять данные фракции и должности."),
+  p("DELETE_FACTION", "Удаление фракции", "Фракции", "Удалять фракцию (критическое).", {
     critical: true,
   }),
-  p("MANAGE_FACTION_MEMBERS", "Manage faction members", "Factions", "Change faction membership."),
+  p("MANAGE_FACTION_MEMBERS", "Управление составом фракции", "Фракции", "Изменять состав фракции."),
 
-  p("VIEW_BUDGET", "View budget", "Budget", "See faction budgets and transactions."),
-  p("MANAGE_BUDGET", "Manage budget", "Budget", "Create deposits and withdrawals (critical ledger).", {
-    critical: true,
-  }),
-
-  p("VIEW_ACTIVITY", "View activity", "Activity", "See manual and integration game activity."),
-  p("CREATE_GAME_ACTIVITY", "Create game activity", "Activity", "Record manual game activity."),
-
-  p("VIEW_LOGS", "View logs", "Logs", "Read activity logs inside a scope."),
-  p("CREATE_LOG", "Create log entry", "Logs", "Write manual log entries."),
-  p("VIEW_AUDIT_LOGS", "View audit logs", "Logs", "Read the immutable audit log (critical).", {
+  p("VIEW_BUDGET", "Просмотр бюджета", "Бюджет", "Видеть бюджеты фракций и транзакции."),
+  p("MANAGE_BUDGET", "Управление бюджетом", "Бюджет", "Создавать пополнения и списания (критический журнал).", {
     critical: true,
   }),
 
-  p("VIEW_NOTIFICATIONS", "View notifications", "Notifications", "Read own notifications.", {
-    scoped: false,
-  }),
-  p("MANAGE_NOTIFICATIONS", "Send notifications", "Notifications", "Send system notifications.", {
-    scoped: false,
-  }),
+  p("VIEW_ACTIVITY", "Просмотр активности", "Активность", "Видеть ручную и интеграционную игровую активность."),
+  p("CREATE_GAME_ACTIVITY", "Создание записи активности", "Активность", "Вносить записи игровой активности вручную."),
 
-  p("MANAGE_ADMINS", "Manage administrators", "Administration", "Assign administrative roles (critical).", {
-    scoped: false,
-    critical: true,
-  }),
-  p("MANAGE_ROLES", "Manage roles", "Administration", "Create/assign roles within hierarchy (critical).", {
-    scoped: false,
-    critical: true,
-  }),
-  p("MANAGE_PERMISSIONS", "Manage permissions", "Administration", "Edit role permission sets (critical).", {
-    scoped: false,
-    critical: true,
-  }),
-  p("SYSTEM_SETTINGS", "System settings", "System", "Change global system settings (critical).", {
-    scoped: false,
+  p("VIEW_LOGS", "Просмотр журналов", "Журналы", "Читать журналы активности в своей области."),
+  p("CREATE_LOG", "Создание записи журнала", "Журналы", "Создавать записи журнала вручную."),
+  p("VIEW_AUDIT_LOGS", "Просмотр журнала аудита", "Журналы", "Читать неизменяемый журнал аудита (критическое).", {
     critical: true,
   }),
 
-  p("VIEW_INTEGRATION", "View integration", "Integration", "See integration status and API keys.", {
+  p("VIEW_NOTIFICATIONS", "Просмотр уведомлений", "Уведомления", "Читать свои уведомления.", {
     scoped: false,
   }),
-  p("MANAGE_INTEGRATION", "Manage integration", "Integration", "Create/disable integration API keys (critical).", {
+  p("MANAGE_NOTIFICATIONS", "Отправка уведомлений", "Уведомления", "Отправлять системные уведомления.", {
+    scoped: false,
+  }),
+
+  p("MANAGE_ADMINS", "Управление администраторами", "Администрирование", "Назначать административные роли (критическое).", {
+    scoped: false,
+    critical: true,
+  }),
+  p("MANAGE_ROLES", "Управление ролями", "Администрирование", "Создавать и назначать роли в рамках иерархии (критическое).", {
+    scoped: false,
+    critical: true,
+  }),
+  p("MANAGE_PERMISSIONS", "Управление разрешениями", "Администрирование", "Изменять наборы разрешений ролей (критическое).", {
+    scoped: false,
+    critical: true,
+  }),
+  p("SYSTEM_SETTINGS", "Системные настройки", "Система", "Изменять глобальные системные настройки (критическое).", {
+    scoped: false,
+    critical: true,
+  }),
+
+  p("VIEW_INTEGRATION", "Просмотр интеграции", "Интеграция", "Видеть статус интеграции и ключи API.", {
+    scoped: false,
+  }),
+  p("MANAGE_INTEGRATION", "Управление интеграцией", "Интеграция", "Создавать и отключать ключи API интеграции (критическое).", {
     scoped: false,
     critical: true,
   }),

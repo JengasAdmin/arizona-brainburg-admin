@@ -33,36 +33,36 @@ export default async function BudgetsPage() {
   return (
     <div>
       <PageHeader
-        title="Budgets"
-        description="Ledger-derived balances — immutable transactions"
+        title="Бюджеты"
+        description="Балансы по регистру — неизменяемые транзакции"
       />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-        <StatCard label="Total balance" value={formatMoney(totalBalance)} hint="Sum of faction accounts" />
-        <StatCard label="Faction accounts" value={items.length.toLocaleString("en-US")} href="/factions" />
+        <StatCard label="Общий баланс" value={formatMoney(totalBalance)} hint="Сумма счетов фракций" />
+        <StatCard label="Счета фракций" value={items.length.toLocaleString("en-US")} href="/factions" />
       </div>
 
       <div className="mt-5">
         <Card>
           <CardHeader
-            title="Faction balances"
-            description="The current balance can never change without a corresponding transaction."
+            title="Балансы фракций"
+            description="Текущий баланс не может измениться без соответствующей транзакции."
           />
           {items.length === 0 ? (
             <EmptyState
               icon={<Wallet className="h-8 w-8" />}
-              title="No budgets in your scope"
-              description="Faction budget accounts assigned to your supervision area will appear here."
+              title="Нет бюджетов в вашей области"
+              description="Бюджетные счета фракций, закреплённые за вашей зоной надзора, появятся здесь."
             />
           ) : (
             <CardBody padded={false}>
               <Table className="min-w-[640px]">
                 <THead>
                   <TR>
-                    <TH>Faction</TH>
-                    <TH>Direction</TH>
-                    <TH align="right">Balance</TH>
-                    <TH align="right">Actions</TH>
+                    <TH>Фракция</TH>
+                    <TH>Направление</TH>
+                    <TH align="right">Баланс</TH>
+                    <TH align="right">Действия</TH>
                   </TR>
                 </THead>
                 <TBody>
@@ -99,14 +99,14 @@ export default async function BudgetsPage() {
                                 href={href}
                                 className="inline-flex h-7 items-center rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
                               >
-                                View ledger
+                                Посмотреть регистр
                               </Link>
                               {canTransact ? (
                                 <Link
                                   href={href}
                                   className="inline-flex h-7 items-center rounded-md border border-transparent bg-white px-2.5 text-xs font-medium text-black transition-colors hover:bg-neutral-200"
                                 >
-                                  New transaction
+                                  Новая транзакция
                                 </Link>
                               ) : null}
                             </div>

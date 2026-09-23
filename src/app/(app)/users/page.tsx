@@ -16,11 +16,11 @@ export const dynamic = "force-dynamic";
 const STATUS_VALUES = ["active", "suspended", "blocked", "inactive"] as const;
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
-  { value: "", label: "All statuses" },
-  { value: "active", label: "Active" },
-  { value: "suspended", label: "Suspended" },
-  { value: "blocked", label: "Blocked" },
-  { value: "inactive", label: "Inactive" },
+  { value: "", label: "Все статусы" },
+  { value: "active", label: "Активен" },
+  { value: "suspended", label: "Приостановлен" },
+  { value: "blocked", label: "Заблокирован" },
+  { value: "inactive", label: "Неактивен" },
 ];
 
 /** Roles this actor may actually grant (level + hierarchy + permissions checked server-side). */
@@ -41,8 +41,8 @@ async function computeAssignableRoles(auth: AuthContext): Promise<AssignableRole
       title: role.name,
       scope:
         role.departmentId == null
-          ? "Global"
-          : (departmentNames.get(role.departmentId) ?? "Scoped"),
+          ? "Глобально"
+          : (departmentNames.get(role.departmentId) ?? "Ограничено"),
     }));
 }
 
@@ -58,12 +58,12 @@ export default async function UsersPage({
   if (!canViewRecords) {
     return (
       <div>
-        <PageHeader title="Users" description="Registered members of Server #5" />
+        <PageHeader title="Пользователи" description="Зарегистрированные участники Сервера #5" />
         <Card>
           <EmptyState
             icon={<Users className="h-8 w-8" />}
-            title="You do not have permission to view user records."
-            description="Ask an administrator to grant you the View profiles permission."
+            title="У вас нет прав для просмотра данных пользователей."
+            description="Попросите администратора выдать вам разрешение «Просмотр профилей»."
           />
         </Card>
       </div>
@@ -97,7 +97,7 @@ export default async function UsersPage({
 
   return (
     <div>
-      <PageHeader title="Users" description="Registered members of Server #5" />
+      <PageHeader title="Пользователи" description="Зарегистрированные участники Сервера #5" />
       <UsersTable
         rows={result.items}
         pagination={{

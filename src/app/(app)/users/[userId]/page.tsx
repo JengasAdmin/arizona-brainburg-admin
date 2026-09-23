@@ -46,8 +46,8 @@ async function computeAssignableRoles(auth: AuthContext): Promise<AssignableRole
       title: role.name,
       scope:
         role.departmentId == null
-          ? "Global"
-          : (departmentNames.get(role.departmentId) ?? "Scoped"),
+          ? "Глобально"
+          : (departmentNames.get(role.departmentId) ?? "Ограничено"),
     }));
 }
 
@@ -78,12 +78,12 @@ export default async function UserProfilePage({
   if (!detail) {
     return (
       <div>
-        <PageHeader title="User profile" description={`User ID #${userId}`} />
+        <PageHeader title="Профиль пользователя" description={`ID пользователя #${userId}`} />
         <Card>
           <EmptyState
             icon={<Lock className="h-8 w-8" />}
-            title="No access to this profile"
-            description="This account is outside your scope, or you lack the required permission."
+            title="Нет доступа к этому профилю"
+            description="Этот аккаунт вне вашей области доступа, либо вам не хватает необходимого разрешения."
           />
         </Card>
       </div>
@@ -129,7 +129,7 @@ export default async function UserProfilePage({
               type="button"
               className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
             >
-              Change status
+              Изменить статус
             </button>
           }
         />
@@ -143,7 +143,7 @@ export default async function UserProfilePage({
               type="button"
               className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
             >
-              Edit game ID
+              Изменить Game ID
             </button>
           }
         />
@@ -158,7 +158,7 @@ export default async function UserProfilePage({
               type="button"
               className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
             >
-              Assign role
+              Назначить роль
             </button>
           }
         />
@@ -176,7 +176,7 @@ export default async function UserProfilePage({
               type="button"
               className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
             >
-              Edit profile
+              Изменить профиль
             </button>
           }
         />
@@ -186,7 +186,7 @@ export default async function UserProfilePage({
           href={`/activity?userId=${userId}`}
           className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
         >
-          Log activity
+          Записать активность
         </Link>
       ) : null}
     </>
@@ -195,39 +195,39 @@ export default async function UserProfilePage({
   const overviewPanel = hasProfileData ? (
     <Card>
       <CardHeader
-        title="Profile"
-        description="Identity and contact data of this account."
+        title="Профиль"
+        description="Идентификационные и контактные данные этого аккаунта."
       />
       <div className="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Field label="Nickname">{detail.user.nickname ?? "—"}</Field>
-        <Field label="Branch">{detail.user.branch ?? "—"}</Field>
+        <Field label="Никнейм">{detail.user.nickname ?? "—"}</Field>
+        <Field label="Ветка">{detail.user.branch ?? "—"}</Field>
         <Field label="Game ID">
           <span className="flex items-center gap-1.5 text-[13px] text-neutral-200">
             {detail.user.gameId ?? "—"}
             {detail.user.gameId ? (
               <Badge tone={detail.user.gameIdVerifiedAt ? "ok" : "warn"}>
-                {detail.user.gameIdVerifiedAt ? "Verified" : "Unverified"}
+                {detail.user.gameIdVerifiedAt ? "Подтверждён" : "Не подтверждён"}
               </Badge>
             ) : null}
           </span>
         </Field>
-        <Field label="Faction position">
+        <Field label="Должность во фракции">
           {activeTerm ? `${activeTerm.positionTitle} — ${activeTerm.factionName}` : "—"}
         </Field>
-        <Field label="Status reason">{detail.user.statusReason ?? "—"}</Field>
-        <Field label="Registration source">{providerLabel(detail.user.registrationSource)}</Field>
+        <Field label="Причина статуса">{detail.user.statusReason ?? "—"}</Field>
+        <Field label="Источник регистрации">{providerLabel(detail.user.registrationSource)}</Field>
         {detail.providers.map((provider) => (
           <Field key={provider.provider} label={providerLabel(provider.provider)}>
             {provider.username ?? provider.displayName ?? "—"}
           </Field>
         ))}
-        <Field label="Registered">{formatDateTime(detail.user.createdAt)}</Field>
-        <Field label="Last login">{formatDateTime(detail.user.lastLoginAt)}</Field>
+        <Field label="Дата регистрации">{formatDateTime(detail.user.createdAt)}</Field>
+        <Field label="Последний вход">{formatDateTime(detail.user.lastLoginAt)}</Field>
       </div>
     </Card>
   ) : (
     <Card>
-      <EmptyState icon={<UserCog className="h-8 w-8" />} title="No profile data" />
+      <EmptyState icon={<UserCog className="h-8 w-8" />} title="Нет данных профиля" />
     </Card>
   );
 
@@ -237,8 +237,8 @@ export default async function UserProfilePage({
     <Card>
       <EmptyState
         icon={<Lock className="h-8 w-8" />}
-        title="No access to the audit log"
-        description="You need the View audit logs permission to see this history."
+        title="Нет доступа к журналу аудита"
+        description="Для просмотра истории требуется разрешение «Просмотр журнала аудита»."
       />
     </Card>
   );
@@ -246,27 +246,27 @@ export default async function UserProfilePage({
   const leadershipPanel = terms.items.length === 0 ? (
     <Card>
       <EmptyState
-        title="No leadership terms"
-        description="This user has never held a leader or deputy position."
+        title="Нет сроков полномочий"
+        description="Этот пользователь никогда не занимал должность руководителя или заместителя."
       />
     </Card>
   ) : (
     <Card>
       <CardHeader
-        title="Leadership history"
-        description={`${plural(terms.total, "term", "terms")} — active and closed.`}
+        title="История полномочий"
+        description={`${plural(terms.total, "срок", "сроков", "срока")} — действующие и закрытые.`}
       />
       <div className="overflow-x-auto">
         <Table className="min-w-[760px]">
           <THead>
             <TR>
-              <TH>Position</TH>
-              <TH>Faction (scope)</TH>
-              <TH>Term</TH>
-              <TH>Start</TH>
-              <TH>End</TH>
-              <TH>Status</TH>
-              <TH>Appointed by</TH>
+              <TH>Должность</TH>
+              <TH>Фракция (охват)</TH>
+              <TH>Срок</TH>
+              <TH>Начало</TH>
+              <TH>Конец</TH>
+              <TH>Статус</TH>
+              <TH>Кем назначен</TH>
             </TR>
           </THead>
           <TBody>
@@ -276,7 +276,7 @@ export default async function UserProfilePage({
                   <div className="flex items-center gap-2">
                     <span className="text-neutral-200">{term.positionTitle}</span>
                     <Badge tone={term.positionKind === "leader" ? "info" : "neutral"}>
-                      {term.positionKind === "leader" ? "Leader" : "Deputy"}
+                      {term.positionKind === "leader" ? "Руководитель" : "Заместитель"}
                     </Badge>
                   </div>
                 </TD>
@@ -285,7 +285,7 @@ export default async function UserProfilePage({
                   <div className="text-[11px] text-neutral-600">{term.factionShort}</div>
                 </TD>
                 <TD className="whitespace-nowrap text-neutral-500">
-                  #{term.termNumber} · rank {term.rank}
+                  #{term.termNumber} · ранг {term.rank}
                 </TD>
                 <TD className="whitespace-nowrap text-neutral-500">
                   {formatDate(term.appointedAt)}
@@ -308,22 +308,22 @@ export default async function UserProfilePage({
   const activityPanel = activity.items.length === 0 ? (
     <Card>
       <EmptyState
-        title="No activity recorded yet"
-        description="Manual and integration game activity will appear here."
+        title="Активность ещё не записана"
+        description="Игровая активность от ручных записей и интеграций появится здесь."
       />
     </Card>
   ) : (
     <Card>
-      <CardHeader title="Game activity" description={`${plural(activity.total, "entry", "entries")}.`} />
+      <CardHeader title="Игровая активность" description={`${plural(activity.total, "запись", "записей", "записи")}.`} />
       <div className="overflow-x-auto">
         <Table className="min-w-[720px]">
           <THead>
             <TR>
-              <TH>Date</TH>
-              <TH>User</TH>
-              <TH>Action</TH>
-              <TH>Description</TH>
-              <TH>Result</TH>
+              <TH>Дата</TH>
+              <TH>Пользователь</TH>
+              <TH>Действие</TH>
+              <TH>Описание</TH>
+              <TH>Результат</TH>
             </TR>
           </THead>
           <TBody>
@@ -368,7 +368,7 @@ export default async function UserProfilePage({
             <span className="min-w-0">
               <span className="block truncate">{detail.user.displayName}</span>
               <span className="block text-xs font-normal text-neutral-500">
-                User ID #{detail.user.id}
+                ID пользователя #{detail.user.id}
                 {detail.user.nickname ? ` · ${detail.user.nickname}` : ""}
               </span>
             </span>
@@ -380,29 +380,29 @@ export default async function UserProfilePage({
             Game ID {detail.user.gameId ?? "—"}
             {detail.user.gameId
               ? detail.user.gameIdVerifiedAt
-                ? " (verified)"
-                : " (unverified)"
+                ? " (подтверждён)"
+                : " (не подтверждён)"
               : ""}
-            {" · "}Registered {formatDate(detail.user.createdAt)}
+            {" · "}Регистрация {formatDate(detail.user.createdAt)}
           </>
         }
         actions={headerActions}
       />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard label="Assigned roles" value={detail.roles.length} />
-        <StatCard label="Warnings" value={warnings} />
-        <StatCard label="Reprimands" value={reprimands} />
-        <StatCard label="Last seen" value={formatDateTime(detail.user.lastLoginAt)} />
+        <StatCard label="Назначенные роли" value={detail.roles.length} />
+        <StatCard label="Предупреждения" value={warnings} />
+        <StatCard label="Выговоры" value={reprimands} />
+        <StatCard label="Последний вход" value={formatDateTime(detail.user.lastLoginAt)} />
       </div>
 
       <ProfileTabs
         tabs={[
-          { key: "overview", label: "Overview" },
-          { key: "roles", label: "Roles", badge: detail.roles.length },
-          { key: "history", label: "History" },
-          { key: "leadership", label: "Leadership", badge: terms.total },
-          { key: "activity", label: "Activity", badge: activity.total },
+          { key: "overview", label: "Обзор" },
+          { key: "roles", label: "Роли", badge: detail.roles.length },
+          { key: "history", label: "История" },
+          { key: "leadership", label: "Полномочия", badge: terms.total },
+          { key: "activity", label: "Активность", badge: activity.total },
         ]}
         panels={{
           overview: overviewPanel,

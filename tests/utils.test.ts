@@ -60,7 +60,7 @@ describe("formatAuditSentence", () => {
         targetLabel: "Alexei — Chief of LSPD",
         reason: null,
       }),
-    ).toBe("Chief Administrator Ivan Petrov appointed Alexei — Chief of LSPD.");
+    ).toBe("Chief Administrator Ivan Petrov: назначение — Alexei — Chief of LSPD.");
 
     expect(
       formatAuditSentence({
@@ -70,16 +70,16 @@ describe("formatAuditSentence", () => {
         targetLabel: "LSPD",
         reason: null,
       }),
-    ).toBe("Ivan Petrov withdrew funds from LSPD.");
+    ).toBe("Ivan Petrov: списание с бюджета — LSPD.");
   });
 
   it("falls back to System when there is no actor", () => {
     expect(
       formatAuditSentence({ actorName: null, actorRole: null, action: "LOGOUT", targetLabel: null, reason: null }),
-    ).toBe("System signed out.");
+    ).toBe("Система: выход из системы.");
     expect(
       formatAuditSentence({ actorName: null, actorRole: null, action: "UPDATE_SETTING", targetLabel: "x", reason: null }),
-    ).toBe("System changed the setting x.");
+    ).toBe("Система: изменена настройка — x.");
   });
 
   it("falls back to a generic sentence for unknown actions", () => {
@@ -91,7 +91,7 @@ describe("formatAuditSentence", () => {
         targetLabel: "X",
         reason: null,
       }),
-    ).toBe("Admin performed SOMETHING_NEW on X.");
+    ).toBe("Admin: действие SOMETHING_NEW — X.");
   });
 });
 

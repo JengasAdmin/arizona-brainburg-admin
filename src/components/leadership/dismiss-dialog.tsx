@@ -46,7 +46,7 @@ export function DismissDialog({
   async function submit() {
     const trimmed = reason.trim();
     if (trimmed.length < 3 || trimmed.length > 500) {
-      setError("Reason must be 3–500 characters.");
+      setError("Поле «Причина»: 3–500 символов.");
       return;
     }
     setError(null);
@@ -60,7 +60,7 @@ export function DismissDialog({
         },
       });
       toast({
-        title: "Term dismissed",
+        title: "Отстранение выполнено",
         description: `${term.displayName} — ${term.positionTitle}`,
         variant: "success",
       });
@@ -69,7 +69,7 @@ export function DismissDialog({
       onClose();
       router.refresh();
     } catch (err) {
-      toast({ title: "Dismissal failed", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось отстранить", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -79,21 +79,21 @@ export function DismissDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      title="Dismiss term"
-      description={`${term.displayName} — ${term.positionTitle}. The historical record is kept and never deleted.`}
+      title="Отстранение"
+      description={`${term.displayName} — ${term.positionTitle}. Историческая запись сохраняется и никогда не удаляется.`}
       footer={
         <>
           <Button variant="ghost" onClick={handleClose} disabled={pending}>
-            Cancel
+            Отмена
           </Button>
           <Button variant="danger" onClick={() => void submit()} loading={pending}>
-            Dismiss term
+            Отстранить
           </Button>
         </>
       }
     >
       <div className="space-y-4">
-        <Field label="End date" htmlFor="dismiss-end-date" hint="Optional — defaults to today">
+        <Field label="Дата окончания" htmlFor="dismiss-end-date" hint="Необязательно — по умолчанию сегодня">
           <Input
             id="dismiss-end-date"
             type="date"
@@ -103,14 +103,14 @@ export function DismissDialog({
         </Field>
 
         <Field
-          label="Reason"
+          label="Причина"
           htmlFor="dismiss-reason"
-          hint="3–500 characters"
+          hint="3–500 символов"
           error={error}
         >
           <Textarea
             id="dismiss-reason"
-            placeholder="Why is this term being closed?"
+            placeholder="Почему это назначение закрывается?"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />

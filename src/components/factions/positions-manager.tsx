@@ -45,8 +45,8 @@ const EMPTY_ADD: AddForm = {
 };
 
 const KIND_OPTIONS = [
-  { value: "leader", label: "Leader" },
-  { value: "deputy", label: "Deputy" },
+  { value: "leader", label: "Руководитель" },
+  { value: "deputy", label: "Заместитель" },
 ];
 
 export function PositionsManager({
@@ -81,18 +81,18 @@ export function PositionsManager({
   function validateAdd(form: AddForm): boolean {
     const errors: Partial<Record<keyof AddForm, string>> = {};
     if (!/^[a-z0-9_]{2,60}$/.test(form.key.trim())) {
-      errors.key = "Key must be 2–60 lowercase letters, digits or underscores.";
+      errors.key = "Ключ: 2–60 строчных букв, цифр или знаков подчёркивания.";
     }
     const title = form.title.trim();
-    if (title.length < 2 || title.length > 80) errors.title = "Title must be 2–80 characters.";
+    if (title.length < 2 || title.length > 80) errors.title = "Название: 2–80 символов.";
     const max = Number(form.maxActiveTerms);
     if (!Number.isInteger(max) || max < 1 || max > 10) {
-      errors.maxActiveTerms = "Must be a whole number between 1 and 10.";
+      errors.maxActiveTerms = "Введите целое число от 1 до 10.";
     }
     const order = Number(form.sortOrder);
-    if (!Number.isInteger(order) || order < 0) errors.sortOrder = "Must be a whole number ≥ 0.";
+    if (!Number.isInteger(order) || order < 0) errors.sortOrder = "Введите целое число ≥ 0.";
     if (form.description.trim().length > 300) {
-      errors.description = "Description must be at most 300 characters.";
+      errors.description = "Описание: не более 300 символов.";
     }
     setAddErrors(errors);
     return Object.keys(errors).length === 0;
@@ -113,13 +113,13 @@ export function PositionsManager({
           description: addForm.description.trim() ? addForm.description.trim() : null,
         },
       });
-      toast({ title: "Position added", description: addForm.title.trim(), variant: "success" });
+      toast({ title: "Должность добавлена", description: addForm.title.trim(), variant: "success" });
       setAddOpen(false);
       setAddForm(EMPTY_ADD);
       setAddErrors({});
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not add position", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось добавить должность", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -141,15 +141,15 @@ export function PositionsManager({
   function validateEdit(form: typeof editForm): boolean {
     const errors: Record<string, string> = {};
     const title = form.title.trim();
-    if (title.length < 2 || title.length > 80) errors.title = "Title must be 2–80 characters.";
+    if (title.length < 2 || title.length > 80) errors.title = "Название: 2–80 символов.";
     const max = Number(form.maxActiveTerms);
     if (!Number.isInteger(max) || max < 1 || max > 10) {
-      errors.maxActiveTerms = "Must be a whole number between 1 and 10.";
+      errors.maxActiveTerms = "Введите целое число от 1 до 10.";
     }
     const order = Number(form.sortOrder);
-    if (!Number.isInteger(order) || order < 0) errors.sortOrder = "Must be a whole number ≥ 0.";
+    if (!Number.isInteger(order) || order < 0) errors.sortOrder = "Введите целое число ≥ 0.";
     if (form.description.trim().length > 300) {
-      errors.description = "Description must be at most 300 characters.";
+      errors.description = "Описание: не более 300 символов.";
     }
     setEditErrors(errors);
     return Object.keys(errors).length === 0;
@@ -170,11 +170,11 @@ export function PositionsManager({
           description: editForm.description.trim() ? editForm.description.trim() : null,
         },
       });
-      toast({ title: "Position updated", description: editForm.title.trim(), variant: "success" });
+      toast({ title: "Должность обновлена", description: editForm.title.trim(), variant: "success" });
       setEditing(null);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not update position", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось обновить должность", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -183,12 +183,12 @@ export function PositionsManager({
   return (
     <Card>
       <CardHeader
-        title="Positions"
-        description={`${positions.length} named position${positions.length === 1 ? "" : "s"}`}
+        title="Должности"
+        description={`${positions.length} ${positions.length === 1 ? "именная должность" : "именных должностей"}`}
         actions={
           canManage ? (
             <Button size="sm" variant="secondary" onClick={() => setAddOpen(true)}>
-              <Plus className="h-3.5 w-3.5" /> Add position
+              <Plus className="h-3.5 w-3.5" /> Добавить должность
             </Button>
           ) : null
         }
@@ -197,19 +197,19 @@ export function PositionsManager({
       {positions.length === 0 ? (
         <EmptyState
           icon={<Layers className="h-8 w-8" />}
-          title="No positions yet"
-          description="Add named leader and deputy positions for this faction."
+          title="Должностей пока нет"
+          description="Добавьте именные должности руководителей и заместителей для этой фракции."
         />
       ) : (
         <Table className="min-w-[640px]">
           <THead>
             <TR>
-              <TH>Position</TH>
-              <TH>Kind</TH>
-              <TH align="right">Order</TH>
-              <TH align="right">Active terms</TH>
-              <TH>Status</TH>
-              {canManage ? <TH align="right">Actions</TH> : null}
+              <TH>Должность</TH>
+              <TH>Тип</TH>
+              <TH align="right">Порядок</TH>
+              <TH align="right">Активные сроки</TH>
+              <TH>Статус</TH>
+              {canManage ? <TH align="right">Действия</TH> : null}
             </TR>
           </THead>
           <TBody>
@@ -220,7 +220,9 @@ export function PositionsManager({
                   <div className="text-[11px] text-neutral-600">{position.key}</div>
                 </TD>
                 <TD>
-                  <Badge tone={position.kind === "leader" ? "info" : "neutral"}>{position.kind}</Badge>
+                  <Badge tone={position.kind === "leader" ? "info" : "neutral"}>
+                    {position.kind === "leader" ? "Руководитель" : "Заместитель"}
+                  </Badge>
                 </TD>
                 <TD align="right" className="text-neutral-500">
                   {position.sortOrder}
@@ -234,7 +236,7 @@ export function PositionsManager({
                 {canManage ? (
                   <TD align="right">
                     <Button size="sm" variant="ghost" onClick={() => openEdit(position)}>
-                      <Pencil className="h-3.5 w-3.5" /> Edit
+                      <Pencil className="h-3.5 w-3.5" /> Изменить
                     </Button>
                   </TD>
                 ) : null}
@@ -248,21 +250,21 @@ export function PositionsManager({
       <Dialog
         open={addOpen}
         onClose={() => (pending ? undefined : setAddOpen(false))}
-        title="Add position"
-        description="Positions are stored as data — renaming them later never rewrites history."
+        title="Добавление должности"
+        description="Должности хранятся как данные — их переименование никогда не переписывает историю."
         footer={
           <>
             <Button variant="ghost" onClick={() => setAddOpen(false)} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={pending} onClick={submitAdd}>
-              Add position
+              Добавить должность
             </Button>
           </>
         }
       >
         <div className="space-y-3">
-          <Field label="Key" htmlFor="pos-key" error={addErrors.key ?? null} hint="lowercase_snake">
+          <Field label="Ключ" htmlFor="pos-key" error={addErrors.key ?? null} hint="lowercase_snake">
             <Input
               id="pos-key"
               value={addForm.key}
@@ -270,16 +272,16 @@ export function PositionsManager({
               placeholder="chief_of_lspd"
             />
           </Field>
-          <Field label="Title" htmlFor="pos-title" error={addErrors.title ?? null}>
+          <Field label="Название" htmlFor="pos-title" error={addErrors.title ?? null}>
             <Input
               id="pos-title"
               value={addForm.title}
               onChange={(e) => setAddForm((f) => ({ ...f, title: e.target.value }))}
-              placeholder="Chief of Los Santos Police Department"
+              placeholder="Начальник полиции Лос-Сантоса"
             />
           </Field>
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Kind" htmlFor="pos-kind">
+            <Field label="Тип" htmlFor="pos-kind">
               <Select
                 id="pos-kind"
                 value={addForm.kind}
@@ -292,7 +294,7 @@ export function PositionsManager({
                 ))}
               </Select>
             </Field>
-            <Field label="Max terms" htmlFor="pos-max" error={addErrors.maxActiveTerms ?? null}>
+            <Field label="Макс. сроков" htmlFor="pos-max" error={addErrors.maxActiveTerms ?? null}>
               <Input
                 id="pos-max"
                 type="number"
@@ -302,7 +304,7 @@ export function PositionsManager({
                 onChange={(e) => setAddForm((f) => ({ ...f, maxActiveTerms: e.target.value }))}
               />
             </Field>
-            <Field label="Order" htmlFor="pos-order" error={addErrors.sortOrder ?? null}>
+            <Field label="Порядок" htmlFor="pos-order" error={addErrors.sortOrder ?? null}>
               <Input
                 id="pos-order"
                 type="number"
@@ -312,7 +314,7 @@ export function PositionsManager({
               />
             </Field>
           </div>
-          <Field label="Description" htmlFor="pos-desc" error={addErrors.description ?? null} hint="optional">
+          <Field label="Описание" htmlFor="pos-desc" error={addErrors.description ?? null} hint="необязательно">
             <Textarea
               id="pos-desc"
               value={addForm.description}
@@ -327,21 +329,21 @@ export function PositionsManager({
       <Dialog
         open={editing !== null}
         onClose={() => (pending ? undefined : setEditing(null))}
-        title="Edit position"
+        title="Редактирование должности"
         description={editing ? editing.key : undefined}
         footer={
           <>
             <Button variant="ghost" onClick={() => setEditing(null)} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={pending} onClick={submitEdit}>
-              Save changes
+              Сохранить изменения
             </Button>
           </>
         }
       >
         <div className="space-y-3">
-          <Field label="Title" htmlFor="edit-title" error={editErrors.title ?? null}>
+          <Field label="Название" htmlFor="edit-title" error={editErrors.title ?? null}>
             <Input
               id="edit-title"
               value={editForm.title}
@@ -349,7 +351,7 @@ export function PositionsManager({
             />
           </Field>
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Kind" htmlFor="edit-kind">
+            <Field label="Тип" htmlFor="edit-kind">
               <Select
                 id="edit-kind"
                 value={editForm.kind}
@@ -362,7 +364,7 @@ export function PositionsManager({
                 ))}
               </Select>
             </Field>
-            <Field label="Max terms" htmlFor="edit-max" error={editErrors.maxActiveTerms ?? null}>
+            <Field label="Макс. сроков" htmlFor="edit-max" error={editErrors.maxActiveTerms ?? null}>
               <Input
                 id="edit-max"
                 type="number"
@@ -372,7 +374,7 @@ export function PositionsManager({
                 onChange={(e) => setEditForm((f) => ({ ...f, maxActiveTerms: e.target.value }))}
               />
             </Field>
-            <Field label="Order" htmlFor="edit-order" error={editErrors.sortOrder ?? null}>
+            <Field label="Порядок" htmlFor="edit-order" error={editErrors.sortOrder ?? null}>
               <Input
                 id="edit-order"
                 type="number"
@@ -383,18 +385,18 @@ export function PositionsManager({
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Status" htmlFor="edit-status">
+            <Field label="Статус" htmlFor="edit-status">
               <Select
                 id="edit-status"
                 value={editForm.status}
                 onChange={(e) => setEditForm((f) => ({ ...f, status: e.target.value }))}
               >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">Активна</option>
+                <option value="inactive">Неактивна</option>
               </Select>
             </Field>
           </div>
-          <Field label="Description" htmlFor="edit-desc" error={editErrors.description ?? null} hint="optional">
+          <Field label="Описание" htmlFor="edit-desc" error={editErrors.description ?? null} hint="необязательно">
             <Textarea
               id="edit-desc"
               value={editForm.description}

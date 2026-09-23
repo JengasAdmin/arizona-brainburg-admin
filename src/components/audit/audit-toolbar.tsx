@@ -73,31 +73,31 @@ export function AuditToolbar({ filters }: { filters: AuditFilters }) {
   return (
     <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-line bg-card p-3">
       <div className="min-w-[200px] flex-1">
-        <Label htmlFor="audit-q">Search</Label>
+        <Label htmlFor="audit-q">Поиск</Label>
         <Input
           id="audit-q"
-          placeholder="Target contains…"
+          placeholder="Цель содержит…"
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
       </div>
       <div className="w-[200px]">
-        <Label htmlFor="audit-action">Action</Label>
+        <Label htmlFor="audit-action">Действие</Label>
         <Input
           id="audit-action"
-          placeholder="e.g. UPDATE_PROFILE"
+          placeholder="например, UPDATE_PROFILE"
           value={action}
           onChange={(e) => setAction(e.target.value)}
         />
       </div>
       <div className="w-[210px]">
-        <Label htmlFor="audit-entity">Entity type</Label>
+        <Label htmlFor="audit-entity">Тип сущности</Label>
         <Select
           id="audit-entity"
           value={filters.entityType}
           onChange={(e) => apply({ entityType: e.target.value })}
         >
-          <option value="">All entities</option>
+          <option value="">Все сущности</option>
           {ENTITY_TYPES.map((type) => (
             <option key={type} value={type}>
               {type}
@@ -106,11 +106,11 @@ export function AuditToolbar({ filters }: { filters: AuditFilters }) {
         </Select>
       </div>
       <div className="w-[130px]">
-        <Label htmlFor="audit-actor">Actor ID</Label>
+        <Label htmlFor="audit-actor">ID автора</Label>
         <Input
           id="audit-actor"
           inputMode="numeric"
-          placeholder="e.g. 1"
+          placeholder="например, 1"
           defaultValue={filters.actor}
           onChange={(e) => apply({ actor: e.target.value.trim() })}
         />
@@ -120,7 +120,7 @@ export function AuditToolbar({ filters }: { filters: AuditFilters }) {
           href="/audit"
           className="pb-2 text-xs text-neutral-500 transition-colors hover:text-white"
         >
-          Clear filters
+          Сбросить фильтры
         </Link>
       ) : null}
     </div>

@@ -170,7 +170,7 @@ export async function seedDemo(db: NodePgDatabase<Record<string, unknown>>) {
     .insert(auditLogs)
     .values({
       actorId: founder ?? null,
-      actorRole: "Site Founder / Developer",
+      actorRole: "Основатель сайта / Разработчик",
       action: "DEMO_SEED",
       entityType: "system",
       targetLabel: "Demo data created",

@@ -10,7 +10,7 @@ export const GET = guard(
   { method: "GET", auth: true, permission: "VIEW_AUDIT_LOGS", rateLimit: RATE_LIMITS.read },
   async ({ req, auth }) => {
     const query = validate(auditQuerySchema, Object.fromEntries(req.nextUrl.searchParams.entries()));
-    if (query.page < 1) throw errors.validation([{ path: "page", message: "Invalid page." }]);
+    if (query.page < 1) throw errors.validation([{ path: "page", message: "Некорректная страница." }]);
     const result = await listAudit(query, actorScope(auth.actor));
     return NextResponse.json(result);
   },

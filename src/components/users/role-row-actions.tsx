@@ -28,14 +28,14 @@ export function RoleRowActions({
     try {
       await api(`/api/users/${userId}/roles/${encodeURIComponent(roleKey)}`, { method: "DELETE" });
       toast({
-        title: "Role revoked",
-        description: `“${roleTitle}” was removed from user #${userId}.`,
+        title: "Роль отозвана",
+        description: `«${roleTitle}» удалена у пользователя #${userId}.`,
         variant: "success",
       });
       setRequest(null);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not revoke the role", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось отозвать роль", description: errorMessage(err), variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -48,14 +48,14 @@ export function RoleRowActions({
         variant="ghost"
         onClick={() =>
           setRequest({
-            title: "Revoke role",
-            description: `Remove “${roleTitle}” from this account?`,
-            confirmLabel: "Revoke",
+            title: "Отзыв роли",
+            description: `Удалить «${roleTitle}» с этого аккаунта?`,
+            confirmLabel: "Отозвать",
             danger: true,
           })
         }
       >
-        Revoke
+        Отозвать
       </Button>
       <ConfirmDialog
         open={request !== null}

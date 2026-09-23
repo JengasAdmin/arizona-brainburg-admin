@@ -30,14 +30,14 @@ export function ConfirmDialog({
       footer={
         <>
           <Button variant="ghost" onClick={onCancel} disabled={loading}>
-            {request.cancelLabel ?? "Cancel"}
+            {request.cancelLabel ?? "Отмена"}
           </Button>
           <Button
             variant={request.danger ? "danger" : "primary"}
             onClick={onConfirm}
             loading={loading}
           >
-            {request.confirmLabel ?? "Confirm"}
+            {request.confirmLabel ?? "Подтвердить"}
           </Button>
         </>
       }

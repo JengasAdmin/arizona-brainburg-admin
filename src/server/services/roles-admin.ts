@@ -76,7 +76,7 @@ export const createRoleSchema = z.object({
     .trim()
     .min(2)
     .max(60)
-    .regex(/^[a-z0-9_]+$/, "Key must be lowercase alphanumeric/underscore."),
+    .regex(/^[a-z0-9_]+$/, "Ключ должен быть в нижнем регистре: буквы, цифры или подчёркивание."),
   name: z.string().trim().min(2).max(80),
   description: z.string().trim().max(300).optional(),
   level: z.coerce.number().int().min(0).max(99),
@@ -91,12 +91,12 @@ export const updateRolePermissionsSchema = z.object({
 
 async function assertGrantable(actor: Actor, permissionKey: string) {
   if (!isPermissionKey(permissionKey)) {
-    throw errors.validation([{ path: "permissionKeys", message: `Unknown permission: ${permissionKey}` }]);
+    throw errors.validation([{ path: "permissionKeys", message: `Неизвестное разрешение: ${permissionKey}` }]);
   }
   const decision = canGrantPermission(actor, permissionKey);
   if (!decision.allowed) {
     throw errors.forbidden(
-      `You cannot grant “${permissionKey}”.`,
+      `Вы не можете выдать «${permissionKey}».`,
       decision.reason ?? "FORBIDDEN",
     );
   }
@@ -108,10 +108,10 @@ export async function createCustomRole(
   ip: string | null,
 ) {
   if (input.level > maxLevel(actor) && !isFounder(actor)) {
-    throw errors.forbidden("You cannot create a role above your own level.", "ROLE_ABOVE_OWN_LEVEL");
+    throw errors.forbidden("Вы не можете создать роль выше собственного уровня.", "ROLE_ABOVE_OWN_LEVEL");
   }
   if (input.category === "administration" && !canManageAdminUsers(actor).allowed) {
-    throw errors.forbidden("Only critical roles may create administrative roles.", "FORBIDDEN");
+    throw errors.forbidden("Создавать административные роли могут только критические роли.", "FORBIDDEN");
   }
   if (!isFounder(actor)) {
     for (const key of input.permissionKeys) await assertGrantable(actor, key);
@@ -134,7 +134,7 @@ export async function createCustomRole(
       .returning({ id: roles.id });
     roleId = inserted[0]!.id;
   } catch {
-    throw errors.conflict("A role with this key already exists.", "ROLE_KEY_EXISTS");
+    throw errors.conflict("Роль с таким ключом уже существует.", "ROLE_KEY_EXISTS");
   }
 
   if (input.permissionKeys.length > 0) {
@@ -164,17 +164,17 @@ export async function updateRolePermissionSet(
 ) {
   const rows = await db.select().from(roles).where(eq(roles.key, roleKey)).limit(1);
   const role = rows[0];
-  if (!role) throw errors.notFound("Role not found.");
+  if (!role) throw errors.notFound("Роль не найдена.");
   if (role.key === "site_founder") {
-    throw errors.forbidden("The Founder role permissions are immutable.", "FOUNDER_ROLE_PROTECTED");
+    throw errors.forbidden("Разрешения роли Основателя неизменяемы.", "FOUNDER_ROLE_PROTECTED");
   }
 
   const assignDecision = canAssignRole(actor, role);
   if (!assignDecision.allowed && !isFounder(actor)) {
-    throw errors.forbidden("You cannot edit this role.", assignDecision.reason ?? "FORBIDDEN");
+    throw errors.forbidden("Вы не можете редактировать эту роль.", assignDecision.reason ?? "FORBIDDEN");
   }
   if (role.level > maxLevel(actor) && !isFounder(actor)) {
-    throw errors.forbidden("You cannot edit a role above your own level.", "ROLE_ABOVE_OWN_LEVEL");
+    throw errors.forbidden("Вы не можете редактировать роль выше собственного уровня.", "ROLE_ABOVE_OWN_LEVEL");
   }
 
   const uniqueKeys = [...new Set(input.permissionKeys)];
@@ -183,7 +183,7 @@ export async function updateRolePermissionSet(
   } else {
     for (const key of uniqueKeys) {
       if (!isPermissionKey(key)) {
-        throw errors.validation([{ path: "permissionKeys", message: `Unknown permission: ${key}` }]);
+        throw errors.validation([{ path: "permissionKeys", message: `Неизвестное разрешение: ${key}` }]);
       }
     }
   }

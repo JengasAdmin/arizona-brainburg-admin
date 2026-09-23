@@ -56,13 +56,13 @@ export default async function DeputiesPage({
   return (
     <div>
       <PageHeader
-        title="Deputies"
-        description="Deputies appointed by leaders"
+        title="Заместители"
+        description="Заместители, назначенные руководителями"
         actions={
           canAppoint ? (
             <AppointLeaderDialog
               mode="deputy"
-              label="Appoint deputy"
+              label="Назначить заместителя"
               factions={factionOptions}
               positions={positions}
             />

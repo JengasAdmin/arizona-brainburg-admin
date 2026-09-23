@@ -26,10 +26,10 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
             }}
           >
             <h1 style={{ fontSize: "18px", fontWeight: 600, color: "#fff", margin: 0 }}>
-              500 — Internal Server Error
+              500 — Внутренняя ошибка сервера
             </h1>
             <p style={{ fontSize: "13px", color: "#a3a3a3", marginTop: "0.5rem" }}>
-              The application hit an unexpected error.
+              В приложении произошла непредвиденная ошибка.
             </p>
             <button
               type="button"
@@ -45,7 +45,7 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
                 cursor: "pointer",
               }}
             >
-              Try again
+              Повторить
             </button>
           </div>
         </main>

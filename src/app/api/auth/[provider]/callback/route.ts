@@ -7,7 +7,7 @@ import { errors, errorResponse } from "@/server/http";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ provider: string }> }) {
   try {
     const { provider } = await params;
-    if (!isProviderKey(provider)) throw errors.notFound("Unknown OAuth provider.");
+    if (!isProviderKey(provider)) throw errors.notFound("Неизвестный OAuth-провайдер.");
 
     const code = req.nextUrl.searchParams.get("code");
     const state = req.nextUrl.searchParams.get("state");

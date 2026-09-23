@@ -16,11 +16,11 @@ export default function Error({
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-line2 bg-raised">
           <AlertTriangle className="h-5 w-5 text-neutral-400" />
         </div>
-        <h1 className="text-lg font-semibold text-white">500 — Internal Server Error</h1>
+        <h1 className="text-lg font-semibold text-white">500 — Внутренняя ошибка сервера</h1>
         <p className="mt-2 text-[13px] text-neutral-500">
-          Something went wrong on our side. The incident has been logged.
+          Что-то пошло не так на нашей стороне. Инцидент записан в журнал.
           {error?.digest ? (
-            <span className="mt-1 block text-[11px] text-neutral-700">Reference: {error.digest}</span>
+            <span className="mt-1 block text-[11px] text-neutral-700">Идентификатор: {error.digest}</span>
           ) : null}
         </p>
         <button
@@ -28,7 +28,7 @@ export default function Error({
           onClick={reset}
           className="mt-6 inline-flex h-9 items-center gap-2 rounded-md border border-line2 bg-raised px-4 text-[13px] text-white transition-colors hover:bg-[#262626]"
         >
-          <RotateCcw className="h-3.5 w-3.5" /> Try again
+          <RotateCcw className="h-3.5 w-3.5" /> Повторить
         </button>
       </div>
     </main>

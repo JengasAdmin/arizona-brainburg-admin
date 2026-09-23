@@ -60,31 +60,31 @@ export function RoleAudit({ roleKey }: { roleKey: string }) {
   return (
     <Card>
       <CardHeader
-        title="Audit history"
-        description="Immutable audit entries recorded against this role."
+        title="История аудита"
+        description="Неизменяемые записи аудита, относящиеся к этой роли."
       />
       {status === "loading" ? (
         <Spinner />
       ) : status === "error" ? (
         <EmptyState
           icon={<ScrollText className="h-8 w-8" />}
-          title="Audit log unavailable"
+          title="Журнал аудита недоступен"
           description={error}
         />
       ) : items.length === 0 ? (
         <EmptyState
           icon={<ScrollText className="h-8 w-8" />}
-          title="No audit entries yet"
-          description="Permission changes and other role actions will appear here once recorded."
+          title="Записей аудита пока нет"
+          description="Изменения прав и другие действия с ролью появятся здесь после записи."
         />
       ) : (
         <div className="overflow-x-auto">
           <Table className="min-w-[560px]">
             <THead>
               <TR>
-                <TH>Entry</TH>
-                <TH>Reason</TH>
-                <TH align="right">Date</TH>
+                <TH>Запись</TH>
+                <TH>Причина</TH>
+                <TH align="right">Дата</TH>
               </TR>
             </THead>
             <TBody>

@@ -35,7 +35,7 @@ export function UserMenu({
     <div className="flex items-center gap-1.5">
       <Link
         href="/notifications"
-        aria-label={`Notifications (${unread} unread)`}
+        aria-label={`Уведомления (${unread} непрочитанных)`}
         className="relative inline-flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised text-neutral-400 transition-colors hover:text-white"
       >
         <Bell className="h-4 w-4" />
@@ -50,7 +50,7 @@ export function UserMenu({
         trigger={
           <button
             type="button"
-            aria-label="Account menu"
+            aria-label="Меню аккаунта"
             className="flex items-center gap-2 rounded-md border border-line bg-raised px-1.5 py-1 transition-colors hover:border-line2"
           >
             <Avatar src={user.avatarUrl} name={user.nickname ?? user.displayName} size={22} />
@@ -63,21 +63,21 @@ export function UserMenu({
         {(close) => (
           <>
             <DropdownLabel>
-              {roleName ?? "Player"} · Server #{user.serverNumber}
+              {roleName ?? "Игрок"} · Сервер #{user.serverNumber}
             </DropdownLabel>
             <Link href={`/users/${user.id}`} onClick={close}>
               <DropdownItem>
-                <User className="h-3.5 w-3.5" /> Profile
+                <User className="h-3.5 w-3.5" /> Профиль
               </DropdownItem>
             </Link>
             <Link href="/settings" onClick={close}>
               <DropdownItem>
-                <Settings className="h-3.5 w-3.5" /> Settings
+                <Settings className="h-3.5 w-3.5" /> Настройки
               </DropdownItem>
             </Link>
             <DropdownSeparator />
             <DropdownItem danger onClick={() => void logout()}>
-              <LogOut className="h-3.5 w-3.5" /> Sign out
+              <LogOut className="h-3.5 w-3.5" /> Выйти
             </DropdownItem>
           </>
         )}

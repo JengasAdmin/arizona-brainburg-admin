@@ -211,10 +211,15 @@ async function main() {
 
   // 10. System settings ----------------------------------------------------------
   for (const [key, def] of Object.entries(DEFAULT_SETTINGS)) {
+    // value намеренно не перезаписывается (пользователь мог менять настройки),
+    // описание обновляется — оно служебное и выводится в интерфейсе.
     await db
       .insert(systemSettings)
       .values({ key, value: def.value, description: def.description })
-      .onConflictDoNothing({ target: systemSettings.key });
+      .onConflictDoUpdate({
+        target: systemSettings.key,
+        set: { description: def.description },
+      });
   }
 
   // 11. Optional demo data (never runs automatically in production) ---------------

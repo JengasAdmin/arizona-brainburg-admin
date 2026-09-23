@@ -4,11 +4,11 @@ import { APP_DESCRIPTION, SERVER_LABEL } from "@/lib/constants";
 import { MessageSquare, ShieldCheck } from "lucide-react";
 
 const ERROR_MESSAGES: Record<string, string> = {
-  oauth_failed: "Sign-in failed with the identity provider. Please try again.",
-  session_expired: "Your session has expired. Please sign in again.",
-  access_denied: "Access to this instance is restricted. Contact an administrator.",
-  provider_already_linked: "This account is already linked to another user.",
-  not_seeded: "The database is not seeded yet. Run `npm run db:seed`.",
+  oauth_failed: "Не удалось войти через провайдера. Попробуйте ещё раз.",
+  session_expired: "Сессия истекла. Войдите заново.",
+  access_denied: "Доступ к этой платформе ограничен. Обратитесь к администратору.",
+  provider_already_linked: "Эта учётная запись уже привязана к другому пользователю.",
+  not_seeded: "База данных ещё не инициализирована. Выполните `npm run db:seed`.",
 };
 
 function DiscordIcon({ className }: { className?: string }) {
@@ -41,13 +41,13 @@ export default async function LandingPage({
   const providers = [
     {
       key: "discord",
-      label: "Continue with Discord",
+      label: "Продолжить через Discord",
       href: "/api/auth/discord?redirectTo=/dashboard",
       icon: <DiscordIcon className="h-4 w-4" />,
     },
     {
       key: "vk",
-      label: "Continue with VK",
+      label: "Продолжить через VK",
       href: "/api/auth/vk?redirectTo=/dashboard",
       icon: <VkIcon className="h-4 w-4" />,
     },
@@ -77,8 +77,8 @@ export default async function LandingPage({
               {APP_DESCRIPTION}
             </p>
             <p className="mt-2 text-xs text-neutral-600">
-              Closed instance — access requires an invited Discord or VK identity. Every action is
-              permission-checked and audit-logged.
+              Закрытая платформа — доступ только по приглашённому Discord- или VK-аккаунту. Каждое
+              действие проверяется на права и записывается в журнал аудита.
             </p>
           </div>
 
@@ -106,14 +106,14 @@ export default async function LandingPage({
 
           <div className="mt-6 flex items-center justify-between border-t border-line pt-4 text-[11px] text-neutral-600">
             <span className="inline-flex items-center gap-1.5">
-              <MessageSquare className="h-3 w-3" /> Support: contact the administration
+              <MessageSquare className="h-3 w-3" /> Поддержка: свяжитесь с администрацией
             </span>
-            <span>Server #5</span>
+            <span>{SERVER_LABEL}</span>
           </div>
         </div>
 
         <p className="mt-4 text-center text-[11px] text-neutral-700">
-          Leadership · Deputies · Factions · Budgets · Audit
+          Руководство · Заместители · Фракции · Бюджеты · Аудит
         </p>
       </div>
     </main>

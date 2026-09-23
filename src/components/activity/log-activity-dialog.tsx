@@ -37,19 +37,19 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
     const next: Partial<Record<keyof Form, string>> = {};
     const userId = Number(value.userId);
     if (!Number.isInteger(userId) || userId <= 0) {
-      next.userId = "Enter a valid user ID.";
+      next.userId = "Введите корректный ID пользователя.";
     }
     const action = value.action.trim();
     if (action.length < 2 || action.length > 60) {
-      next.action = "Action must be 2–60 characters.";
+      next.action = "Поле «Действие»: 2–60 символов.";
     }
     const description = value.description.trim();
     if (description.length < 3 || description.length > 500) {
-      next.description = "Description must be 3–500 characters.";
+      next.description = "Поле «Описание»: 3–500 символов.";
     }
     if (value.occurredAt) {
       const parsed = new Date(value.occurredAt);
-      if (Number.isNaN(parsed.getTime())) next.occurredAt = "Invalid date/time.";
+      if (Number.isNaN(parsed.getTime())) next.occurredAt = "Некорректные дата/время.";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -72,8 +72,8 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
         },
       });
       toast({
-        title: "Activity recorded",
-        description: `${form.action.trim()} — user #${form.userId}`,
+        title: "Активность записана",
+        description: `${form.action.trim()} — пользователь #${form.userId}`,
         variant: "success",
       });
       setOpen(false);
@@ -81,7 +81,7 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
       setErrors({});
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not record activity", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось записать активность", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -90,28 +90,28 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
   return (
     <>
       <Button size="sm" variant="primary" onClick={() => setOpen(true)}>
-        <ClipboardPlus className="h-3.5 w-3.5" /> Log activity
+        <ClipboardPlus className="h-3.5 w-3.5" /> Записать активность
       </Button>
 
       <Dialog
         open={open}
         onClose={() => (pending ? undefined : setOpen(false))}
-        title="Log game activity"
-        description="Manual session record — until the game API is connected."
+        title="Запись игровой активности"
+        description="Ручная запись о сессии — пока игровой API не подключён."
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={pending} onClick={submit}>
-              Record activity
+              Записать активность
             </Button>
           </>
         }
       >
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <Field label="User ID" htmlFor="act-user" error={errors.userId ?? null}>
+            <Field label="ID пользователя" htmlFor="act-user" error={errors.userId ?? null}>
               <Input
                 id="act-user"
                 type="number"
@@ -121,13 +121,13 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
                 placeholder="124"
               />
             </Field>
-            <Field label="Faction" htmlFor="act-faction" hint="optional">
+            <Field label="Фракция" htmlFor="act-faction" hint="необязательно">
               <Select
                 id="act-faction"
                 value={form.factionId}
                 onChange={(e) => setForm((f) => ({ ...f, factionId: e.target.value }))}
               >
-                <option value="">— none —</option>
+                <option value="">— нет —</option>
                 {factions.map((faction) => (
                   <option key={faction.id} value={faction.id}>
                     {faction.name}
@@ -136,24 +136,24 @@ export function LogActivityDialog({ factions }: { factions: { id: number; name: 
               </Select>
             </Field>
           </div>
-          <Field label="Action" htmlFor="act-action" error={errors.action ?? null} hint="2–60 characters">
+          <Field label="Действие" htmlFor="act-action" error={errors.action ?? null} hint="2–60 символов">
             <Input
               id="act-action"
               value={form.action}
               onChange={(e) => setForm((f) => ({ ...f, action: e.target.value }))}
-              placeholder="Patrol shift"
+              placeholder="Патрульная смена"
             />
           </Field>
-          <Field label="Description" htmlFor="act-desc" error={errors.description ?? null}>
+          <Field label="Описание" htmlFor="act-desc" error={errors.description ?? null}>
             <Textarea
               id="act-desc"
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               maxLength={500}
-              placeholder="Completed a 2-hour patrol shift in downtown Los Santos."
+              placeholder="Отработал двухчасовую патрульную смену в центре Лос-Сантоса."
             />
           </Field>
-          <Field label="Occurred at" htmlFor="act-when" error={errors.occurredAt ?? null} hint="optional — defaults to now">
+          <Field label="Время события" htmlFor="act-when" error={errors.occurredAt ?? null} hint="необязательно — по умолчанию сейчас">
             <Input
               id="act-when"
               type="datetime-local"

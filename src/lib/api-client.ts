@@ -33,7 +33,7 @@ export async function api<T = unknown>(path: string, init: ApiInit = {}): Promis
     if (typeof window !== "undefined" && !window.location.pathname.match(/^\/($|\?)/)) {
       window.location.assign("/?error=session_expired");
     }
-    throw new ApiClientError(401, "SESSION_EXPIRED", "Your session has expired.");
+    throw new ApiClientError(401, "SESSION_EXPIRED", "Сессия истекла.");
   }
 
   const text = await res.text();
@@ -52,7 +52,7 @@ export async function api<T = unknown>(path: string, init: ApiInit = {}): Promis
     throw new ApiClientError(
       res.status,
       envelope?.code ?? "ERROR",
-      envelope?.message ?? `Request failed with status ${res.status}.`,
+      envelope?.message ?? `Запрос завершился с ошибкой ${res.status}.`,
       envelope?.details,
     );
   }
@@ -64,5 +64,5 @@ export async function api<T = unknown>(path: string, init: ApiInit = {}): Promis
 export function errorMessage(err: unknown): string {
   if (err instanceof ApiClientError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Something went wrong.";
+  return "Что-то пошло не так.";
 }

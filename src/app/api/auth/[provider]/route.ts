@@ -12,7 +12,7 @@ import { rateLimit, RATE_LIMITS } from "@/server/security/rate-limit";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ provider: string }> }) {
   try {
     const { provider } = await params;
-    if (!isProviderKey(provider)) throw errors.notFound("Unknown OAuth provider.");
+    if (!isProviderKey(provider)) throw errors.notFound("Неизвестный OAuth-провайдер.");
 
     const limit = rateLimit(
       `auth-start:${getClientIp(req)}`,

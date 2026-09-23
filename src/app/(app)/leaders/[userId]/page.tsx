@@ -64,13 +64,13 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
             <StatusBadge status={profile.status} />
           </span>
         }
-        description="Leadership history"
+        description="История полномочий"
         actions={
           <Link
             href="/leaders"
             className="inline-flex items-center gap-1.5 text-xs text-neutral-500 transition-colors hover:text-white"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Leadership
+            <ArrowLeft className="h-3.5 w-3.5" /> Назад к руководителям
           </Link>
         }
       />
@@ -79,8 +79,8 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
         <Card>
           <EmptyState
             icon={<History className="h-8 w-8" />}
-            title="No leadership terms"
-            description="This user has never held a leadership or deputy position."
+            title="Нет сроков полномочий"
+            description="Этот пользователь никогда не занимал должность руководителя или заместителя."
           />
         </Card>
       ) : (
@@ -94,7 +94,7 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
                     <Badge tone="neutral">{term.factionName}</Badge>
                   </span>
                 }
-                description={`Term #${term.termNumber}`}
+                description={`Срок #${term.termNumber}`}
                 actions={
                   <span className="flex items-center gap-2">
                     <StatusBadge status={term.status} />
@@ -111,15 +111,15 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
               />
               <CardBody>
                 <dl className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  <DetailRow label="Appointed by" value={term.appointedBy ?? "—"} />
-                  <DetailRow label="Since" value={formatDate(term.appointedAt)} />
+                  <DetailRow label="Кем назначен" value={term.appointedBy ?? "—"} />
+                  <DetailRow label="Начало" value={formatDate(term.appointedAt)} />
                   <DetailRow
-                    label="End"
+                    label="Конец"
                     value={
                       term.dismissedAt
                         ? formatDate(term.dismissedAt)
                         : term.status === "active"
-                          ? "Present"
+                          ? "по настоящее время"
                           : "—"
                     }
                   />
@@ -127,14 +127,14 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
                 {term.dismissalReason ? (
                   <div className="mt-3 rounded-md border border-line bg-panel px-3 py-2">
                     <div className="text-[11px] uppercase tracking-wide text-neutral-600">
-                      Dismissal reason
+                      Причина отстранения
                     </div>
                     <div className="mt-0.5 text-[13px] text-neutral-300">
                       {term.dismissalReason}
                     </div>
                     {term.dismissedBy ? (
                       <div className="mt-1 text-[11px] text-neutral-600">
-                        Dismissed by {term.dismissedBy}
+                        Инициатор отстранения: {term.dismissedBy}
                       </div>
                     ) : null}
                   </div>
@@ -148,23 +148,23 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
       <div className="mt-5">
         <Card>
           <CardHeader
-            title="Disciplinary record"
-            description="Warnings and reprimands issued across all leadership terms."
+            title="Дисциплинарные взыскания"
+            description="Предупреждения и выговоры, выданные за все сроки полномочий."
           />
           {disciplinary.length === 0 ? (
             <EmptyState
               icon={<ShieldAlert className="h-8 w-8" />}
-              title="No disciplinary actions on record."
+              title="Дисциплинарных взысканий в записи нет."
             />
           ) : (
             <Table className="min-w-[720px]">
               <THead>
                 <TR>
-                  <TH>Type</TH>
-                  <TH>Reason</TH>
-                  <TH>Term</TH>
-                  <TH>Issued by</TH>
-                  <TH align="right">Date</TH>
+                  <TH>Тип</TH>
+                  <TH>Причина</TH>
+                  <TH>Срок</TH>
+                  <TH>Кем выдано</TH>
+                  <TH align="right">Дата</TH>
                 </TR>
               </THead>
               <TBody>
@@ -173,9 +173,9 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
                     <TD>
                       <Badge tone={entry.type === "reprimand" ? "danger" : "warn"}>
                         {entry.type === "reprimand"
-                          ? "Reprimand"
+                          ? "Выговор"
                           : entry.type === "warning"
-                            ? "Warning"
+                            ? "Предупреждение"
                             : entry.type}
                       </Badge>
                     </TD>
@@ -187,7 +187,7 @@ export default async function LeaderHistoryPage({ params }: { params: Params }) 
                     <TD>
                       <div className="text-neutral-300">{entry.term.positionTitle}</div>
                       <div className="text-[11px] text-neutral-600">
-                        {entry.term.factionName} · Term #{entry.term.termNumber}
+                        {entry.term.factionName} · Срок #{entry.term.termNumber}
                       </div>
                     </TD>
                     <TD>{entry.issuedBy ?? "—"}</TD>

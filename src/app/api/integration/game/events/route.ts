@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const enabled = (await getSetting<boolean>("integration_enabled")) ?? false;
     if (!enabled) {
       throw errors.serviceUnavailable(
-        "Integration status: Not connected. Enable the integration in Settings → Integration.",
+        "Статус интеграции: Не подключено. Включите интеграцию в разделе «Настройки → Интеграция».",
         "INTEGRATION_DISABLED",
       );
     }
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     if (!limit.ok) throw errors.rateLimited(limit.retryAfterSec);
 
     const apiKeyId = await authenticateApiKey(req.headers.get("authorization"));
-    if (!apiKeyId) throw errors.forbidden("Invalid or disabled API key.", "INVALID_API_KEY");
+    if (!apiKeyId) throw errors.forbidden("Недействительный или отключённый API-ключ.", "INVALID_API_KEY");
 
     const body = await parseJsonBody(req as never, schema);
     const eventId = await recordIntegrationEvent(body.event, body.payload, apiKeyId, "received");

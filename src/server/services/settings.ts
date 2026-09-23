@@ -17,6 +17,12 @@ export async function ensureSettingsSeeded(): Promise<void> {
         value: def.value,
         description: def.description,
       });
+    } else if (existing[0].description !== def.description) {
+      // Описание — служебное: синхронизируем с каталогом, не трогая value.
+      await db
+        .update(systemSettings)
+        .set({ description: def.description })
+        .where(eq(systemSettings.key, key));
     }
   }
 }
@@ -38,7 +44,7 @@ export const updateSettingSchema = z.object({
 
 export async function updateSetting(key: string, value: unknown, actorId: number) {
   const existing = await db.select().from(systemSettings).where(eq(systemSettings.key, key)).limit(1);
-  if (!existing[0]) throw errors.notFound(`Unknown setting: ${key}`);
+  if (!existing[0]) throw errors.notFound(`Неизвестная настройка: ${key}`);
   await db
     .update(systemSettings)
     .set({ value, updatedBy: actorId, updatedAt: new Date() })

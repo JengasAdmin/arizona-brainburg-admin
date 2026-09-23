@@ -7,6 +7,12 @@ import { KeyRound } from "lucide-react";
 import { RoleAssignDialog, type AssignableRole } from "./role-assign-dialog";
 import { RoleRowActions } from "./role-row-actions";
 
+const CATEGORY_LABELS: Record<string, string> = {
+  administration: "Администрирование",
+  supervision: "Надзор",
+  player: "Игрок",
+};
+
 export interface ProfileRole {
   key: string;
   name: string;
@@ -32,8 +38,8 @@ export async function RolesCard({
 }) {
   const departments = await listDepartments();
   const scopeOf = (departmentId: number | null): string => {
-    if (departmentId == null) return "Global";
-    return departments.find((d) => d.id === departmentId)?.name ?? "Scoped";
+    if (departmentId == null) return "Глобально";
+    return departments.find((d) => d.id === departmentId)?.name ?? "Ограничено";
   };
   const availableCount = assignableRoles.filter(
     (role) => !roles.some((assigned) => assigned.key === role.key),
@@ -42,8 +48,8 @@ export async function RolesCard({
   return (
     <Card>
       <CardHeader
-        title="Assigned roles"
-        description="Roles currently granted to this account."
+        title="Назначенные роли"
+        description="Роли, предоставленные этому аккаунту."
         actions={
           canAssign && availableCount > 0 ? (
             <RoleAssignDialog
@@ -55,7 +61,7 @@ export async function RolesCard({
                   type="button"
                   className="inline-flex h-7 items-center justify-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
                 >
-                  Assign role
+                  Назначить роль
                 </button>
               }
             />
@@ -65,8 +71,8 @@ export async function RolesCard({
       {roles.length === 0 ? (
         <EmptyState
           icon={<KeyRound className="h-8 w-8" />}
-          title="No roles assigned"
-          description="This account only has its default access."
+          title="Роли не назначены"
+          description="У этого аккаунта только стандартный доступ."
         />
       ) : (
         <ul className="divide-y divide-line/70">
@@ -81,10 +87,10 @@ export async function RolesCard({
                   <Badge tone={role.category === "administration" ? "info" : "neutral"}>
                     {scopeOf(role.departmentId)}
                   </Badge>
-                  <Badge tone="neutral">{role.category}</Badge>
+                  <Badge tone="neutral">{CATEGORY_LABELS[role.category] ?? role.category}</Badge>
                 </div>
                 <div className="mt-0.5 text-[11px] text-neutral-600">
-                  Assigned {formatDateTime(role.assignedAt)} · Granted by —
+                  Назначена {formatDateTime(role.assignedAt)} · Выдал —
                 </div>
               </div>
               {canAssign ? (

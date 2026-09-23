@@ -27,7 +27,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# vergel / vercel
+# vercel / vercel.json
 .vercel
 
 # typescript

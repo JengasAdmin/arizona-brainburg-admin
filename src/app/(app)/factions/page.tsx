@@ -39,16 +39,16 @@ export default async function FactionsPage() {
   return (
     <div>
       <PageHeader
-        title="Factions"
-        description="14 factions across 7 categories — Server #5"
+        title="Фракции"
+        description="14 фракций в 7 категориях — Сервер #5"
       />
 
       {factions.length === 0 ? (
         <Card>
           <EmptyState
             icon={<Shield className="h-8 w-8" />}
-            title="No factions in your scope"
-            description="Factions assigned to your supervision area will appear here."
+            title="Нет фракций в вашей области"
+            description="Фракции, закреплённые за вашей зоной надзора, появятся здесь."
           />
         </Card>
       ) : (
@@ -85,9 +85,9 @@ export default async function FactionsPage() {
                       </p>
 
                       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-neutral-600">
-                        <span>{faction.members} members</span>
-                        <span>{faction.activeLeaders} leaders</span>
-                        <span>{faction.activeDeputies} deputies</span>
+                        <span>Участников: {faction.members}</span>
+                        <span>Руководителей: {faction.activeLeaders}</span>
+                        <span>Заместителей: {faction.activeDeputies}</span>
                         {canViewBudget ? (
                           <span className="ml-auto font-medium text-neutral-400">
                             {formatMoney(faction.budget)}

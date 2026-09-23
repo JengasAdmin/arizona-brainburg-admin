@@ -6,28 +6,28 @@ export const DEFAULT_SETTINGS: Record<string, { value: unknown; description: str
   audit_store_ip: {
     value: true,
     description:
-      "Store the actor's IP address in audit logs (privacy-sensitive — disable where not justified).",
+      "Хранить IP-адреса действующих лиц в журнале аудита (конфиденциальные данные — отключите, если это не оправдано).",
   },
   allow_negative_budget: {
     value: false,
-    description: "Allow faction budgets to drop below zero via withdrawals.",
+    description: "Разрешить бюджетам фракций уходить в минус за счёт списаний.",
   },
   allow_multiple_active_terms: {
     value: false,
-    description: "Allow one user to hold active leader terms in several factions at once.",
+    description: "Разрешить одному пользователю иметь действующие сроки полномочий сразу в нескольких фракциях.",
   },
   registration_allowlist_enabled: {
     value: false,
-    description: "Restrict sign-in to allowlisted Discord/VK IDs (env-driven ALLOWLIST_*).",
+    description: "Ограничить вход списком разрешённых Discord/VK ID (переменные окружения ALLOWLIST_*).",
   },
   integration_enabled: {
     value: false,
     description:
-      "Enable the future game-bot integration API. Off by default → status shows “Not connected”.",
+      "Включить будущий API интеграции с игровым ботом. По умолчанию выключен → статус «Не подключено».",
   },
   maintenance_mode: {
     value: false,
-    description: "Block non-administrative access while performing maintenance.",
+    description: "Блокировать доступ неадминистраторов на время технических работ.",
   },
 };
 

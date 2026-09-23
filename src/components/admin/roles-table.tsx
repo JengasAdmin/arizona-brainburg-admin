@@ -115,14 +115,14 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
         body: { permissionKeys: resetRow.base },
       });
       toast({
-        title: "Grants reset",
-        description: `${resetRow.name} restored to its ${resetRow.base.length} catalog permissions.`,
+        title: "Права сброшены",
+        description: `Восстановлены права каталога роли «${resetRow.name}»: ${resetRow.base.length}.`,
         variant: "success",
       });
       setResetRow(null);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not reset grants", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось сбросить права", description: errorMessage(err), variant: "error" });
     } finally {
       setResetting(false);
     }
@@ -133,8 +133,8 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
   return (
     <Card>
       <CardHeader
-        title="Role hierarchy"
-        description="Roles grouped by hierarchy band — Founder to Player."
+        title="Иерархия ролей"
+        description="Роли, сгруппированные по уровням иерархии — от основателя до игрока."
       />
 
       <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
@@ -143,19 +143,19 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
           <Input
             value={text}
             onChange={(e) => setText(e.currentTarget.value)}
-            placeholder="Search roles…"
-            aria-label="Search roles"
+            placeholder="Поиск ролей…"
+            aria-label="Поиск ролей"
             className="pl-8 pr-3"
           />
         </div>
         <Select
           value={scope}
           onChange={(e) => router.replace(buildHref({ scope: e.currentTarget.value || null, page: null }))}
-          aria-label="Filter by scope"
+          aria-label="Фильтр по зоне ответственности"
           className="w-full sm:w-48"
         >
-          <option value="">All scopes</option>
-          <option value="global">Global</option>
+          <option value="">Все зоны ответственности</option>
+          <option value="global">Глобально</option>
           {departments.map((dept) => (
             <option key={dept.key} value={dept.key}>
               {dept.name}
@@ -164,30 +164,30 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
         </Select>
         {hasFilters ? (
           <Button size="sm" variant="ghost" onClick={() => { setText(""); router.replace("/admin/roles"); }}>
-            <X className="h-3.5 w-3.5" /> Clear
+            <X className="h-3.5 w-3.5" /> Очистить
           </Button>
         ) : null}
         <span className="ml-auto text-xs text-neutral-600">
-          {total} {total === 1 ? "role" : "roles"}
+          {total} {total === 1 ? "роль" : "ролей"}
         </span>
       </div>
 
       {groups.length === 0 ? (
         <EmptyState
           icon={<Search className="h-8 w-8" />}
-          title="No roles match your filters"
-          description="Adjust the search or scope filter to see roles again."
+          title="Роли не найдены по заданным фильтрам"
+          description="Измените строку поиска или фильтр зоны ответственности, чтобы увидеть роли."
         />
       ) : (
         <Table className="min-w-[760px]">
           <THead>
             <TR>
-              <TH>Role</TH>
-              <TH>Level</TH>
-              <TH>Scope</TH>
-              <TH>Permissions</TH>
-              <TH align="right">Members</TH>
-              <TH align="right">Actions</TH>
+              <TH>Роль</TH>
+              <TH>Уровень</TH>
+              <TH>Зона ответственности</TH>
+              <TH>Права</TH>
+              <TH align="right">Участники</TH>
+              <TH align="right">Действия</TH>
             </TR>
           </THead>
           <TBody>
@@ -219,17 +219,17 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
                       {row.departmentName ? (
                         <Badge>{row.departmentName}</Badge>
                       ) : (
-                        <Badge tone="info">Global</Badge>
+                        <Badge tone="info">Глобально</Badge>
                       )}
                     </TD>
                     <TD>
                       <div className="flex items-center gap-1.5">
                         <span className="text-neutral-200">{row.permissionCount}</span>
                         {row.baseCount !== null && row.isCustom ? (
-                          <Badge tone="warn">custom</Badge>
+                          <Badge tone="warn">своя</Badge>
                         ) : null}
                       </div>
-                      <div className="text-[11px] text-neutral-600">base {row.baseCount ?? "—"}</div>
+                      <div className="text-[11px] text-neutral-600">база: {row.baseCount ?? "—"}</div>
                     </TD>
                     <TD align="right">{row.memberCount}</TD>
                     <TD align="right">
@@ -238,16 +238,16 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
                           href={`/admin/roles/${row.key}`}
                           className="rounded px-2 py-1 text-xs text-neutral-300 transition-colors hover:bg-raised hover:text-white"
                         >
-                          Edit permissions
+                          Изменить права
                         </Link>
                         {row.canReset ? (
                           <Button
                             size="sm"
                             variant="ghost"
-                            title="Restore this role's catalog default permissions"
+                            title="Восстановить права этой роли из каталога по умолчанию"
                             onClick={() => setResetRow(row)}
                           >
-                            <RotateCcw className="h-3.5 w-3.5" /> Reset
+                            <RotateCcw className="h-3.5 w-3.5" /> Сбросить
                           </Button>
                         ) : null}
                       </div>
@@ -273,14 +273,14 @@ export function RolesTable({ groups, q, scope, page, pageSize, total, department
         request={
           resetRow
             ? {
-                title: "Reset custom grants?",
-                description: `Restore the catalog default permission set for “${resetRow.name}”.`,
+                title: "Сбросить пользовательские права?",
+                description: `Восстановить набор прав по умолчанию из каталога для роли «${resetRow.name}».`,
                 fields: [
-                  { label: "Role", value: resetRow.name },
-                  { label: "Current set", value: `${resetRow.permissionCount} permissions` },
-                  { label: "After reset", value: `${resetRow.base?.length ?? 0} permissions` },
+                  { label: "Роль", value: resetRow.name },
+                  { label: "Текущий набор", value: `${resetRow.permissionCount} прав` },
+                  { label: "После сброса", value: `${resetRow.base?.length ?? 0} прав` },
                 ],
-                confirmLabel: "Reset grants",
+                confirmLabel: "Сбросить права",
                 danger: true,
               }
             : null
@@ -334,15 +334,15 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
     const level = Number(form.level);
 
     if (!/^[a-z0-9_]{2,60}$/.test(key)) {
-      nextErrors.key = "Lowercase letters, digits and underscores only (2–60 characters).";
+      nextErrors.key = "Только строчные буквы, цифры и знаки подчёркивания (2–60 символов).";
     }
-    if (name.length < 2 || name.length > 80) nextErrors.name = "2–80 characters.";
-    if (description.length > 300) nextErrors.description = "Maximum 300 characters.";
+    if (name.length < 2 || name.length > 80) nextErrors.name = "2–80 символов.";
+    if (description.length > 300) nextErrors.description = "Не более 300 символов.";
     if (!Number.isInteger(level) || level < 0 || level > maxCreateLevel) {
-      nextErrors.level = `Whole number between 0 and ${maxCreateLevel} (your own level).`;
+      nextErrors.level = `Целое число от 0 до ${maxCreateLevel} (ваш собственный уровень).`;
     }
     if (form.category === "administration" && !canCreateAdminRoles) {
-      nextErrors.category = "Only critical roles may create administrative roles.";
+      nextErrors.category = "Создавать административные роли могут только критичные роли.";
     }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -362,14 +362,14 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
         },
       });
       toast({
-        title: "Role created",
-        description: `${res.roleKey} — open it to assign permissions.`,
+        title: "Роль создана",
+        description: `${res.roleKey} — откройте её, чтобы назначить права.`,
         variant: "success",
       });
       close();
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not create role", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось создать роль", description: errorMessage(err), variant: "error" });
     } finally {
       setBusy(false);
     }
@@ -378,27 +378,27 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
   return (
     <>
       <Button size="sm" variant="primary" onClick={() => setOpen(true)}>
-        <Plus className="h-3.5 w-3.5" /> Create role
+        <Plus className="h-3.5 w-3.5" /> Создать роль
       </Button>
 
       <Dialog
         open={open}
         onClose={close}
-        title="Create role"
-        description="Add a custom role inside the hierarchy. Permissions are set afterwards on the role page."
+        title="Создание роли"
+        description="Добавьте пользовательскую роль в иерархию. Права задаются позже на странице роли."
         footer={
           <>
             <Button variant="ghost" onClick={close} disabled={busy}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={busy} onClick={submit}>
-              Create role
+              Создать роль
             </Button>
           </>
         }
       >
         <div className="space-y-3">
-          <Field label="Key" htmlFor="create-role-key" hint="lowercase_with_underscore" error={errors.key}>
+          <Field label="Ключ" htmlFor="create-role-key" hint="lowercase_with_underscore" error={errors.key}>
             <Input
               id="create-role-key"
               value={form.key}
@@ -407,25 +407,25 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
               autoComplete="off"
             />
           </Field>
-          <Field label="Name" htmlFor="create-role-name" error={errors.name}>
+          <Field label="Название" htmlFor="create-role-name" error={errors.name}>
             <Input
               id="create-role-name"
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.currentTarget.value }))}
-              placeholder="Custom Moderator"
+              placeholder="Пользовательский модератор"
             />
           </Field>
-          <Field label="Description" htmlFor="create-role-description" error={errors.description}>
+          <Field label="Описание" htmlFor="create-role-description" error={errors.description}>
             <Input
               id="create-role-description"
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.currentTarget.value }))}
-              placeholder="Optional — what this role is for"
+              placeholder="Необязательно — для чего эта роль"
             />
           </Field>
           <div className="grid gap-3 sm:grid-cols-2">
             <Field
-              label="Level"
+              label="Уровень"
               htmlFor="create-role-level"
               hint={`0–${maxCreateLevel}`}
               error={errors.level}
@@ -440,7 +440,7 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
                 placeholder="10"
               />
             </Field>
-            <Field label="Category" htmlFor="create-role-category" error={errors.category}>
+            <Field label="Категория" htmlFor="create-role-category" error={errors.category}>
               <Select
                 id="create-role-category"
                 value={form.category}
@@ -452,18 +452,18 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
                   }));
                 }}
               >
-                <option value="player">Player</option>
-                <option value="supervision">Supervision</option>
+                <option value="player">Игрок</option>
+                <option value="supervision">Надзор</option>
                 <option value="administration" disabled={!canCreateAdminRoles}>
-                  Administration{canCreateAdminRoles ? "" : " (not allowed for you)"}
+                  Администрирование{canCreateAdminRoles ? "" : " (недоступно для вас)"}
                 </option>
               </Select>
             </Field>
           </div>
           <Field
-            label="Department scope"
+            label="Зона ответственности (направление)"
             htmlFor="create-role-department"
-            hint="empty = global"
+            hint="пусто = глобально"
             error={errors.departmentId}
           >
             <Select
@@ -471,7 +471,7 @@ export function CreateRoleButton({ departments, canCreateAdminRoles, maxCreateLe
               value={form.departmentId}
               onChange={(e) => setForm((f) => ({ ...f, departmentId: e.currentTarget.value }))}
             >
-              <option value="">Global (all departments)</option>
+              <option value="">Глобально (все направления)</option>
               {departments.map((dept) => (
                 <option key={dept.id} value={dept.id}>
                   {dept.name}

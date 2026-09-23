@@ -41,14 +41,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
         <div className="flex-1 overflow-y-auto py-3">
           <div className="mb-2 px-4 text-[10px] font-semibold uppercase tracking-wider text-neutral-700">
-            Navigation
+            Навигация
           </div>
           <SidebarNav allowedHrefs={allowedHrefs} />
         </div>
 
         <div className="border-t border-line px-4 py-3">
           <div className="truncate text-[11px] text-neutral-600">
-            {primaryRole?.name ?? "Player"}
+            {primaryRole?.name ?? "Игрок"}
           </div>
           <div className="truncate text-xs text-neutral-300">
             {auth.user.nickname ?? auth.user.displayName}
@@ -81,7 +81,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <main className="min-w-0 flex-1 px-3 py-4 sm:px-5 sm:py-5">{children}</main>
 
         <footer className="border-t border-line px-4 py-3 text-[11px] text-neutral-700">
-          ARIZONA RP — BRAINBURG · Server #5 · Administration Platform
+          ARIZONA RP — BRAINBURG · {SERVER_LABEL} · Платформа администрирования
         </footer>
       </div>
     </div>

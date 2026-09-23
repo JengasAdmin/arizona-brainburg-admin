@@ -60,9 +60,9 @@ export async function getBudgetDetail(factionId: number, actor: Actor, page = 1,
   const scope = actorScope(actor);
   const factionRows = await db.select().from(factions).where(eq(factions.id, factionId)).limit(1);
   const faction = factionRows[0];
-  if (!faction) throw errors.notFound("Faction not found.");
+  if (!faction) throw errors.notFound("Фракция не найдена.");
   if (scope !== null && !scope.includes(faction.departmentId)) {
-    throw errors.forbidden("This faction is outside your scope.", "OUT_OF_SCOPE");
+    throw errors.forbidden("Эта фракция вне вашей зоны доступа.", "OUT_OF_SCOPE");
   }
 
   const accountRows = await db
@@ -116,9 +116,9 @@ export const budgetTransactionSchema = z.object({
   type: z.enum(["deposit", "withdrawal"]),
   amount: z.coerce
     .number()
-    .int("Amount must be a whole number.")
-    .positive("Amount must be greater than zero.")
-    .max(1_000_000_000, "Amount is too large."),
+    .int("Сумма должна быть целым числом.")
+    .positive("Сумма должна быть больше нуля.")
+    .max(1_000_000_000, "Сумма слишком велика."),
   reason: z.string().trim().min(3).max(500),
 });
 
@@ -136,7 +136,7 @@ export async function createBudgetTransaction(
   return db.transaction(async (tx) => {
     const factionRows = await tx.select().from(factions).where(eq(factions.id, factionId));
     const faction = factionRows[0];
-    if (!faction) throw errors.notFound("Faction not found.");
+    if (!faction) throw errors.notFound("Фракция не найдена.");
 
     // Ensure the account exists (older factions may predate the budget module).
     let accountRows = await tx
@@ -161,7 +161,7 @@ export async function createBudgetTransaction(
       const allowNegative = await getSetting<boolean>("allow_negative_budget");
       if (!allowNegative) {
         throw errors.conflict(
-          `Insufficient balance: $${balanceBefore.toLocaleString("en-US")} cannot cover a withdrawal of $${input.amount.toLocaleString("en-US")}.`,
+          `Недостаточно средств: $${balanceBefore.toLocaleString("en-US")} не покрывает списание $${input.amount.toLocaleString("en-US")}.`,
           "INSUFFICIENT_BALANCE",
         );
       }

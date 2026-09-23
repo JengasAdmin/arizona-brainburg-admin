@@ -4,43 +4,43 @@ import type { PermissionKey } from "./permissions";
 export const DEPARTMENTS = [
   {
     key: "state_structures",
-    name: "State Structures",
-    description: "Government and state law-enforcement factions.",
+    name: "Госструктуры",
+    description: "Правительственные и правоохранительные фракции.",
   },
   {
     key: "central_management",
-    name: "Central Management",
-    description: "Administrative apparatus: media and licensing.",
+    name: "Центральное управление",
+    description: "Административный аппарат: СМИ и лицензирование.",
   },
   {
     key: "ministry_of_justice",
-    name: "Ministry of Justice",
-    description: "Justice direction (extensible — new factions can be attached).",
+    name: "Министерство юстиции",
+    description: "Направление юстиции (расширяемо — можно подключать новые фракции).",
   },
   {
     key: "healthcare",
-    name: "Healthcare",
-    description: "Medical centres, health academy and fire/rescue service.",
+    name: "Здравоохранение",
+    description: "Медцентры, академия здравоохранения и пожарно-спасательная служба.",
   },
   {
     key: "max_prison",
-    name: "Maximum Security Prison",
-    description: "Las Venturas Maximum Security Prison.",
+    name: "Тюрьма особого режима",
+    description: "Тюрьма особого режима Лас-Вентурас.",
   },
   {
     key: "ministry_of_defense",
-    name: "Ministry of Defense",
-    description: "Army factions.",
+    name: "Министерство обороны",
+    description: "Армейские фракции.",
   },
   {
     key: "ghetto",
-    name: "Ghetto",
-    description: "Ghetto direction (reserved for future factions).",
+    name: "Гетто",
+    description: "Направление «Гетто» (зарезервировано под будущие фракции).",
   },
   {
     key: "mafia",
-    name: "Mafia",
-    description: "Mafia direction (reserved for future factions).",
+    name: "Мафия",
+    description: "Направление «Мафия» (зарезервировано под будущие фракции).",
   },
 ] as const;
 
@@ -124,29 +124,29 @@ const SUPERVISOR_DEPARTMENTS: {
   short: string;
   label: string;
 }[] = [
-  { dept: "state_structures", short: "state", label: "State Structures" },
-  { dept: "central_management", short: "central", label: "Central Management" },
-  { dept: "ministry_of_justice", short: "justice", label: "Ministry of Justice" },
-  { dept: "healthcare", short: "health", label: "Healthcare" },
-  { dept: "max_prison", short: "prison", label: "Maximum Security Prison" },
-  { dept: "ministry_of_defense", short: "defense", label: "Ministry of Defense" },
-  { dept: "ghetto", short: "ghetto", label: "Ghetto" },
-  { dept: "mafia", short: "mafia", label: "Mafia" },
+  { dept: "state_structures", short: "state", label: "Госструктуры" },
+  { dept: "central_management", short: "central", label: "Центральное управление" },
+  { dept: "ministry_of_justice", short: "justice", label: "Министерство юстиции" },
+  { dept: "healthcare", short: "health", label: "Здравоохранение" },
+  { dept: "max_prison", short: "prison", label: "Тюрьма особого режима" },
+  { dept: "ministry_of_defense", short: "defense", label: "Министерство обороны" },
+  { dept: "ghetto", short: "ghetto", label: "Гетто" },
+  { dept: "mafia", short: "mafia", label: "Мафия" },
 ];
 
 const TIERS = [
-  { tier: "chief" as const, suffix: "chief", label: (l: string) => `Chief Supervisor of ${l}`, level: 70 },
+  { tier: "chief" as const, suffix: "chief", label: (l: string) => `Старший куратор — ${l}`, level: 70 },
   {
     tier: "deputy_chief" as const,
     suffix: "deputy_chief",
-    label: (l: string) => `Deputy Chief Supervisor of ${l}`,
+    label: (l: string) => `Заместитель старшего куратора — ${l}`,
     level: 66,
   },
-  { tier: "senior" as const, suffix: "senior", label: (l: string) => `Senior Supervisor of ${l}`, level: 62 },
+  { tier: "senior" as const, suffix: "senior", label: (l: string) => `Ведущий куратор — ${l}`, level: 62 },
   {
     tier: "supervisor" as const,
     suffix: "supervisor",
-    label: (l: string) => `${l} Supervisor`,
+    label: (l: string) => `Куратор — ${l}`,
     level: 58,
   },
 ];
@@ -155,7 +155,7 @@ const supervisorRoles: RoleDefinition[] = SUPERVISOR_DEPARTMENTS.flatMap((d, dep
   TIERS.map((t, tierIndex) => ({
     key: `sup_${d.short}_${t.suffix}`,
     name: t.label(d.label),
-    description: `${t.label(d.label)} — scoped to the ${d.label} direction only.`,
+    description: `${t.label(d.label)} — действует только в направлении «${d.label}».`,
     level: t.level,
     category: "supervision" as const,
     managesAdminRoles: false,
@@ -172,9 +172,9 @@ const supervisorRoles: RoleDefinition[] = SUPERVISOR_DEPARTMENTS.flatMap((d, dep
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     key: "site_founder",
-    name: "Site Founder / Developer",
+    name: "Основатель сайта / Разработчик",
     description:
-      "Absolute system level. Full access to every module, role, permission, budget, log and setting.",
+      "Абсолютный системный уровень. Полный доступ ко всем модулям, ролям, разрешениям, бюджету, журналам и настройкам.",
     level: 100,
     category: "administration",
     managesAdminRoles: true,
@@ -183,8 +183,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   },
   {
     key: "chief_administrator",
-    name: "Chief Administrator",
-    description: "Highest administrative level below the founder. Manages administrators, roles, permissions and the system.",
+    name: "Главный администратор",
+    description:
+      "Высший административный уровень после основателя. Управляет администраторами, ролями, разрешениями и системой.",
     level: 90,
     category: "administration",
     managesAdminRoles: true,
@@ -193,9 +194,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   },
   {
     key: "deputy_chief_administrator",
-    name: "Deputy Chief Administrator",
+    name: "Заместитель главного администратора",
     description:
-      "Manages administrators, roles and permissions. Global system settings and integration keys stay with Chief Administrator/Founder.",
+      "Управляет администраторами, ролями и разрешениями. Глобальные системные настройки и ключи интеграции остаются за главным администратором и основателем.",
     level: 85,
     category: "administration",
     managesAdminRoles: true,
@@ -206,9 +207,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   },
   {
     key: "curator",
-    name: "Curator",
+    name: "Куратор",
     description:
-      "Manages administrators and roles strictly below its own level. Cannot edit permission sets or system settings.",
+      "Управляет администраторами и ролями строго ниже собственного уровня. Не может изменять наборы разрешений и системные настройки.",
     level: 80,
     category: "administration",
     managesAdminRoles: true,
@@ -253,9 +254,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
 
   {
     key: "administrator_level_4",
-    name: "Administrator Level 4",
+    name: "Администратор 4 уровня",
     description:
-      "Senior site administrator: user moderation, leadership moderation, logs and audit access. Cannot appoint/dismiss leaders or touch budgets.",
+      "Старший администратор сайта: модерация пользователей и руководства, журналы и аудит. Не может назначать и отстранять руководителей, не работает с бюджетами.",
     level: 45,
     category: "administration",
     managesAdminRoles: false,
@@ -287,9 +288,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   },
   {
     key: "administrator_level_3",
-    name: "Administrator Level 3",
+    name: "Администратор 3 уровня",
     description:
-      "Junior site administrator: read-mostly access with manual activity logging. No administration controls, no audit log.",
+      "Младший администратор сайта: доступ преимущественно для чтения с ручным ведением активности. Без административных прав и журнала аудита.",
     level: 40,
     category: "administration",
     managesAdminRoles: false,
@@ -311,8 +312,8 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   },
   {
     key: "player",
-    name: "Player",
-    description: "Default role for every newly registered user. No administrative access.",
+    name: "Игрок",
+    description: "Роль по умолчанию для каждого нового пользователя. Без административного доступа.",
     level: 0,
     category: "player",
     managesAdminRoles: false,

@@ -50,15 +50,15 @@ export default async function BudgetDetailPage({
   return (
     <div>
       <PageHeader
-        title={`${budget.factionName} — Ledger`}
-        description="Ledger-derived balances — immutable transactions"
+        title={`${budget.factionName} — Регистр`}
+        description="Балансы по регистру — неизменяемые транзакции"
         actions={
           <>
             <Link
               href="/budgets"
               className="inline-flex h-7 items-center gap-1.5 rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-[#262626] hover:text-white"
             >
-              <ArrowLeft className="h-3.5 w-3.5" /> All budgets
+              <ArrowLeft className="h-3.5 w-3.5" /> Все бюджеты
             </Link>
             {canTransact ? (
               <NewTransactionDialog factionId={budget.factionId} balance={budget.balance} />
@@ -69,39 +69,39 @@ export default async function BudgetDetailPage({
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
         <StatCard
-          label="Current balance"
+          label="Текущий баланс"
           value={<span className="font-mono">{formatMoney(budget.balance)}</span>}
-          hint="Changes only with a transaction"
+          hint="Изменяется только транзакцией"
         />
         <StatCard
-          label="Transactions"
+          label="Транзакции"
           value={budget.total.toLocaleString("en-US")}
-          hint="Immutable ledger entries"
+          hint="Неизменяемые записи регистра"
         />
       </div>
 
       <div className="mt-5">
         <Card>
           <CardHeader
-            title="Transactions"
-            description="Newest first — balance after each entry is written into the ledger."
+            title="Транзакции"
+            description="Сначала новые — баланс после каждой записи вносится в регистр."
           />
           {budget.transactions.length === 0 ? (
             <EmptyState
               icon={<Receipt className="h-8 w-8" />}
-              title="No transactions yet"
-              description="Deposits and withdrawals recorded for this faction will appear here."
+              title="Транзакций пока нет"
+              description="Пополнения и списания этой фракции появятся здесь."
             />
           ) : (
             <>
               <Table className="min-w-[720px]">
                 <THead>
                   <TR>
-                    <TH>Date</TH>
-                    <TH>Type</TH>
-                    <TH align="right">Amount</TH>
-                    <TH align="right">Balance after</TH>
-                    <TH>Reason</TH>
+                    <TH>Дата</TH>
+                    <TH>Тип</TH>
+                    <TH align="right">Сумма</TH>
+                    <TH align="right">Баланс после</TH>
+                    <TH>Причина</TH>
                   </TR>
                 </THead>
                 <TBody>
@@ -135,7 +135,7 @@ export default async function BudgetDetailPage({
               {pages > 1 ? (
                 <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
                   <span className="text-xs text-neutral-500">
-                    Page {budget.page} of {pages} — {budget.total} entries
+                    Страница {budget.page} из {pages} — записей: {budget.total}
                   </span>
                   <div className="flex items-center gap-1.5">
                     <Link
@@ -147,7 +147,7 @@ export default async function BudgetDetailPage({
                           : "bg-raised text-neutral-200 hover:bg-[#262626] hover:text-white"
                       }`}
                     >
-                      <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                      <ChevronLeft className="h-3.5 w-3.5" /> Назад
                     </Link>
                     <Link
                       href={pageHref(budget.page + 1)}
@@ -158,7 +158,7 @@ export default async function BudgetDetailPage({
                           : "bg-raised text-neutral-200 hover:bg-[#262626] hover:text-white"
                       }`}
                     >
-                      Next <ChevronRight className="h-3.5 w-3.5" />
+                      Вперёд <ChevronRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </div>

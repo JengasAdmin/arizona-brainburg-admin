@@ -34,13 +34,13 @@ export const POST = guard(
       .from(factionPositions)
       .where(eq(factionPositions.id, body.positionId))
       .limit(1);
-    if (!positionRows[0]) throw errors.notFound("Position not found.");
+    if (!positionRows[0]) throw errors.notFound("Должность не найдена.");
 
     const departmentId = await departmentOfFaction(positionRows[0].factionId);
     const permission = positionRows[0].kind === "deputy" ? "MANAGE_DEPUTIES" : "APPOINT_LEADER";
     const decision = can(auth.actor, permission, { departmentId });
     if (!decision.allowed) {
-      throw errors.forbidden(`Missing permission: ${permission}.`, decision.reason ?? "FORBIDDEN");
+      throw errors.forbidden(`Нет разрешения: ${permission}.`, decision.reason ?? "FORBIDDEN");
     }
 
     const result = await appointTerm(body, auth.actor, getClientIp(req));

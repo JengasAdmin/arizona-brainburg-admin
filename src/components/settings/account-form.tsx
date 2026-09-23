@@ -28,13 +28,13 @@ interface FormState {
 function validate(form: FormState): string | null {
   const displayName = form.displayName.trim();
   if (displayName.length < 2 || displayName.length > 64) {
-    return "Display name must be 2–64 characters.";
+    return "Поле «Отображаемое имя»: 2–64 символов.";
   }
-  if (form.nickname.trim().length > 64) return "Nickname must be at most 64 characters.";
-  if (form.branch.trim().length > 120) return "Branch must be at most 120 characters.";
+  if (form.nickname.trim().length > 64) return "Поле «Никнейм»: не более 64 символов.";
+  if (form.branch.trim().length > 120) return "Поле «Направление»: не более 120 символов.";
   const gameId = form.gameId.trim();
   if (gameId && !/^[0-9A-Za-z_-]{1,32}$/.test(gameId)) {
-    return "Game ID must be 1–32 letters, digits, underscores or hyphens.";
+    return "Game ID: 1–32 символа — буквы, цифры, «_» или «-».";
   }
   return null;
 }
@@ -85,7 +85,7 @@ export function AccountForm({ profile }: { profile: OwnProfile }) {
           gameId: form.gameId.trim() || null,
         },
       });
-      toast({ title: "Profile updated.", variant: "success" });
+      toast({ title: "Профиль обновлён.", variant: "success" });
       setOpen(false);
       router.refresh();
     } catch (err) {
@@ -98,20 +98,20 @@ export function AccountForm({ profile }: { profile: OwnProfile }) {
   return (
     <>
       <Button size="sm" variant="outline" onClick={openEdit}>
-        <Pencil className="h-3.5 w-3.5" /> Edit profile
+        <Pencil className="h-3.5 w-3.5" /> Редактировать профиль
       </Button>
       <Dialog
         open={open}
         onClose={() => (pending ? undefined : setOpen(false))}
-        title="Edit profile"
-        description="Changing your Game ID always resets its verification."
+        title="Редактирование профиля"
+        description="Изменение Game ID всегда сбрасывает его подтверждение."
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={pending} onClick={() => void submit()}>
-              Save changes
+              Сохранить изменения
             </Button>
           </>
         }
@@ -123,7 +123,7 @@ export function AccountForm({ profile }: { profile: OwnProfile }) {
             void submit();
           }}
         >
-          <Field label="Display name" htmlFor="profile-display-name" error={error}>
+          <Field label="Отображаемое имя" htmlFor="profile-display-name" error={error}>
             <Input
               id="profile-display-name"
               required
@@ -131,21 +131,21 @@ export function AccountForm({ profile }: { profile: OwnProfile }) {
               onChange={(e) => setForm((prev) => ({ ...prev, displayName: e.target.value }))}
             />
           </Field>
-          <Field label="Nickname" htmlFor="profile-nickname">
+          <Field label="Никнейм" htmlFor="profile-nickname">
             <Input
               id="profile-nickname"
               value={form.nickname}
               onChange={(e) => setForm((prev) => ({ ...prev, nickname: e.target.value }))}
             />
           </Field>
-          <Field label="Branch" htmlFor="profile-branch">
+          <Field label="Направление" htmlFor="profile-branch">
             <Input
               id="profile-branch"
               value={form.branch}
               onChange={(e) => setForm((prev) => ({ ...prev, branch: e.target.value }))}
             />
           </Field>
-          <Field label="Game ID" htmlFor="profile-game-id" hint="Letters, digits, _ or - · max 32">
+          <Field label="Game ID" htmlFor="profile-game-id" hint="Буквы, цифры, _ или - · макс. 32">
             <Input
               id="profile-game-id"
               value={form.gameId}

@@ -68,12 +68,12 @@ export default async function SettingsPage({
     : null;
 
   const tabs: SettingsTabDef[] = [
-    { id: "account", label: "Account" },
-    { id: "connected", label: "Connected" },
-    { id: "notifications", label: "Notifications" },
-    { id: "security", label: "Security" },
-    ...(canSystem ? [{ id: "system", label: "System" }] : []),
-    ...(canIntegration ? [{ id: "integration", label: "Integration" }] : []),
+    { id: "account", label: "Учётная запись" },
+    { id: "connected", label: "Подключения" },
+    { id: "notifications", label: "Уведомления" },
+    { id: "security", label: "Безопасность" },
+    ...(canSystem ? [{ id: "system", label: "Система" }] : []),
+    ...(canIntegration ? [{ id: "integration", label: "Интеграция" }] : []),
   ];
 
   const requestedTab = typeof sp.tab === "string" ? sp.tab : undefined;
@@ -86,8 +86,8 @@ export default async function SettingsPage({
     <div className="space-y-4">
       <Card>
         <CardHeader
-          title="Profile"
-          description="Your own account details."
+          title="Профиль"
+          description="Данные вашей учётной записи."
           actions={
             <AccountForm
               profile={{
@@ -101,35 +101,35 @@ export default async function SettingsPage({
           }
         />
         <CardBody>
-          <AccountRow label="Display name">{auth.user.displayName}</AccountRow>
-          <AccountRow label="Nickname">{auth.user.nickname ?? "—"}</AccountRow>
-          <AccountRow label="Branch">{auth.user.branch ?? "—"}</AccountRow>
+          <AccountRow label="Отображаемое имя">{auth.user.displayName}</AccountRow>
+          <AccountRow label="Никнейм">{auth.user.nickname ?? "—"}</AccountRow>
+          <AccountRow label="Ветка">{auth.user.branch ?? "—"}</AccountRow>
           <AccountRow label="Game ID">
             {auth.user.gameId ? (
               <span className="inline-flex items-center gap-2">
                 <span className="font-mono">{auth.user.gameId}</span>
                 <Badge tone={auth.user.gameIdVerifiedAt ? "ok" : "warn"}>
-                  {auth.user.gameIdVerifiedAt ? "Verified" : "Unverified"}
+                  {auth.user.gameIdVerifiedAt ? "Подтверждён" : "Не подтверждён"}
                 </Badge>
               </span>
             ) : (
               "—"
             )}
           </AccountRow>
-          <AccountRow label="Status">
+          <AccountRow label="Статус">
             <StatusBadge status={auth.user.status} />
           </AccountRow>
-          <AccountRow label="Server">#{auth.user.serverNumber}</AccountRow>
-          <AccountRow label="Account created">{formatDateTime(auth.user.createdAt)}</AccountRow>
-          <AccountRow label="Last sign-in">{formatDateTime(auth.user.lastLoginAt)}</AccountRow>
+          <AccountRow label="Сервер">#{auth.user.serverNumber}</AccountRow>
+          <AccountRow label="Аккаунт создан">{formatDateTime(auth.user.createdAt)}</AccountRow>
+          <AccountRow label="Последний вход">{formatDateTime(auth.user.lastLoginAt)}</AccountRow>
         </CardBody>
       </Card>
 
       <Card>
-        <CardHeader title="Roles" description="Roles currently assigned to your account." />
+        <CardHeader title="Роли" description="Роли, назначенные вашей учётной записи." />
         <CardBody>
           {roles.length === 0 ? (
-            <p className="text-[13px] text-neutral-500">No roles assigned.</p>
+            <p className="text-[13px] text-neutral-500">Роли не назначены.</p>
           ) : (
             <div className="flex flex-wrap gap-1.5">
               {roles.map((role) => (
@@ -147,8 +147,8 @@ export default async function SettingsPage({
   const connectedPanel = (
     <Card>
       <CardHeader
-        title="Connected accounts"
-        description="Link external identity providers used for sign-in."
+        title="Подключённые аккаунты"
+        description="Подключение внешних учётных записей для входа."
       />
       <CardBody padded={false}>
         <div className="divide-y divide-line">
@@ -159,19 +159,19 @@ export default async function SettingsPage({
                 <div className="min-w-0">
                   <div className="text-[13px] font-medium text-neutral-200">{provider.label}</div>
                   <div className="text-[11px] text-neutral-600">
-                    {account ? (account.username ?? "Connected") : "Not connected"}
+                    {account ? (account.username ?? "Подключено") : "Не подключено"}
                   </div>
                 </div>
                 {account ? (
                   <Badge tone="ok" dot>
-                    Connected
+                    Подключено
                   </Badge>
                 ) : (
                   <a
                     href={`/api/auth/${provider.key}?mode=link&redirectTo=/settings`}
                     className="inline-flex h-7 items-center rounded-md border border-line bg-raised px-2.5 text-xs font-medium text-neutral-200 transition-colors hover:border-line2 hover:text-white"
                   >
-                    Connect {provider.label}
+                    Подключить {provider.label}
                   </a>
                 )}
               </div>
@@ -221,8 +221,8 @@ export default async function SettingsPage({
   return (
     <div>
       <PageHeader
-        title="Settings"
-        description="Your account, preferences, session security and — where permitted — platform configuration."
+        title="Настройки"
+        description="Ваш аккаунт, настройки, безопасность сессии и — где разрешено — конфигурация платформы."
       />
       <SettingsTabs tabs={tabs} defaultTab={defaultTab} panels={panels} />
     </div>

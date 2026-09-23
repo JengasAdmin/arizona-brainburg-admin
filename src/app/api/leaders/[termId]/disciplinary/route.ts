@@ -20,7 +20,7 @@ export const POST = guard(
     const permission = body.type === "warning" ? "GIVE_WARNING" : "GIVE_REPRIMAND";
     const decision = can(auth.actor, permission, scope);
     if (!decision.allowed) {
-      throw errors.forbidden(`Missing permission: ${permission}.`, decision.reason ?? "FORBIDDEN");
+      throw errors.forbidden(`Нет разрешения: ${permission}.`, decision.reason ?? "FORBIDDEN");
     }
     const result = await addDisciplinary(Number(params.termId), body, auth.actor, getClientIp(req));
     return NextResponse.json(result, { status: 201 });

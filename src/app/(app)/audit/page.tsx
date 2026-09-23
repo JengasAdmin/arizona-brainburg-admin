@@ -80,8 +80,8 @@ export default async function AuditPage({
   return (
     <div>
       <PageHeader
-        title="Audit log"
-        description="Immutable record of all privileged actions"
+        title="Журнал аудита"
+        description="Неизменяемая запись всех привилегированных действий"
       />
 
       <AuditToolbar filters={filters} />
@@ -90,11 +90,11 @@ export default async function AuditPage({
         {result.items.length === 0 ? (
           <EmptyState
             icon={<FileClock className="h-8 w-8" />}
-            title={hasFilters ? "No audit entries match the current filters" : "No audit entries yet"}
+            title={hasFilters ? "Нет записей аудита, соответствующих текущим фильтрам" : "Записей аудита пока нет"}
             description={
               hasFilters
-                ? "Adjust or clear the filters to see more entries."
-                : "Privileged actions will be recorded here as soon as they are performed."
+                ? "Измените или сбросьте фильтры, чтобы увидеть больше записей."
+                : "Привилегированные действия будут записываться здесь по мере выполнения."
             }
             action={
               hasFilters ? (
@@ -102,7 +102,7 @@ export default async function AuditPage({
                   href="/audit"
                   className="inline-flex h-7 items-center rounded-md border border-line bg-raised px-2.5 text-xs text-neutral-300 transition-colors hover:border-line2 hover:text-white"
                 >
-                  Clear filters
+                  Сбросить фильтры
                 </Link>
               ) : undefined
             }
@@ -112,11 +112,11 @@ export default async function AuditPage({
             <Table className="min-w-[960px]">
               <THead>
                 <TR>
-                  <TH>Timestamp</TH>
-                  <TH>Actor</TH>
-                  <TH>Action</TH>
-                  <TH>Entity</TH>
-                  <TH>Details</TH>
+                  <TH>Время</TH>
+                  <TH>Исполнитель</TH>
+                  <TH>Действие</TH>
+                  <TH>Сущность</TH>
+                  <TH>Детали</TH>
                   <TH>IP</TH>
                   <TH align="right"> </TH>
                 </TR>
@@ -135,7 +135,7 @@ export default async function AuditPage({
             {totalPages > 1 ? (
               <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3 text-xs text-neutral-500">
                 <span>
-                  {from}–{to} of {result.total}
+                  {from}–{to} из {result.total}
                 </span>
                 <div className="flex items-center gap-2">
                   {page > 1 ? (
@@ -143,26 +143,26 @@ export default async function AuditPage({
                       href={href(page - 1)}
                       className="inline-flex h-7 items-center gap-1 rounded-md border border-line bg-raised px-2.5 text-neutral-300 transition-colors hover:border-line2 hover:text-white"
                     >
-                      <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                      <ChevronLeft className="h-3.5 w-3.5" /> Назад
                     </Link>
                   ) : (
                     <span className="inline-flex h-7 items-center gap-1 rounded-md border border-line px-2.5 opacity-50">
-                      <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                      <ChevronLeft className="h-3.5 w-3.5" /> Назад
                     </span>
                   )}
                   <span>
-                    Page {page} / {totalPages}
+                    Страница {page} / {totalPages}
                   </span>
                   {page < totalPages ? (
                     <Link
                       href={href(page + 1)}
                       className="inline-flex h-7 items-center gap-1 rounded-md border border-line bg-raised px-2.5 text-neutral-300 transition-colors hover:border-line2 hover:text-white"
                     >
-                      Next <ChevronRight className="h-3.5 w-3.5" />
+                      Вперёд <ChevronRight className="h-3.5 w-3.5" />
                     </Link>
                   ) : (
                     <span className="inline-flex h-7 items-center gap-1 rounded-md border border-line px-2.5 opacity-50">
-                      Next <ChevronRight className="h-3.5 w-3.5" />
+                      Вперёд <ChevronRight className="h-3.5 w-3.5" />
                     </span>
                   )}
                 </div>

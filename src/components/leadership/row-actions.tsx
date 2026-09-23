@@ -49,7 +49,7 @@ export function RowActions({
         trigger={
           <button
             type="button"
-            aria-label={`Actions for ${term.displayName}`}
+            aria-label={`Действия для ${term.displayName}`}
             className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-line text-neutral-400 transition-colors hover:bg-raised hover:text-white"
           >
             <MoreHorizontal className="h-4 w-4" />
@@ -66,7 +66,7 @@ export function RowActions({
                   setDialog("dismiss");
                 }}
               >
-                <UserX className="h-3.5 w-3.5" /> Dismiss
+                <UserX className="h-3.5 w-3.5" /> Отстранить
               </DropdownItem>
             ) : null}
             {canPoints ? (
@@ -76,7 +76,7 @@ export function RowActions({
                   setDialog("points");
                 }}
               >
-                <Award className="h-3.5 w-3.5" /> Add points
+                <Award className="h-3.5 w-3.5" /> Начислить баллы
               </DropdownItem>
             ) : null}
             {canDisciplinary ? (
@@ -86,7 +86,7 @@ export function RowActions({
                   setDialog("disciplinary");
                 }}
               >
-                <ShieldAlert className="h-3.5 w-3.5" /> Issue warning / reprimand
+                <ShieldAlert className="h-3.5 w-3.5" /> Выдать предупреждение / выговор
               </DropdownItem>
             ) : null}
             {historyHref ? (
@@ -96,7 +96,7 @@ export function RowActions({
                   router.push(historyHref);
                 }}
               >
-                <Eye className="h-3.5 w-3.5" /> View history
+                <Eye className="h-3.5 w-3.5" /> Просмотреть историю
               </DropdownItem>
             ) : null}
           </>

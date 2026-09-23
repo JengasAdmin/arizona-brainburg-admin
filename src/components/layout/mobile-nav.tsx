@@ -25,7 +25,7 @@ export function MobileNav({ allowedHrefs }: { allowedHrefs: string[] }) {
     <>
       <button
         type="button"
-        aria-label="Open navigation"
+        aria-label="Открыть навигацию"
         onClick={() => setOpen(true)}
         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised text-neutral-300 transition-colors hover:text-white lg:hidden"
       >
@@ -48,7 +48,7 @@ export function MobileNav({ allowedHrefs }: { allowedHrefs: string[] }) {
               </div>
               <button
                 type="button"
-                aria-label="Close navigation"
+                aria-label="Закрыть навигацию"
                 onClick={() => setOpen(false)}
                 className="rounded p-1 text-neutral-500 hover:text-white"
               >

@@ -72,17 +72,17 @@ export default async function NotificationsPage({
   return (
     <div>
       <PageHeader
-        title="Notifications"
-        description={`${result.unread} unread · ${result.total} total`}
+        title="Уведомления"
+        description={`${result.unread} непрочитанных · ${result.total} всего`}
         actions={<NotificationActions unread={result.unread} />}
       />
 
       <div className="mb-3 flex gap-2">
         <FilterChip href="/notifications" active={!unreadOnly}>
-          All
+          Все
         </FilterChip>
         <FilterChip href="/notifications?unread=1" active={unreadOnly}>
-          Unread{result.unread > 0 ? ` (${result.unread})` : ""}
+          Непрочитанные{result.unread > 0 ? ` (${result.unread})` : ""}
         </FilterChip>
       </div>
 
@@ -90,11 +90,11 @@ export default async function NotificationsPage({
         <Card>
           <EmptyState
             icon={<Bell className="h-8 w-8" />}
-            title="No notifications."
+            title="Нет уведомлений."
             description={
               unreadOnly
-                ? "You have no unread notifications."
-                : "Notifications about leadership, roles and your account will appear here."
+                ? "У вас нет непрочитанных уведомлений."
+                : "Уведомления о руководстве, ролях и вашей учётной записи появятся здесь."
             }
           />
         </Card>
@@ -129,7 +129,7 @@ export default async function NotificationsPage({
                             href={internalLink}
                             className="inline-flex items-center gap-1 text-[11px] text-neutral-500 underline-offset-2 transition-colors hover:text-white hover:underline"
                           >
-                            View details <ArrowUpRight className="h-3 w-3" />
+                            Подробнее <ArrowUpRight className="h-3 w-3" />
                           </Link>
                         ) : null}
                       </div>
@@ -148,7 +148,7 @@ export default async function NotificationsPage({
           {totalPages > 1 ? (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3 text-xs text-neutral-500">
               <span>
-                {from}–{to} of {result.total}
+                {from}–{to} из {result.total}
               </span>
               <div className="flex items-center gap-2">
                 {page > 1 ? (
@@ -156,26 +156,26 @@ export default async function NotificationsPage({
                     href={href(page - 1)}
                     className="inline-flex h-7 items-center gap-1 rounded-md border border-line bg-raised px-2.5 text-neutral-300 transition-colors hover:border-line2 hover:text-white"
                   >
-                    <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                    <ChevronLeft className="h-3.5 w-3.5" /> Назад
                   </Link>
                 ) : (
                   <span className="inline-flex h-7 items-center gap-1 rounded-md border border-line px-2.5 opacity-50">
-                    <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                    <ChevronLeft className="h-3.5 w-3.5" /> Назад
                   </span>
                 )}
                 <span>
-                  Page {page} / {totalPages}
+                  Страница {page} / {totalPages}
                 </span>
                 {page < totalPages ? (
                   <Link
                     href={href(page + 1)}
                     className="inline-flex h-7 items-center gap-1 rounded-md border border-line bg-raised px-2.5 text-neutral-300 transition-colors hover:border-line2 hover:text-white"
                   >
-                    Next <ChevronRight className="h-3.5 w-3.5" />
+                    Вперёд <ChevronRight className="h-3.5 w-3.5" />
                   </Link>
                 ) : (
                   <span className="inline-flex h-7 items-center gap-1 rounded-md border border-line px-2.5 opacity-50">
-                    Next <ChevronRight className="h-3.5 w-3.5" />
+                    Вперёд <ChevronRight className="h-3.5 w-3.5" />
                   </span>
                 )}
               </div>

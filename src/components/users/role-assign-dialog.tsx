@@ -49,7 +49,7 @@ export function RoleAssignDialog({
   const submit = async () => {
     const chosen = available.find((role) => role.key === roleKey);
     if (!chosen) {
-      setError("Select a role to assign.");
+      setError("Выберите роль для назначения.");
       return;
     }
     setError(null);
@@ -57,15 +57,15 @@ export function RoleAssignDialog({
     try {
       await api(`/api/users/${userId}/roles`, { method: "POST", body: { roleKey: chosen.key } });
       toast({
-        title: "Role assigned",
-        description: `“${chosen.title}” was granted to user #${userId}.`,
+        title: "Роль назначена",
+        description: `«${chosen.title}» выдана пользователю #${userId}.`,
         variant: "success",
       });
       setRoleKey("");
       setOpen(false);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not assign the role", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось назначить роль", description: errorMessage(err), variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -81,12 +81,12 @@ export function RoleAssignDialog({
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Assign role"
-        description={`Grant a role to user #${userId}. Hierarchy rules are enforced server-side.`}
+        title="Назначить роль"
+        description={`Выдача роли пользователю #${userId}. Правила иерархии проверяются на сервере.`}
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={loading}>
-              Cancel
+              Отмена
             </Button>
             <Button
               variant="primary"
@@ -94,23 +94,24 @@ export function RoleAssignDialog({
               loading={loading}
               disabled={available.length === 0}
             >
-              Assign role
+              Назначить роль
             </Button>
           </>
         }
       >
         {available.length === 0 ? (
           <p className="text-[13px] text-neutral-500">
-            No assignable roles available — this user already holds every role you may grant.
+            Нет доступных ролей для назначения — у этого пользователя уже есть все роли, которые
+            вы можете выдать.
           </p>
         ) : (
-          <Field label="Role" htmlFor="role-assign-dialog-select" error={error}>
+          <Field label="Роль" htmlFor="role-assign-dialog-select" error={error}>
             <Select
               id="role-assign-dialog-select"
               value={roleKey}
               onChange={(e) => setRoleKey(e.target.value)}
             >
-              <option value="">Select a role…</option>
+              <option value="">Выберите роль…</option>
               {available.map((role) => (
                 <option key={role.key} value={role.key}>
                   {role.title} — {role.scope}

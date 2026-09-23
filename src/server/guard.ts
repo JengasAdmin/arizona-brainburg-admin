@@ -70,7 +70,7 @@ export function guard<S extends ZodTypeAny = ZodTypeAny>(
   ): Promise<NextResponse> => {
     try {
       if (config.method && req.method !== config.method) {
-        throw errors.forbidden(`Method ${req.method} not allowed.`, "METHOD_NOT_ALLOWED");
+        throw errors.forbidden(`Метод ${req.method} не поддерживается.`, "METHOD_NOT_ALLOWED");
       }
 
       const rl = config.rateLimit ?? RATE_LIMITS.write;
@@ -84,7 +84,7 @@ export function guard<S extends ZodTypeAny = ZodTypeAny>(
       if (needsAuth || config.permission) {
         auth = await getAuth();
         if (needsAuth && !auth) throw errors.unauthorized();
-        if (auth && auth.actor.status === "blocked") throw errors.forbidden("Account blocked.", "ACCOUNT_BLOCKED");
+        if (auth && auth.actor.status === "blocked") throw errors.forbidden("Аккаунт заблокирован.", "ACCOUNT_BLOCKED");
       }
 
       // Body validation runs BEFORE scope resolution so scope helpers may use it.
@@ -102,7 +102,7 @@ export function guard<S extends ZodTypeAny = ZodTypeAny>(
         const decision = can(auth.actor, config.permission, scope);
         if (!decision.allowed) {
           throw errors.forbidden(
-            `Missing permission: ${config.permission}.`,
+            `Нет разрешения: ${config.permission}.`,
             decision.reason ?? "FORBIDDEN",
           );
         }

@@ -55,7 +55,7 @@ export function AuditExpandRow({ row, entityHref }: { row: AuditRowData; entityH
           {formatDateTime(row.createdAt)}
         </TD>
         <TD>
-          <div className="text-neutral-200">{row.actorName ?? "System"}</div>
+          <div className="text-neutral-200">{row.actorName ?? "Система"}</div>
           <div className="font-mono text-[11px] text-neutral-600">
             {row.actorId != null ? formatUserId(row.actorId) : "—"}
           </div>
@@ -99,17 +99,17 @@ export function AuditExpandRow({ row, entityHref }: { row: AuditRowData; entityH
             <div className="space-y-3">
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-wide text-neutral-600">
-                  Entry
+                  Запись
                 </div>
                 <p className="mt-1 text-[13px] text-neutral-200">{sentence}</p>
               </div>
               <dl className="grid max-w-2xl grid-cols-1 gap-x-6 sm:grid-cols-2">
-                <Meta label="Timestamp" value={<span className="font-mono">{formatDateTime(row.createdAt)}</span>} />
+                <Meta label="Время" value={<span className="font-mono">{formatDateTime(row.createdAt)}</span>} />
                 <Meta
-                  label="Actor"
+                  label="Автор"
                   value={
                     <>
-                      {row.actorName ?? "System"}
+                      {row.actorName ?? "Система"}
                       {row.actorRole ? <span className="text-neutral-500"> · {row.actorRole}</span> : null}
                       {row.actorId != null ? (
                         <span className="ml-1 font-mono text-neutral-500">{formatUserId(row.actorId)}</span>
@@ -117,9 +117,9 @@ export function AuditExpandRow({ row, entityHref }: { row: AuditRowData; entityH
                     </>
                   }
                 />
-                <Meta label="Action" value={<Badge tone="neutral">{row.action}</Badge>} />
+                <Meta label="Действие" value={<Badge tone="neutral">{row.action}</Badge>} />
                 <Meta
-                  label="Entity"
+                  label="Сущность"
                   value={
                     <>
                       {row.entityType}
@@ -127,15 +127,15 @@ export function AuditExpandRow({ row, entityHref }: { row: AuditRowData; entityH
                     </>
                   }
                 />
-                <Meta label="Target" value={row.targetLabel ?? "—"} />
-                <Meta label="Reason" value={row.reason ?? "—"} />
+                <Meta label="Цель" value={row.targetLabel ?? "—"} />
+                <Meta label="Причина" value={row.reason ?? "—"} />
                 <Meta label="IP" value={<span className="font-mono">{row.ip ?? "—"}</span>} />
-                <Meta label="Department" value={row.departmentId != null ? String(row.departmentId) : "—"} />
+                <Meta label="Направление" value={row.departmentId != null ? String(row.departmentId) : "—"} />
               </dl>
               {hasMetadata ? (
                 <div>
                   <div className="text-[11px] font-semibold uppercase tracking-wide text-neutral-600">
-                    Metadata
+                    Метаданные
                   </div>
                   <pre className="mt-1 max-w-3xl overflow-x-auto rounded-md border border-line bg-card p-3 text-[11px] leading-relaxed text-neutral-400">
                     {JSON.stringify(

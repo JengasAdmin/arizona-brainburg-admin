@@ -85,8 +85,8 @@ export function PermissionEditor({
   // Curator-type actors can open the role but may not change any permission set.
   const editable = canAssign && (isFounder || grantable.length > 0);
   const readOnlyReason = !canAssign
-    ? "Your account is not allowed to assign or edit this role (RBAC engine decision)."
-    : "You do not hold MANAGE_PERMISSIONS, so you cannot change permission sets.";
+    ? "Вашему аккаунту нельзя назначать или изменять эту роль (решение движка RBAC)."
+    : "У вас нет права MANAGE_PERMISSIONS, поэтому изменять наборы прав нельзя.";
 
   const dirtyList = useMemo(() => {
     const current = [...selected].sort();
@@ -118,13 +118,13 @@ export function PermissionEditor({
       const next = new Set<string>([...basePermissions, ...res.permissions]);
       setSelected(next);
       toast({
-        title: "Permissions saved",
-        description: `${roleName} now holds ${next.size} permissions.`,
+        title: "Права сохранены",
+        description: `У роли «${roleName}» теперь ${next.size} прав.`,
         variant: "success",
       });
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not save permissions", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось сохранить права", description: errorMessage(err), variant: "error" });
     } finally {
       setSaving(false);
     }
@@ -139,14 +139,14 @@ export function PermissionEditor({
       );
       setSelected(new Set<string>([...basePermissions, ...res.permissions]));
       toast({
-        title: "Custom grants reset",
-        description: `${roleName} restored to its ${basePermissions.length} catalog permissions.`,
+        title: "Пользовательские права сброшены",
+        description: `Восстановлены ${basePermissions.length} прав каталога роли «${roleName}».`,
         variant: "success",
       });
       setResetOpen(false);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not reset grants", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось сбросить права", description: errorMessage(err), variant: "error" });
     } finally {
       setResetting(false);
     }
@@ -154,9 +154,9 @@ export function PermissionEditor({
 
   const titleFor = (perm: PermissionDefinition, isBase: boolean, canToggle: boolean): string | undefined => {
     if (canToggle) return undefined;
-    if (isBase) return "Inherent to this role — always included.";
-    if (!grantableSet.has(perm.key)) return "You cannot grant this permission";
-    if (!canAssign) return "You cannot edit this role.";
+    if (isBase) return "Входит в роль по умолчанию — всегда включено.";
+    if (!grantableSet.has(perm.key)) return "Вы не можете выдать это право";
+    if (!canAssign) return "Вы не можете изменять эту роль.";
     return readOnlyReason;
   };
 
@@ -164,10 +164,10 @@ export function PermissionEditor({
     <>
       <Card>
         <CardHeader
-          title="Permission editor"
+          title="Редактор прав"
           description={
             editable
-              ? "Grant or revoke permissions for this role. Base permissions are inherent and always included."
+              ? "Выдавайте или отзывайте права этой роли. Базовые права входят в роль по умолчанию и всегда включены."
               : readOnlyReason
           }
         />
@@ -177,7 +177,7 @@ export function PermissionEditor({
             <div className="flex items-start gap-2.5 rounded-md border border-line bg-panel px-3 py-2.5">
               <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-neutral-500" />
               <div>
-                <p className="text-[13px] text-neutral-200">Read-only — you cannot edit this role&apos;s permissions.</p>
+                <p className="text-[13px] text-neutral-200">Только для просмотра — изменять права этой роли нельзя.</p>
                 <p className="mt-0.5 text-xs text-neutral-600">{readOnlyReason}</p>
               </div>
             </div>
@@ -227,8 +227,8 @@ export function PermissionEditor({
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="text-[13px] text-neutral-200">{perm.name}</span>
-                            {isBase ? <Badge tone="info">base</Badge> : null}
-                            {perm.critical ? <Badge tone="warn">critical</Badge> : null}
+                            {isBase ? <Badge tone="info">база</Badge> : null}
+                            {perm.critical ? <Badge tone="warn">критично</Badge> : null}
                           </div>
                           <p className="mt-0.5 text-xs text-neutral-600">{perm.description}</p>
                           <p className="mt-0.5 font-mono text-[11px] text-neutral-700">{perm.key}</p>
@@ -250,16 +250,16 @@ export function PermissionEditor({
         {editable ? (
           <div className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border-t border-line bg-card px-4 py-3">
             <div className="flex items-center gap-2 text-xs text-neutral-500">
-              <span className="text-neutral-300">{selected.size} selected</span>
-              <span className="text-neutral-600">of {PERMISSIONS.length}</span>
-              {dirty ? <Badge tone="warn">Unsaved changes</Badge> : null}
+              <span className="text-neutral-300">{selected.size} выбрано</span>
+              <span className="text-neutral-600">из {PERMISSIONS.length}</span>
+              {dirty ? <Badge tone="warn">Несохранённые изменения</Badge> : null}
             </div>
             <div className="flex items-center gap-2">
               <Button size="sm" variant="ghost" disabled={!dirty || saving} onClick={() => setSelected(new Set(initialList))}>
-                Reset
+                Сбросить
               </Button>
               <Button size="sm" variant="primary" loading={saving} disabled={!dirty} onClick={save}>
-                <Save className="h-3.5 w-3.5" /> Save
+                <Save className="h-3.5 w-3.5" /> Сохранить
               </Button>
             </div>
           </div>
@@ -268,18 +268,19 @@ export function PermissionEditor({
 
       {showDangerZone ? (
         <Card className="mt-4">
-          <CardHeader title="Danger zone" description="Destructive, audited actions for this role." />
+          <CardHeader title="Опасная зона" description="Деструктивные действия с этой ролью, записываемые в аудит." />
           <CardBody>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-[13px] text-neutral-200">Reset custom grants</p>
+                <p className="text-[13px] text-neutral-200">Сбросить пользовательские права</p>
                 <p className="mt-0.5 text-xs text-neutral-600">
-                  Discard the {initialGrants.length}-permission custom set and restore the{" "}
-                  {basePermissions.length} catalog defaults. Recorded in the audit log.
+                  Будет отброшен пользовательский набор из {initialGrants.length} прав и восстановлены
+                  {" "}значения каталога по умолчанию ({basePermissions.length}).
+                  {" "}Действие записывается в журнал аудита.
                 </p>
               </div>
               <Button size="sm" variant="danger" onClick={() => setResetOpen(true)}>
-                <TriangleAlert className="h-3.5 w-3.5" /> Reset grants
+                <TriangleAlert className="h-3.5 w-3.5" /> Сбросить права
               </Button>
             </div>
           </CardBody>
@@ -292,14 +293,14 @@ export function PermissionEditor({
         request={
           resetOpen
             ? {
-                title: "Reset custom grants?",
-                description: `Restore the catalog default permission set for “${roleName}”.`,
+                title: "Сбросить пользовательские права?",
+                description: `Восстановить набор прав по умолчанию из каталога для роли «${roleName}».`,
                 fields: [
-                  { label: "Role", value: roleName },
-                  { label: "Custom set", value: `${initialGrants.length} permissions` },
-                  { label: "After reset", value: `${basePermissions.length} permissions` },
+                  { label: "Роль", value: roleName },
+                  { label: "Пользовательский набор", value: `${initialGrants.length} прав` },
+                  { label: "После сброса", value: `${basePermissions.length} прав` },
                 ],
-                confirmLabel: "Reset grants",
+                confirmLabel: "Сбросить права",
                 danger: true,
               }
             : null

@@ -51,32 +51,32 @@ export default async function AdministrationPage() {
   return (
     <div>
       <PageHeader
-        title="Administration"
-        description="Roles, permission grants and system governance"
+        title="Администрирование"
+        description="Роли, выдача разрешений и управление системой"
       />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
-          label="Total roles"
+          label="Всего ролей"
           value={totalRoles.toLocaleString("en-US")}
-          hint="Catalog and custom roles"
+          hint="Роли из каталога и пользовательские"
           href="/admin/roles"
         />
         <StatCard
-          label="Custom permission sets"
+          label="Пользовательские наборы разрешений"
           value={customPermissionSets.toLocaleString("en-US")}
-          hint="Derived: stored set differs from catalog base"
+          hint="Вычисляется: сохранённый набор отличается от базового в каталоге"
           href="/admin/roles"
         />
         <StatCard
-          label="Departments"
+          label="Ведомства"
           value={departmentCount.toLocaleString("en-US")}
-          hint="Catalog-derived supervision directions"
+          hint="Направления надзора из каталога"
         />
         <StatCard
-          label="Admin-tier roles (L3/L4)"
+          label="Роли админ-уровня (L3/L4)"
           value={adminTierCount.toLocaleString("en-US")}
-          hint="Catalog-derived: Administrator Level 3–4"
+          hint="Из каталога: Administrator Level 3–4"
         />
       </div>
 
@@ -88,10 +88,11 @@ export default async function AdministrationPage() {
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                <FileClock className="h-4 w-4 text-neutral-500" /> Roles & permissions
+                <FileClock className="h-4 w-4 text-neutral-500" /> Роли и разрешения
               </div>
               <p className="mt-1 text-xs text-neutral-500">
-                Browse the hierarchy, edit permission sets and reset custom grants.
+                Просмотр иерархии, редактирование наборов разрешений и сброс пользовательских
+                выдач.
               </p>
             </div>
             <ArrowRight className="h-4 w-4 shrink-0 text-neutral-600 transition-colors group-hover:text-white" />
@@ -104,10 +105,10 @@ export default async function AdministrationPage() {
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                <Settings2 className="h-4 w-4 text-neutral-500" /> Integration & system settings
+                <Settings2 className="h-4 w-4 text-neutral-500" /> Интеграция и системные настройки
               </div>
               <p className="mt-1 text-xs text-neutral-500">
-                Integration API keys and global settings live under Settings.
+                Ключи API интеграции и глобальные настройки находятся в разделе «Настройки».
               </p>
             </div>
             <ArrowRight className="h-4 w-4 shrink-0 text-neutral-600 transition-colors group-hover:text-white" />
@@ -119,24 +120,24 @@ export default async function AdministrationPage() {
         <div className="mt-5">
           <Card>
             <CardHeader
-              title="Recent role changes"
-              description="Latest audited actions on role entities (entityType = role)."
+              title="Недавние изменения ролей"
+              description="Последние действия аудита для сущностей роли (entityType = role)."
             />
             {roleAudit.items.length === 0 ? (
               <EmptyState
                 icon={<ScrollText className="h-8 w-8" />}
-                title="No role changes recorded yet"
-                description="Role creations and permission edits will appear here as soon as they happen."
+                title="Изменения ролей ещё не записаны"
+                description="Создание ролей и изменение разрешений появятся здесь по мере выполнения."
               />
             ) : (
               <div className="overflow-x-auto">
                 <Table className="min-w-[560px]">
                   <THead>
                     <TR>
-                      <TH>Action</TH>
-                      <TH>Entry</TH>
-                      <TH>Reason</TH>
-                      <TH align="right">Date</TH>
+                      <TH>Действие</TH>
+                      <TH>Запись</TH>
+                      <TH>Причина</TH>
+                      <TH align="right">Дата</TH>
                     </TR>
                   </THead>
                   <TBody>

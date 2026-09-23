@@ -28,15 +28,15 @@ interface SearchParams {
 }
 
 const BANDS: { id: BandId; label: string; hint: string }[] = [
-  { id: "founder", label: "Founder", hint: "Absolute system level — permission set is immutable." },
+  { id: "founder", label: "Основатель", hint: "Абсолютный системный уровень — набор разрешений неизменяем." },
   {
     id: "leadership",
-    label: "Government leadership",
-    hint: "Chief Administrator, Deputy Chief Administrator and Curator.",
+    label: "Правительственное руководство",
+    hint: "Главный администратор, Заместитель главного администратора и Куратор.",
   },
-  { id: "supervisors", label: "Department supervisors", hint: "Eight supervision directions × four tiers." },
-  { id: "admin-tiers", label: "Administrative tiers", hint: "Administrator Level 4 and Level 3." },
-  { id: "player", label: "Player & custom roles", hint: "Default player role and custom-created roles." },
+  { id: "supervisors", label: "Руководители ведомств", hint: "Восемь направлений надзора × четыре уровня." },
+  { id: "admin-tiers", label: "Административные уровни", hint: "Администратор 4 уровня и 3 уровня." },
+  { id: "player", label: "Роли игроков и пользовательские", hint: "Роль игрока по умолчанию и созданные вручную роли." },
 ];
 
 function bandOf(role: { key: string; category: string; level: number }): BandId {
@@ -147,8 +147,8 @@ export default async function RolesPage({
   return (
     <div>
       <PageHeader
-        title="Roles"
-        description="Hierarchy bands, scope and permission sets — each role is edited on its own page."
+        title="Роли"
+        description="Уровни иерархии, область действия и наборы разрешений — каждая роль редактируется на своей странице."
         actions={
           canCreate ? (
             <CreateRoleButton

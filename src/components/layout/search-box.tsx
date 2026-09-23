@@ -78,14 +78,14 @@ export function SearchBox() {
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          placeholder="Search users, factions, positions…"
-          aria-label="Global search"
+          placeholder="Поиск пользователей, фракций, должностей…"
+          aria-label="Глобальный поиск"
           className="h-8 w-full rounded-md border border-line bg-panel pl-8 pr-7 text-[13px] text-white placeholder:text-neutral-600 focus:border-neutral-600 focus:outline-none"
         />
         {query ? (
           <button
             type="button"
-            aria-label="Clear search"
+            aria-label="Очистить поиск"
             onClick={() => setQuery("")}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-neutral-300"
           >
@@ -101,9 +101,9 @@ export function SearchBox() {
       {open && (query.trim().length > 0 || loading) ? (
         <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-line bg-card p-1 shadow-popover">
           {loading ? (
-            <div className="px-2.5 py-3 text-xs text-neutral-600">Searching…</div>
+            <div className="px-2.5 py-3 text-xs text-neutral-600">Поиск…</div>
           ) : !hasResults ? (
-            <div className="px-2.5 py-3 text-xs text-neutral-600">No results for “{query}”.</div>
+            <div className="px-2.5 py-3 text-xs text-neutral-600">Нет результатов по запросу «{query}».</div>
           ) : (
             <>
               {results!.users.map((user) => (

@@ -11,7 +11,7 @@ export const GET = guard(
     const unreadOnly = req.nextUrl.searchParams.get("unreadOnly") === "true";
     const page = Number(req.nextUrl.searchParams.get("page") ?? "1") || 1;
     const pageSize = Math.min(Number(req.nextUrl.searchParams.get("pageSize") ?? "25") || 25, 100);
-    if (page < 1) throw errors.validation([{ path: "page", message: "Invalid page." }]);
+    if (page < 1) throw errors.validation([{ path: "page", message: "Некорректная страница." }]);
     return NextResponse.json(await listNotifications(auth.user.id, { unreadOnly, page, pageSize }));
   },
 );

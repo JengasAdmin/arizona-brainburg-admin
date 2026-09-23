@@ -97,8 +97,8 @@ export function LeadershipTable({
           <Input
             value={qInput}
             onChange={(e) => setQInput(e.target.value)}
-            placeholder="Search by name or ID…"
-            aria-label="Search leaders"
+            placeholder="Поиск по имени или ID…"
+            aria-label="Поиск руководителей"
             className="h-8 pl-8"
           />
         </div>
@@ -106,10 +106,10 @@ export function LeadershipTable({
         <Select
           value={filters.faction}
           onChange={(e) => router.replace(hrefFor({ faction: e.target.value }))}
-          aria-label="Filter by faction"
+          aria-label="Фильтр по фракции"
           className="h-8 w-auto max-w-[220px]"
         >
-          <option value="">All factions</option>
+          <option value="">Все фракции</option>
           {factions.map((faction) => (
             <option key={faction.id} value={String(faction.id)}>
               {faction.name}
@@ -120,32 +120,32 @@ export function LeadershipTable({
         <Select
           value={filters.status}
           onChange={(e) => router.replace(hrefFor({ status: e.target.value }))}
-          aria-label="Filter by status"
+          aria-label="Фильтр по статусу"
           className="h-8 w-auto"
         >
-          <option value="">All statuses</option>
-          <option value="active">Active</option>
-          <option value="dismissed">Dismissed</option>
+          <option value="">Все статусы</option>
+          <option value="active">Активен</option>
+          <option value="dismissed">Отстранён</option>
         </Select>
       </div>
 
       {rows.length === 0 ? (
         <EmptyState
           icon={<Crown className="h-8 w-8" />}
-          title="No leadership terms found"
-          description="Adjust the filters, or appoint a leader to start the record."
+          title="Назначения руководителей не найдены"
+          description="Измените фильтры или назначьте руководителя, чтобы начать вести журнал."
         />
       ) : (
         <Table className="min-w-[940px]">
           <THead>
             <TR>
-              <TH>Leader</TH>
-              <TH>Position</TH>
-              <TH>Faction</TH>
-              <TH>Appointed by</TH>
-              <TH>Since</TH>
-              <TH>Status</TH>
-              <TH align="right">Actions</TH>
+              <TH>Руководитель</TH>
+              <TH>Должность</TH>
+              <TH>Фракция</TH>
+              <TH>Назначил</TH>
+              <TH>С</TH>
+              <TH>Статус</TH>
+              <TH align="right">Действия</TH>
             </TR>
           </THead>
           <TBody>
@@ -166,7 +166,7 @@ export function LeadershipTable({
                 </TD>
                 <TD>
                   <div className="text-neutral-200">{row.positionTitle}</div>
-                  <div className="text-[11px] text-neutral-600">Term #{row.termNumber}</div>
+                  <div className="text-[11px] text-neutral-600">Срок №{row.termNumber}</div>
                 </TD>
                 <TD>
                   <Badge tone="neutral">{row.factionName}</Badge>

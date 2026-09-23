@@ -21,7 +21,7 @@ export const PATCH = guard(
         .from(factionPositions)
         .where(eq(factionPositions.id, Number(params.positionId)))
         .limit(1);
-      if (!rows[0]) throw errors.notFound("Position not found.");
+      if (!rows[0]) throw errors.notFound("Должность не найдена.");
       return { departmentId: await departmentOfFaction(rows[0].factionId) };
     },
   },

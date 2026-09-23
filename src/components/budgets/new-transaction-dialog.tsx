@@ -39,17 +39,17 @@ export function NewTransactionDialog({ factionId, balance }: { factionId: number
   function validate(value: Form): boolean {
     const next: Partial<Record<keyof Form, string>> = {};
     if (value.type !== "deposit" && value.type !== "withdrawal") {
-      next.type = "Choose deposit or withdrawal.";
+      next.type = "Выберите пополнение или списание.";
     }
     const parsed = Number(value.amount);
     if (!Number.isInteger(parsed) || parsed <= 0) {
-      next.amount = "Amount must be a whole number greater than zero.";
+      next.amount = "Сумма должна быть целым числом больше нуля.";
     } else if (parsed > 1_000_000_000) {
-      next.amount = "Amount is too large.";
+      next.amount = "Слишком большая сумма.";
     }
     const reason = value.reason.trim();
     if (reason.length < 3 || reason.length > 500) {
-      next.reason = "Reason must be 3–500 characters.";
+      next.reason = "Поле «Причина»: 3–500 символов.";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -68,7 +68,7 @@ export function NewTransactionDialog({ factionId, balance }: { factionId: number
         },
       });
       toast({
-        title: form.type === "deposit" ? "Deposit recorded" : "Withdrawal recorded",
+        title: form.type === "deposit" ? "Пополнение записано" : "Списание записано",
         description: `${formatMoney(Number(form.amount))} — ${form.reason.trim()}`,
         variant: "success",
       });
@@ -78,7 +78,7 @@ export function NewTransactionDialog({ factionId, balance }: { factionId: number
       router.refresh();
     } catch (err) {
       // e.g. INSUFFICIENT_BALANCE — show the exact server message.
-      toast({ title: "Transaction rejected", description: errorMessage(err), variant: "error" });
+      toast({ title: "Транзакция отклонена", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -87,37 +87,37 @@ export function NewTransactionDialog({ factionId, balance }: { factionId: number
   return (
     <>
       <Button size="sm" variant="primary" onClick={() => setOpen(true)}>
-        <Plus className="h-3.5 w-3.5" /> New transaction
+        <Plus className="h-3.5 w-3.5" /> Новая транзакция
       </Button>
 
       <Dialog
         open={open}
         onClose={() => (pending ? undefined : setOpen(false))}
-        title="New transaction"
-        description={`Current balance ${formatMoney(balance)} — entries are immutable.`}
+        title="Новая транзакция"
+        description={`Текущий баланс ${formatMoney(balance)} — записи неизменяемы.`}
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" loading={pending} onClick={submit}>
-              Submit transaction
+              Провести транзакцию
             </Button>
           </>
         }
       >
         <div className="space-y-3">
-          <Field label="Type" htmlFor="tx-type" error={errors.type ?? null}>
+          <Field label="Тип" htmlFor="tx-type" error={errors.type ?? null}>
             <Select
               id="tx-type"
               value={form.type}
               onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
             >
-              <option value="deposit">Deposit (income)</option>
-              <option value="withdrawal">Withdrawal (expense)</option>
+              <option value="deposit">Пополнение (доход)</option>
+              <option value="withdrawal">Списание (расход)</option>
             </Select>
           </Field>
-          <Field label="Amount" htmlFor="tx-amount" error={errors.amount ?? null} hint="whole number, $">
+          <Field label="Сумма" htmlFor="tx-amount" error={errors.amount ?? null} hint="целое число, $">
             <Input
               id="tx-amount"
               type="number"
@@ -130,18 +130,18 @@ export function NewTransactionDialog({ factionId, balance }: { factionId: number
           </Field>
           {insufficient ? (
             <p className="rounded-md border border-[#3d3316] bg-[#211c0d] px-3 py-2 text-[11px] text-warn">
-              Heads-up: {formatMoney(amount)} exceeds the current balance of{" "}
-              {formatMoney(balance)}. The server will reject the withdrawal unless negative
-              budgets are allowed.
+              Внимание: {formatMoney(amount)} превышает текущий баланс{" "}
+              {formatMoney(balance)}. Сервер отклонит списание, если не разрешены
+              отрицательные бюджеты.
             </p>
           ) : null}
-          <Field label="Reason" htmlFor="tx-reason" error={errors.reason ?? null}>
+          <Field label="Причина" htmlFor="tx-reason" error={errors.reason ?? null}>
             <Textarea
               id="tx-reason"
               value={form.reason}
               onChange={(e) => setForm((f) => ({ ...f, reason: e.target.value }))}
               maxLength={500}
-              placeholder="Quarterly equipment budget for patrol units"
+              placeholder="Квартальный бюджет на снаряжение патрульных подразделений"
             />
           </Field>
         </div>

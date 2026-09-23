@@ -108,7 +108,7 @@ export async function createActivity(
   ip: string | null,
 ) {
   const userRows = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
-  if (!userRows[0]) throw errors.notFound("User not found.");
+  if (!userRows[0]) throw errors.notFound("Пользователь не найден.");
 
   const departmentId = input.factionId
     ? ((await db

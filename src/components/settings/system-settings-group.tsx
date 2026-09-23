@@ -55,20 +55,20 @@ function isDirty(item: SystemSettingItem, draft: Draft | undefined): boolean {
 type ParseResult = { ok: true; value: unknown } | { ok: false; error: string };
 
 function parseDraft(draft: Draft | undefined): ParseResult {
-  if (!draft) return { ok: false, error: "Missing value." };
+  if (!draft) return { ok: false, error: "Не указано значение." };
   if (draft.kind === "boolean") return { ok: true, value: draft.value };
   const raw = draft.text.trim();
   if (draft.kind === "text") return { ok: true, value: draft.text };
   if (draft.kind === "number") {
-    if (!raw) return { ok: false, error: "Enter a number." };
+    if (!raw) return { ok: false, error: "Введите число." };
     const n = Number(raw);
-    if (!Number.isFinite(n)) return { ok: false, error: "Enter a valid number." };
+    if (!Number.isFinite(n)) return { ok: false, error: "Введите корректное число." };
     return { ok: true, value: n };
   }
   try {
     return { ok: true, value: JSON.parse(draft.text) };
   } catch {
-    return { ok: false, error: "Invalid JSON." };
+    return { ok: false, error: "Некорректный JSON." };
   }
 }
 
@@ -134,12 +134,12 @@ export function SystemSettingsGroup({ items }: { items: SystemSettingItem[] }) {
     setSavingKey(item.key);
     try {
       await api(`/api/settings/${item.key}`, { method: "PATCH", body: { value: parsed.value } });
-      toast({ title: `Setting “${item.key}” saved.`, variant: "success" });
+      toast({ title: `Настройка «${item.key}» сохранена.`, variant: "success" });
       router.refresh();
     } catch (err) {
       const message = errorMessage(err);
       setErrors((prev) => ({ ...prev, [item.key]: message }));
-      toast({ title: "Could not save the setting.", description: message, variant: "error" });
+      toast({ title: "Не удалось сохранить настройку.", description: message, variant: "error" });
     } finally {
       setSavingKey(null);
     }
@@ -148,8 +148,8 @@ export function SystemSettingsGroup({ items }: { items: SystemSettingItem[] }) {
   return (
     <Card>
       <CardHeader
-        title="System settings"
-        description="Global switches for the platform. Every change is written to the audit log."
+        title="Системные настройки"
+        description="Глобальные переключатели платформы. Каждое изменение записывается в журнал аудита."
       />
       <CardBody padded={false}>
         <div className="divide-y divide-line">
@@ -168,7 +168,7 @@ export function SystemSettingsGroup({ items }: { items: SystemSettingItem[] }) {
                       <p className="mt-0.5 max-w-2xl text-xs text-neutral-500">{item.description}</p>
                     ) : null}
                     <div className="mt-0.5 text-[11px] text-neutral-600">
-                      Updated {formatDateTime(item.updatedAt)}
+                      Обновлено {formatDateTime(item.updatedAt)}
                     </div>
                   </div>
 
@@ -215,7 +215,7 @@ export function SystemSettingsGroup({ items }: { items: SystemSettingItem[] }) {
                       loading={busy}
                       onClick={() => void save(item)}
                     >
-                      <Save className="h-3.5 w-3.5" /> Save
+                      <Save className="h-3.5 w-3.5" /> Сохранить
                     </Button>
                   </div>
                 </div>

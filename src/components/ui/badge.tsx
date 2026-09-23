@@ -49,10 +49,25 @@ const STATUS_TONE: Record<string, Tone> = {
   withdrawal: "danger",
 };
 
+const STATUS_LABELS: Record<string, string> = {
+  active: "Активен",
+  inactive: "Неактивен",
+  suspended: "Приостановлен",
+  blocked: "Заблокирован",
+  dismissed: "Отстранён",
+  pending: "Ожидает",
+  player: "Игрок",
+  verified: "Подтверждён",
+  unverified: "Не подтверждён",
+  deposit: "Пополнение",
+  withdrawal: "Вывод",
+};
+
 export function StatusBadge({ status, label }: { status: string; label?: string }) {
+  const text = label ?? STATUS_LABELS[status] ?? status;
   return (
     <Badge tone={STATUS_TONE[status] ?? "neutral"} dot>
-      {(label ?? status).charAt(0).toUpperCase() + (label ?? status).slice(1)}
+      {text.charAt(0).toUpperCase() + text.slice(1)}
     </Badge>
   );
 }

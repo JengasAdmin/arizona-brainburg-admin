@@ -42,6 +42,17 @@ export function formatUserId(id: number): string {
   return `#${id}`;
 }
 
-export function plural(n: number, one: string, many: string): string {
+/**
+ * `plural(n, one, many)` — английское согласование (1 term / 2 terms).
+ * `plural(n, one, many, few)` — русское согласование (1 срок / 2 срока / 5 сроков).
+ */
+export function plural(n: number, one: string, many: string, few?: string): string {
+  if (few !== undefined) {
+    const m10 = n % 10;
+    const m100 = n % 100;
+    const word =
+      m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? few : many;
+    return `${n} ${word}`;
+  }
   return `${n} ${n === 1 ? one : many}`;
 }

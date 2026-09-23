@@ -46,7 +46,7 @@ export function ProfileDialog({
   const submit = async () => {
     const name = displayName.trim();
     if (name.length < 2 || name.length > 64) {
-      setError("Display name must be 2–64 characters.");
+      setError("Отображаемое имя должно содержать 2–64 символа.");
       return;
     }
     setError(null);
@@ -60,11 +60,11 @@ export function ProfileDialog({
           branch: branch.trim() === "" ? null : branch.trim(),
         },
       });
-      toast({ title: "Profile updated", description: `User #${userId} was saved.`, variant: "success" });
+      toast({ title: "Профиль обновлён", description: `Пользователь #${userId} сохранён.`, variant: "success" });
       setOpen(false);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not update the profile", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось обновить профиль", description: errorMessage(err), variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -80,21 +80,21 @@ export function ProfileDialog({
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Edit profile"
-        description={`Core profile fields of user #${userId}.`}
+        title="Редактировать профиль"
+        description={`Основные поля профиля пользователя #${userId}.`}
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={loading}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" onClick={submit} loading={loading}>
-              Save changes
+              Сохранить изменения
             </Button>
           </>
         }
       >
         <div className="space-y-4">
-          <Field label="Display name" htmlFor="profile-dialog-name" error={error}>
+          <Field label="Отображаемое имя" htmlFor="profile-dialog-name" error={error}>
             <Input
               id="profile-dialog-name"
               value={displayName}
@@ -103,9 +103,9 @@ export function ProfileDialog({
             />
           </Field>
           <Field
-            label="In-game nickname"
+            label="Ник в игре"
             htmlFor="profile-dialog-nickname"
-            hint="Optional"
+            hint="Необязательно"
           >
             <Input
               id="profile-dialog-nickname"
@@ -114,12 +114,12 @@ export function ProfileDialog({
               autoComplete="off"
             />
           </Field>
-          <Field label="Branch" htmlFor="profile-dialog-branch" hint="Optional">
+          <Field label="Направление" htmlFor="profile-dialog-branch" hint="Необязательно">
             <Input
               id="profile-dialog-branch"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
-              placeholder="e.g. Government / Law Enforcement"
+              placeholder="напр. Государство / Правоохранительные органы"
               autoComplete="off"
             />
           </Field>

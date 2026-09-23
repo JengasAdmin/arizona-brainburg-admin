@@ -12,7 +12,7 @@ const schema = z.object({
   gameId: z
     .string()
     .trim()
-    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID must be 1-32 alphanumeric characters.")
+    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID должен состоять из 1–32 буквенно-цифровых символов.")
     .nullable()
     .optional(),
 });

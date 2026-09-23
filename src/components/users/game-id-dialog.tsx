@@ -39,7 +39,7 @@ export function GameIdDialog({
     const trimmed = value.trim();
     // Mirrors the server-side schema: 1–32 alphanumeric characters, "_" or "-".
     if (trimmed && !/^[0-9A-Za-z_-]{1,32}$/.test(trimmed)) {
-      setError("Use 1–32 letters, digits, “_” or “-”.");
+      setError("Укажите 1–32 символа: буквы, цифры, «_» или «-».");
       return;
     }
     setError(null);
@@ -50,14 +50,14 @@ export function GameIdDialog({
         body: { gameId: trimmed === "" ? null : trimmed },
       });
       toast({
-        title: "Game ID updated",
-        description: trimmed === "" ? "The Game ID was cleared." : `New Game ID: ${trimmed}.`,
+        title: "Game ID обновлён",
+        description: trimmed === "" ? "Game ID очищен." : `Новый Game ID: ${trimmed}.`,
         variant: "success",
       });
       setOpen(false);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not update the Game ID", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось обновить Game ID", description: errorMessage(err), variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -73,15 +73,15 @@ export function GameIdDialog({
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Edit Game ID"
-        description={`Arizona RP Game ID of user #${userId}.`}
+        title="Изменить Game ID"
+        description={`Game ID пользователя #${userId} в Arizona RP.`}
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={loading}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" onClick={submit} loading={loading}>
-              Save Game ID
+              Сохранить Game ID
             </Button>
           </>
         }
@@ -89,19 +89,19 @@ export function GameIdDialog({
         <Field
           label="Game ID"
           htmlFor="game-id-dialog-input"
-          hint="Leave empty to clear"
+          hint="Оставьте пустым, чтобы очистить"
           error={error}
         >
           <Input
             id="game-id-dialog-input"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="e.g. 12345"
+            placeholder="напр. 12345"
             autoComplete="off"
           />
         </Field>
         <p className="mt-2 text-[11px] text-neutral-600">
-          Changing the Game ID resets its verification — it must be confirmed again.
+          Смена Game ID сбрасывает его подтверждение — его нужно пройти заново.
         </p>
       </Dialog>
     </>

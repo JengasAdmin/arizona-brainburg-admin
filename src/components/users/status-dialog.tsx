@@ -10,10 +10,10 @@ import { api, errorMessage } from "@/lib/api-client";
 
 /** The statuses accepted by `POST /api/users/:id/status`. */
 export const USER_STATUS_OPTIONS = [
-  { value: "active", label: "Active" },
-  { value: "suspended", label: "Suspended" },
-  { value: "blocked", label: "Blocked" },
-  { value: "inactive", label: "Inactive" },
+  { value: "active", label: "Активен" },
+  { value: "suspended", label: "Приостановлен" },
+  { value: "blocked", label: "Заблокирован" },
+  { value: "inactive", label: "Неактивен" },
 ] as const;
 
 export type UserStatus = (typeof USER_STATUS_OPTIONS)[number]["value"];
@@ -49,12 +49,12 @@ export function StatusDialog({
   const submit = async () => {
     const next = USER_STATUS_OPTIONS.find((option) => option.value === status);
     if (!next) {
-      setError("Select a status.");
+      setError("Выберите статус.");
       return;
     }
     // The API requires a reason (min. 3 characters) for every status change.
     if (reason.trim().length < 3) {
-      setError("A reason is required (min. 3 characters).");
+      setError("Укажите причину (мин. 3 символа).");
       return;
     }
     setError(null);
@@ -65,15 +65,15 @@ export function StatusDialog({
         body: { status: next.value, reason: reason.trim() },
       });
       toast({
-        title: "Status updated",
-        description: `User #${userId} is now ${next.label.toLowerCase()}.`,
+        title: "Статус обновлён",
+        description: `Пользователь #${userId} теперь ${next.label.toLowerCase()}.`,
         variant: "success",
       });
       setReason("");
       setOpen(false);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not change the status", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось изменить статус", description: errorMessage(err), variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -89,21 +89,21 @@ export function StatusDialog({
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Change status"
-        description={`Update the account status of user #${userId}.`}
+        title="Изменить статус"
+        description={`Обновление статуса аккаунта пользователя #${userId}.`}
         footer={
           <>
             <Button variant="ghost" onClick={() => setOpen(false)} disabled={loading}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" onClick={submit} loading={loading}>
-              Save status
+              Сохранить статус
             </Button>
           </>
         }
       >
         <div className="space-y-4">
-          <Field label="New status" htmlFor="status-dialog-select">
+          <Field label="Новый статус" htmlFor="status-dialog-select">
             <Select
               id="status-dialog-select"
               value={status}
@@ -117,16 +117,16 @@ export function StatusDialog({
             </Select>
           </Field>
           <Field
-            label="Reason"
+            label="Причина"
             htmlFor="status-dialog-reason"
-            hint="Min. 3 characters"
+            hint="Мин. 3 символа"
             error={error}
           >
             <Textarea
               id="status-dialog-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="Explain why the status is being changed…"
+              placeholder="Укажите, почему статус меняется…"
             />
           </Field>
         </div>

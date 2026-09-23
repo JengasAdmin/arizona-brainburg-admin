@@ -75,7 +75,7 @@ describe("guard() — permission enforcement (403s)", () => {
     const res = await route(req("/api/guard-403", "GET"), CTX);
     expect(res.status).toBe(403);
     const body = await res.json();
-    expect(body.error.message).toBe("Missing permission: VIEW_AUDIT_LOGS.");
+    expect(body.error.message).toBe("Нет разрешения: VIEW_AUDIT_LOGS.");
     expect(body.error.code).toBe("MISSING_PERMISSION");
     expect(okHandler).not.toHaveBeenCalled();
   });
@@ -127,7 +127,7 @@ describe("guard() — body validation and rate limiting", () => {
     expect(res.status).toBe(422);
     const body = await res.json();
     expect(body.error.code).toBe("VALIDATION_ERROR");
-    expect(body.error.details).toEqual([{ path: "reason", message: "String must contain at least 3 character(s)" }]);
+    expect(body.error.details).toEqual([{ path: "reason", message: "Минимум 3 символов." }]);
     expect(okHandler).not.toHaveBeenCalled();
   });
 
@@ -202,7 +202,7 @@ describe("guard() — handler contract", () => {
     const res = await route(req("/api/guard-500", "GET"), CTX);
     expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body.error.message).toBe("Internal server error.");
+    expect(body.error.message).toBe("Внутренняя ошибка сервера.");
     expect(JSON.stringify(body)).not.toContain("secret internal detail");
     vi.restoreAllMocks();
   });

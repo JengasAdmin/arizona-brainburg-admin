@@ -18,7 +18,7 @@ const patchSchema = z.object({
   gameId: z
     .string()
     .trim()
-    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID must be 1-32 alphanumeric characters.")
+    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID должен состоять из 1–32 буквенно-цифровых символов.")
     .nullable()
     .optional(),
 });
@@ -33,7 +33,7 @@ export const GET = guard(
   async ({ auth }) => {
     const rows = await db.select().from(users).where(eq(users.id, auth.user.id)).limit(1);
     const user = rows[0];
-    if (!user) throw errors.notFound("User not found.");
+    if (!user) throw errors.notFound("Пользователь не найден.");
 
     const terms = await listTerms({ userId: user.id, page: 1, pageSize: 50 }, auth.actor);
 

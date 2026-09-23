@@ -1,5 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ZodError, type ZodTypeAny, type z } from "zod";
+import { ZodError, z, type ZodTypeAny } from "zod";
+
+/**
+ * Русские сообщения zod по умолчанию. Кастомные сообщения схем имеют приоритет
+ * (проверено: `errorMap` их не затирает).
+ */
+z.setErrorMap((issue, ctx) => {
+  switch (issue.code) {
+    case "invalid_type":
+      if (issue.received === "undefined" || issue.received === "null") return { message: "Обязательное поле." };
+      return { message: `Ожидается тип ${issue.expected}, получено ${issue.received}.` };
+    case "too_small":
+      if (issue.type === "string") return { message: `Минимум ${issue.minimum} символов.` };
+      if (issue.type === "array") return { message: `Минимум ${issue.minimum} элементов.` };
+      if (issue.type === "date") return { message: `Дата не раньше ${String(issue.minimum)}.` };
+      return { message: `Значение не меньше ${String(issue.minimum)}.` };
+    case "too_big":
+      if (issue.type === "string") return { message: `Максимум ${issue.maximum} символов.` };
+      if (issue.type === "array") return { message: `Максимум ${issue.maximum} элементов.` };
+      if (issue.type === "date") return { message: `Дата не позже ${String(issue.maximum)}.` };
+      return { message: `Значение не больше ${String(issue.maximum)}.` };
+    case "invalid_enum_value":
+      return { message: `Недопустимое значение. Допустимо: ${issue.options.join(", ")}.` };
+    case "unrecognized_keys":
+      return { message: `Лишние поля: ${issue.keys.join(", ")}.` };
+    case "invalid_literal":
+    case "invalid_union":
+      return { message: "Недопустимое значение." };
+    case "invalid_date":
+      return { message: "Недопустимая дата." };
+    default:
+      return { message: ctx.defaultError };
+  }
+});
 
 /** Structured API error — never leaks internals to the client. */
 export class ApiError extends Error {
@@ -15,20 +48,20 @@ export class ApiError extends Error {
 }
 
 export const errors = {
-  unauthorized: (message = "Authentication required.") => new ApiError(401, "UNAUTHENTICATED", message),
-  sessionExpired: () => new ApiError(401, "SESSION_EXPIRED", "Your session has expired. Sign in again."),
-  forbidden: (message = "You do not have permission to perform this action.", code = "FORBIDDEN") =>
+  unauthorized: (message = "Требуется вход в систему.") => new ApiError(401, "UNAUTHENTICATED", message),
+  sessionExpired: () => new ApiError(401, "SESSION_EXPIRED", "Сессия истекла. Войдите заново."),
+  forbidden: (message = "У вас нет прав для выполнения этого действия.", code = "FORBIDDEN") =>
     new ApiError(403, code, message),
-  notFound: (message = "Resource not found.") => new ApiError(404, "NOT_FOUND", message),
+  notFound: (message = "Ресурс не найден.") => new ApiError(404, "NOT_FOUND", message),
   conflict: (message: string, code = "CONFLICT") => new ApiError(409, code, message),
   validation: (details?: unknown) =>
-    new ApiError(422, "VALIDATION_ERROR", "The submitted data is invalid.", details),
+    new ApiError(422, "VALIDATION_ERROR", "Переданные данные некорректны.", details),
   rateLimited: (retryAfterSec: number) =>
     // details carries the retry seconds — errorResponse() maps it to the Retry-After header.
-    new ApiError(429, "RATE_LIMITED", `Too many requests. Retry in ${retryAfterSec}s.`, retryAfterSec),
+    new ApiError(429, "RATE_LIMITED", `Слишком много запросов. Повторите через ${retryAfterSec} с.`, retryAfterSec),
   serviceUnavailable: (message: string, code = "SERVICE_UNAVAILABLE") =>
     new ApiError(503, code, message),
-  internal: () => new ApiError(500, "INTERNAL_ERROR", "Internal server error."),
+  internal: () => new ApiError(500, "INTERNAL_ERROR", "Внутренняя ошибка сервера."),
 };
 
 export function getClientIp(req: NextRequest): string {
@@ -42,7 +75,7 @@ export async function parseJsonBody<S extends ZodTypeAny>(req: NextRequest, sche
   try {
     raw = await req.json();
   } catch {
-    throw errors.validation({ _errors: ["Invalid JSON body."] });
+    throw errors.validation({ _errors: ["Некорректный JSON в теле запроса."] });
   }
   const result = schema.safeParse(raw);
   if (!result.success) throw errors.validation(zodDetails(result.error));
@@ -75,14 +108,14 @@ export function errorResponse(err: unknown): NextResponse {
   }
   if (err instanceof ZodError) {
     return NextResponse.json(
-      { error: { code: "VALIDATION_ERROR", message: "The submitted data is invalid.", details: zodDetails(err) } },
+      { error: { code: "VALIDATION_ERROR", message: "Переданные данные некорректны.", details: zodDetails(err) } },
       { status: 422 },
     );
   }
   // Never expose stack traces or internal messages.
   console.error("[api] unhandled", err);
   return NextResponse.json(
-    { error: { code: "INTERNAL_ERROR", message: "Internal server error.", details: null } },
+    { error: { code: "INTERNAL_ERROR", message: "Внутренняя ошибка сервера.", details: null } },
     { status: 500 },
   );
 }

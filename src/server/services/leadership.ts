@@ -151,7 +151,7 @@ export async function getTerm(termId: number) {
     string,
     unknown
   >[];
-  if (!rows[0]) throw errors.notFound("Term not found.");
+  if (!rows[0]) throw errors.notFound("Срок назначения не найден.");
   return mapTerm(rows[0]);
 }
 
@@ -160,13 +160,13 @@ export async function getTerm(termId: number) {
 /** Strict calendar date: YYYY-MM-DD with a real month/day (rejects 2026-13-45). */
 const isoDate = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD.")
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Дата должна быть в формате ГГГГ-ММ-ДД.")
   .refine((value) => {
     const [y, m, d] = value.split("-").map(Number) as [number, number, number];
     if (m < 1 || m > 12 || d < 1) return false;
     const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
     return d <= daysInMonth;
-  }, "Date must be a real calendar date.");
+  }, "Дата должна быть корректным календарным числом.");
 
 export const appointSchema = z.object({
   userId: z.coerce.number().int().positive(),
@@ -189,17 +189,17 @@ export async function appointTerm(
       .where(eq(factionPositions.id, input.positionId))
       .for("update");
     const position = positionRows[0];
-    if (!position || position.status !== "active") throw errors.notFound("Position not found.");
+    if (!position || position.status !== "active") throw errors.notFound("Должность не найдена.");
 
     const factionRows = await tx.select().from(factions).where(eq(factions.id, position.factionId));
     const faction = factionRows[0];
-    if (!faction) throw errors.notFound("Faction not found.");
+    if (!faction) throw errors.notFound("Фракция не найдена.");
 
     const userRows = await tx.select().from(users).where(eq(users.id, input.userId));
     const target = userRows[0];
-    if (!target) throw errors.notFound("User not found.");
+    if (!target) throw errors.notFound("Пользователь не найден.");
     if (target.status !== "active") {
-      throw errors.conflict(`User account is ${target.status}.`, "USER_NOT_ACTIVE");
+      throw errors.conflict(`Аккаунт пользователя: ${target.status}.`, "USER_NOT_ACTIVE");
     }
 
     // Rule 1 — a position may only hold `maxActiveTerms` active terms at once.
@@ -210,7 +210,7 @@ export async function appointTerm(
     );
     if (activeForPosition >= position.maxActiveTerms) {
       throw errors.conflict(
-        `Position “${position.title}” already has ${activeForPosition} active term(s) (max ${position.maxActiveTerms}).`,
+        `Должность «${position.title}» уже занята: действующих назначений ${activeForPosition} (макс. ${position.maxActiveTerms}).`,
         "POSITION_ALREADY_FILLED",
       );
     }
@@ -226,7 +226,7 @@ export async function appointTerm(
         ((activeLeaders as unknown as { rows?: { count: number }[] }).rows?.[0]?.count as number) ?? 0;
       if (count >= 1) {
         throw errors.conflict(
-          `${faction.name} already has an active leader.`,
+          `У ${faction.name} уже есть действующий лидер.`,
           "FACTION_ALREADY_HAS_LEADER",
         );
       }
@@ -246,7 +246,7 @@ export async function appointTerm(
           ((otherLeaders as unknown as { rows?: { count: number }[] }).rows?.[0]?.count as number) ?? 0;
         if (count >= 1) {
           throw errors.conflict(
-            `${target.displayName} already holds an active leadership term in another faction.`,
+            `${target.displayName} уже занимает руководящий пост в другой фракции.`,
             "USER_ALREADY_LEADER_ELSEWHERE",
           );
         }
@@ -335,9 +335,9 @@ export async function dismissTerm(
       .for("update");
 
     const row = rows[0];
-    if (!row) throw errors.notFound("Term not found.");
+    if (!row) throw errors.notFound("Срок назначения не найден.");
     if (row.term.status !== "active") {
-      throw errors.conflict("This term is already closed.", "TERM_ALREADY_CLOSED");
+      throw errors.conflict("Это назначение уже закрыто.", "TERM_ALREADY_CLOSED");
     }
 
     const updated = await tx
@@ -370,8 +370,8 @@ export async function dismissTerm(
     await notify({
       userId: row.term.userId,
       type: row.positionKind === "deputy" ? "leader_dismissed" : "leader_dismissed",
-      title: row.positionKind === "deputy" ? "Deputy dismissed" : "Leader dismissed",
-      body: `You have been dismissed from “${row.positionTitle}”. Reason: ${input.reason}`,
+      title: row.positionKind === "deputy" ? "Отстранение заместителя" : "Отстранение руководителя",
+      body: `Вы отстранены с должности «${row.positionTitle}». Причина: ${input.reason}`,
       link: `/users/${row.term.userId}`,
       metadata: { termId },
     });
@@ -383,7 +383,7 @@ export async function dismissTerm(
 /* --------------------------------- Points --------------------------------- */
 
 export const pointsSchema = z.object({
-  delta: z.coerce.number().int().refine((n) => n !== 0, "Delta cannot be zero."),
+  delta: z.coerce.number().int().refine((n) => n !== 0, "Изменение не может быть нулевым."),
   reason: z.string().trim().min(3).max(500),
 });
 
@@ -409,15 +409,15 @@ export async function adjustPoints(
       .for("update");
 
     const row = rows[0];
-    if (!row) throw errors.notFound("Term not found.");
+    if (!row) throw errors.notFound("Срок назначения не найден.");
     if (row.term.status !== "active") {
-      throw errors.conflict("Points can only be changed on an active term.", "TERM_NOT_ACTIVE");
+      throw errors.conflict("Баллы можно изменять только для действующего назначения.", "TERM_NOT_ACTIVE");
     }
 
     const oldValue = row.term.leadershipPoints;
     const newValue = oldValue + input.delta;
     if (newValue < 0) {
-      throw errors.validation([{ path: "delta", message: "Leadership points cannot become negative." }]);
+      throw errors.validation([{ path: "delta", message: "Баллы руководства не могут быть отрицательными." }]);
     }
 
     await tx
@@ -451,8 +451,8 @@ export async function adjustPoints(
     await notify({
       userId: row.term.userId,
       type: "points_changed",
-      title: `Leadership points ${input.delta > 0 ? "added" : "removed"}`,
-      body: `${input.delta > 0 ? "+" : ""}${input.delta} points on “${row.positionTitle}”. Reason: ${input.reason}`,
+      title: "Изменены баллы руководства",
+      body: `${input.delta > 0 ? "+" : ""}${input.delta} баллов на «${row.positionTitle}». Причина: ${input.reason}`,
       link: `/users/${row.term.userId}`,
       metadata: { termId, oldValue, newValue },
     });
@@ -490,9 +490,9 @@ export async function addDisciplinary(
       .for("update");
 
     const row = rows[0];
-    if (!row) throw errors.notFound("Term not found.");
+    if (!row) throw errors.notFound("Срок назначения не найден.");
     if (row.term.status !== "active") {
-      throw errors.conflict("Disciplinary actions require an active term.", "TERM_NOT_ACTIVE");
+      throw errors.conflict("Дисциплинарные взыскания применяются только к действующему назначению.", "TERM_NOT_ACTIVE");
     }
 
     const inserted = await tx
@@ -541,8 +541,8 @@ export async function addDisciplinary(
     await notify({
       userId: row.term.userId,
       type: isWarning ? "warning_received" : "reprimand_received",
-      title: isWarning ? "Warning received" : "Reprimand received",
-      body: `${isWarning ? "Warning" : "Reprimand"} issued on “${row.positionTitle}”. Reason: ${input.reason}`,
+      title: isWarning ? "Получено предупреждение" : "Получен выговор",
+      body: `${isWarning ? "Предупреждение" : "Выговор"} по должности «${row.positionTitle}». Причина: ${input.reason}`,
       link: `/users/${row.term.userId}`,
       metadata: { termId },
     });
@@ -584,7 +584,7 @@ export async function updateTermRank(
 ) {
   const before = await getTerm(termId);
   if (before.status !== "active") {
-    throw errors.conflict("Historical terms cannot be edited.", "TERM_CLOSED");
+    throw errors.conflict("Исторические назначения нельзя редактировать.", "TERM_CLOSED");
   }
   const updated = await db
     .update(leadershipTerms)
@@ -596,7 +596,7 @@ export async function updateTermRank(
     })
     .where(eq(leadershipTerms.id, termId))
     .returning();
-  if (!updated[0]) throw errors.notFound("Term not found.");
+  if (!updated[0]) throw errors.notFound("Срок назначения не найден.");
 
   await writeAudit({
     actorId: actor.userId,

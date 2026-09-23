@@ -71,7 +71,7 @@ export function AppointLeaderDialog({
   const { toast } = useToast();
 
   const kind = mode === "leader" ? "leader" : "deputy";
-  const triggerLabel = label ?? (mode === "leader" ? "Appoint leader" : "Appoint deputy");
+  const triggerLabel = label ?? (mode === "leader" ? "Назначить руководителя" : "Назначить заместителя");
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Form>(emptyForm);
@@ -96,15 +96,15 @@ export function AppointLeaderDialog({
     const rawId = form.userId.trim().replace(/^#/, "");
     const userId = Number(rawId);
     if (!/^\d+$/.test(rawId) || !Number.isInteger(userId) || userId <= 0) {
-      next.userId = "Enter a valid numeric user ID, e.g. #124.";
+      next.userId = "Введите корректный числовой ID пользователя, например #124.";
     }
     const positionId = Number(form.positionId);
     if (!Number.isInteger(positionId) || positionId <= 0) {
-      next.positionId = "Select a position.";
+      next.positionId = "Выберите должность.";
     }
     const reason = form.reason.trim();
     if (reason.length < 3 || reason.length > 500) {
-      next.reason = "Reason must be 3–500 characters.";
+      next.reason = "Поле «Причина»: 3–500 символов.";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -133,10 +133,10 @@ export function AppointLeaderDialog({
       });
       const position = positions.find((p) => p.id === positionId);
       toast({
-        title: mode === "leader" ? "Leader appointed" : "Deputy appointed",
+        title: mode === "leader" ? "Руководитель назначен" : "Заместитель назначен",
         description: position
-          ? `Term #${result.termNumber} — ${position.title} (${position.factionName}).`
-          : `Term #${result.termNumber} created.`,
+          ? `Срок №${result.termNumber} — ${position.title} (${position.factionName}).`
+          : `Срок №${result.termNumber} создан.`,
         variant: "success",
       });
       setOpen(false);
@@ -144,7 +144,7 @@ export function AppointLeaderDialog({
       setErrors({});
       router.refresh();
     } catch (err) {
-      toast({ title: "Appointment failed", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось выполнить назначение", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -161,11 +161,11 @@ export function AppointLeaderDialog({
         open={open}
         onClose={handleClose}
         title={triggerLabel}
-        description="Appointments always create a new immutable term — history is never overwritten."
+        description="Назначение всегда создаёт новый неизменяемый срок — история никогда не перезаписывается."
         footer={
           <>
             <Button variant="ghost" onClick={handleClose} disabled={pending}>
-              Cancel
+              Отмена
             </Button>
             <Button variant="primary" onClick={() => void submit()} loading={pending}>
               {triggerLabel}
@@ -174,7 +174,7 @@ export function AppointLeaderDialog({
         }
       >
         <div className="space-y-4">
-          <Field label="User ID" htmlFor="appoint-user-id" error={errors.userId}>
+          <Field label="ID пользователя" htmlFor="appoint-user-id" error={errors.userId}>
             <div className="relative">
               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[13px] text-neutral-600">
                 #
@@ -192,13 +192,13 @@ export function AppointLeaderDialog({
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Faction" htmlFor="appoint-faction" hint="Filter">
+            <Field label="Фракция" htmlFor="appoint-faction" hint="Фильтр">
               <Select
                 id="appoint-faction"
                 value={form.factionId}
                 onChange={(e) => setForm((prev) => ({ ...prev, factionId: e.target.value }))}
               >
-                <option value="">All factions</option>
+                <option value="">Все фракции</option>
                 {factions.map((faction) => (
                   <option key={faction.id} value={String(faction.id)}>
                     {faction.name}
@@ -207,13 +207,13 @@ export function AppointLeaderDialog({
               </Select>
             </Field>
 
-            <Field label="Position" htmlFor="appoint-position" error={errors.positionId}>
+            <Field label="Должность" htmlFor="appoint-position" error={errors.positionId}>
               <Select
                 id="appoint-position"
                 value={form.positionId}
                 onChange={(e) => setForm((prev) => ({ ...prev, positionId: e.target.value }))}
               >
-                <option value="">Select a position…</option>
+                <option value="">Выберите должность…</option>
                 {available.map((position) => (
                   <option key={position.id} value={String(position.id)}>
                     {position.title} — {position.factionName}
@@ -225,11 +225,11 @@ export function AppointLeaderDialog({
 
           {available.length === 0 ? (
             <p className="text-[11px] text-neutral-600">
-              No active {kind} positions match this faction.
+              Активных должностей этого типа для выбранной фракции нет.
             </p>
           ) : null}
 
-          <Field label="Start date" htmlFor="appoint-start-date" hint="YYYY-MM-DD">
+          <Field label="Дата начала" htmlFor="appoint-start-date" hint="YYYY-MM-DD">
             <Input
               id="appoint-start-date"
               type="date"
@@ -239,14 +239,14 @@ export function AppointLeaderDialog({
           </Field>
 
           <Field
-            label="Reason"
+            label="Причина"
             htmlFor="appoint-reason"
-            hint="3–500 characters"
+            hint="3–500 символов"
             error={errors.reason}
           >
             <Textarea
               id="appoint-reason"
-              placeholder="Why is this appointment being made?"
+              placeholder="Почему совершается это назначение?"
               value={form.reason}
               onChange={(e) => setForm((prev) => ({ ...prev, reason: e.target.value }))}
             />

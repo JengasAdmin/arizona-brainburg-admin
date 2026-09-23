@@ -86,7 +86,7 @@ export async function listFactions(actor: Actor): Promise<FactionListItem[]> {
 export async function getFactionDetail(factionId: number, actor: Actor) {
   const list = await listFactions(actor);
   const faction = list.find((f) => f.id === factionId);
-  if (!faction) throw errors.notFound("Faction not found.");
+  if (!faction) throw errors.notFound("Фракция не найдена.");
 
   const positions = await db
     .select()
@@ -127,7 +127,7 @@ export const createFactionSchema = z.object({
     .trim()
     .min(2)
     .max(40)
-    .regex(/^[a-z0-9_]+$/, "Key must be lowercase alphanumeric/underscore."),
+    .regex(/^[a-z0-9_]+$/, "Ключ должен быть в нижнем регистре: буквы, цифры или подчёркивание."),
   name: z.string().trim().min(2).max(80),
   shortName: z.string().trim().min(2).max(12),
   description: z.string().trim().max(600).nullable().optional(),
@@ -156,7 +156,7 @@ export async function createFaction(
   ip: string | null,
 ) {
   const category = await db.select().from(factionCategories).where(eq(factionCategories.id, input.categoryId));
-  if (!category[0]) throw errors.notFound("Faction category not found.");
+  if (!category[0]) throw errors.notFound("Категория фракции не найдена.");
 
   let factionId: number;
   try {
@@ -175,7 +175,7 @@ export async function createFaction(
       .returning({ id: factions.id });
     factionId = inserted[0]!.id;
   } catch {
-    throw errors.conflict("A faction with this key already exists.", "FACTION_KEY_EXISTS");
+    throw errors.conflict("Фракция с таким ключом уже существует.", "FACTION_KEY_EXISTS");
   }
 
   // Budget account is created together with the faction — balance starts at 0.
@@ -226,7 +226,7 @@ export async function updateFaction(
   ip: string | null,
 ) {
   const before = await db.select().from(factions).where(eq(factions.id, factionId)).limit(1);
-  if (!before[0]) throw errors.notFound("Faction not found.");
+  if (!before[0]) throw errors.notFound("Фракция не найдена.");
 
   const updated = await db
     .update(factions)
@@ -252,14 +252,14 @@ export async function updateFaction(
 
 export async function deleteFaction(factionId: number, actor: Actor, ip: string | null) {
   const before = await db.select().from(factions).where(eq(factions.id, factionId)).limit(1);
-  if (!before[0]) throw errors.notFound("Faction not found.");
+  if (!before[0]) throw errors.notFound("Фракция не найдена.");
 
   const activeTerms = await countRows(
     sql`SELECT count(*) AS count FROM leadership_terms WHERE faction_id = ${factionId} AND status = 'active'`,
   );
   if (activeTerms > 0) {
     throw errors.conflict(
-      "Dismiss all active leaders/deputies before deleting this faction.",
+      "Перед удалением фракции отстраните всех действующих лидеров и заместителей.",
       "FACTION_HAS_ACTIVE_TERMS",
     );
   }
@@ -268,7 +268,7 @@ export async function deleteFaction(factionId: number, actor: Actor, ip: string 
   );
   if (hasTransactions > 0) {
     throw errors.conflict(
-      "Faction has budget history and cannot be deleted (set it inactive instead).",
+      "У фракции есть история бюджета, удаление невозможно (вместо этого отключите её).",
       "FACTION_HAS_BUDGET_HISTORY",
     );
   }
@@ -299,7 +299,7 @@ export const createPositionSchema = z.object({
     .trim()
     .min(2)
     .max(60)
-    .regex(/^[a-z0-9_]+$/, "Key must be lowercase alphanumeric/underscore."),
+    .regex(/^[a-z0-9_]+$/, "Ключ должен быть в нижнем регистре: буквы, цифры или подчёркивание."),
   title: z.string().trim().min(2).max(80),
   kind: z.enum(["leader", "deputy"]),
   maxActiveTerms: z.coerce.number().int().min(1).max(10).default(1),
@@ -323,7 +323,7 @@ export async function createPosition(
   ip: string | null,
 ) {
   const faction = await db.select().from(factions).where(eq(factions.id, factionId)).limit(1);
-  if (!faction[0]) throw errors.notFound("Faction not found.");
+  if (!faction[0]) throw errors.notFound("Фракция не найдена.");
 
   let positionId: number;
   try {
@@ -333,7 +333,7 @@ export async function createPosition(
       .returning({ id: factionPositions.id });
     positionId = inserted[0]!.id;
   } catch {
-    throw errors.conflict("A position with this key already exists in the faction.", "POSITION_KEY_EXISTS");
+    throw errors.conflict("Должность с таким ключом во фракции уже существует.", "POSITION_KEY_EXISTS");
   }
 
   await writeAudit({
@@ -363,7 +363,7 @@ export async function updatePosition(
     .innerJoin(factions, eq(factions.id, factionPositions.factionId))
     .where(eq(factionPositions.id, positionId))
     .limit(1);
-  if (!before[0]) throw errors.notFound("Position not found.");
+  if (!before[0]) throw errors.notFound("Должность не найдена.");
 
   // Renaming a position never rewrites history — old terms keep their own snapshot.
   await db

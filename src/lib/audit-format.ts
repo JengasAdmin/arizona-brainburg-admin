@@ -2,7 +2,8 @@ import { formatDateTime } from "@/lib/utils";
 
 /**
  * Human-readable sentence for an audit entry, e.g.
- * "Administrator appointed Vyacheslav_Gorbunov as Chief of LSPD."
+ * «Главный администратор Ivan: назначение — Alexei — Chief of LSPD.»
+ * Формулировки согласованы с объектом действия, а не с деятелем — род не важен.
  */
 export function formatAuditSentence(row: {
   actorName: string | null;
@@ -11,56 +12,56 @@ export function formatAuditSentence(row: {
   targetLabel: string | null;
   reason: string | null;
 }): string {
-  const actor = row.actorName ? `${row.actorRole ? `${row.actorRole} ` : ""}${row.actorName}` : "System";
+  const actor = row.actorName ? `${row.actorRole ? `${row.actorRole} ` : ""}${row.actorName}` : "Система";
   const target = row.targetLabel ?? "—";
 
   switch (row.action) {
     case "APPOINT_LEADER":
-      return `${actor} appointed ${target}.`;
+      return `${actor}: назначение — ${target}.`;
     case "APPOINT_DEPUTY":
-      return `${actor} appointed ${target}.`;
+      return `${actor}: назначение заместителя — ${target}.`;
     case "DISMISS_LEADER":
-      return `${actor} dismissed ${target}.`;
+      return `${actor}: отстранение — ${target}.`;
     case "DISMISS_DEPUTY":
-      return `${actor} dismissed ${target}.`;
+      return `${actor}: отстранение заместителя — ${target}.`;
     case "ADD_LEADERSHIP_POINTS":
-      return `${actor} added leadership points to ${target}.`;
+      return `${actor}: начисление баллов лидерства — ${target}.`;
     case "REMOVE_LEADERSHIP_POINTS":
-      return `${actor} removed leadership points from ${target}.`;
+      return `${actor}: снятие баллов лидерства — ${target}.`;
     case "GIVE_WARNING":
-      return `${actor} issued a warning to ${target}.`;
+      return `${actor}: выдано предупреждение — ${target}.`;
     case "GIVE_REPRIMAND":
-      return `${actor} issued a reprimand to ${target}.`;
+      return `${actor}: выдан выговор — ${target}.`;
     case "BUDGET_DEPOSIT":
-      return `${actor} deposited funds to ${target}.`;
+      return `${actor}: пополнение бюджета — ${target}.`;
     case "BUDGET_WITHDRAWAL":
-      return `${actor} withdrew funds from ${target}.`;
+      return `${actor}: списание с бюджета — ${target}.`;
     case "ASSIGN_ROLE":
-      return `${actor} assigned the role “${row.targetLabel ?? ""}”.`;
+      return `${actor}: назначена роль «${row.targetLabel ?? ""}».`;
     case "REMOVE_ROLE":
-      return `${actor} removed the role “${row.targetLabel ?? ""}”.`;
+      return `${actor}: отозвана роль «${row.targetLabel ?? ""}».`;
     case "VERIFY_GAME_ID":
-      return `${actor} verified the Game ID of ${target}.`;
+      return `${actor}: подтверждён Game ID — ${target}.`;
     case "REVOKE_GAME_ID":
-      return `${actor} revoked the Game ID verification of ${target}.`;
+      return `${actor}: отменена проверка Game ID — ${target}.`;
     case "SET_USER_STATUS":
-      return `${actor} changed the status of ${target}.`;
+      return `${actor}: изменён статус — ${target}.`;
     case "BLOCK_USERS":
-      return `${actor} blocked ${target}.`;
+      return `${actor}: блокировка — ${target}.`;
     case "CREATE_FACTION":
-      return `${actor} created the faction ${target}.`;
+      return `${actor}: создана фракция — ${target}.`;
     case "UPDATE_FACTION":
-      return `${actor} updated the faction ${target}.`;
+      return `${actor}: обновлена фракция — ${target}.`;
     case "DELETE_FACTION":
-      return `${actor} deleted the faction ${target}.`;
+      return `${actor}: удалена фракция — ${target}.`;
     case "UPDATE_ROLE_PERMISSIONS":
-      return `${actor} updated permissions of the role ${target}.`;
+      return `${actor}: обновлены права роли — ${target}.`;
     case "UPDATE_SETTING":
-      return `${actor} changed the setting ${target}.`;
+      return `${actor}: изменена настройка — ${target}.`;
     case "LOGOUT":
-      return `${actor} signed out.`;
+      return `${actor}: выход из системы.`;
     default:
-      return `${actor} performed ${row.action} on ${target}.`;
+      return `${actor}: действие ${row.action} — ${target}.`;
   }
 }
 

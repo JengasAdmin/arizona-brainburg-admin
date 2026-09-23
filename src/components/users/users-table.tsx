@@ -78,15 +78,15 @@ function UsersToolbar({
         <Input
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Search by name, nickname, ID or Game ID…"
-          aria-label="Search users"
+          placeholder="Поиск по имени, нику, ID или Game ID…"
+          aria-label="Поиск пользователей"
           className="pl-8"
         />
       </div>
       <Select
         value={filters.status ?? ""}
         onChange={(e) => router.replace(usersHref({ q: value, status: e.target.value }))}
-        aria-label="Filter by status"
+        aria-label="Фильтр по статусу"
         className="w-[150px]"
       >
         {statuses.map((option) => (
@@ -96,7 +96,12 @@ function UsersToolbar({
         ))}
       </Select>
       <span className="whitespace-nowrap text-xs text-neutral-500">
-        {total.toLocaleString("en-US")} result{total === 1 ? "" : "s"}
+        {total.toLocaleString("en-US")}{" "}
+        {total % 10 === 1 && total % 100 !== 11
+          ? "результат"
+          : total % 10 >= 2 && total % 10 <= 4 && (total % 100 < 12 || total % 100 > 14)
+            ? "результата"
+            : "результатов"}
       </span>
     </div>
   );
@@ -133,7 +138,7 @@ function RowActions({
         trigger={
           <button
             type="button"
-            aria-label={`Actions for ${row.displayName}`}
+            aria-label={`Действия для ${row.displayName}`}
             className="inline-flex h-7 w-7 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-raised hover:text-white"
           >
             <MoreHorizontal className="h-4 w-4" />
@@ -148,7 +153,7 @@ function RowActions({
                 router.push(`/users/${row.id}`);
               }}
             >
-              View profile
+              Открыть профиль
             </DropdownItem>
             {canEditStatus ? (
               <DropdownItem
@@ -157,7 +162,7 @@ function RowActions({
                   setStatusOpen(true);
                 }}
               >
-                Change status
+                Изменить статус
               </DropdownItem>
             ) : null}
             {canEditGameId ? (
@@ -167,7 +172,7 @@ function RowActions({
                   setGameIdOpen(true);
                 }}
               >
-                Edit game ID
+                Изменить Game ID
               </DropdownItem>
             ) : null}
             {canAssignRoles && assignableForUser.length > 0 ? (
@@ -177,7 +182,7 @@ function RowActions({
                   setRoleOpen(true);
                 }}
               >
-                Assign role
+                Назначить роль
               </DropdownItem>
             ) : null}
             {canViewAudit ? (
@@ -187,7 +192,7 @@ function RowActions({
                   router.push(`/audit?entityType=user&entityId=${row.id}`);
                 }}
               >
-                View audit
+                Журнал аудита
               </DropdownItem>
             ) : null}
           </>
@@ -247,20 +252,20 @@ export function UsersTable({
       {rows.length === 0 ? (
         <EmptyState
           icon={<Users className="h-8 w-8" />}
-          title="No users found"
-          description="Adjust the search or status filter and try again."
+          title="Пользователи не найдены"
+          description="Измените запрос или фильтр статуса и попробуйте снова."
         />
       ) : (
         <Table className="min-w-[880px]">
           <THead>
             <TR>
-              <TH>Player</TH>
-              <TH>User ID</TH>
-              <TH>Status</TH>
+              <TH>Игрок</TH>
+              <TH>ID пользователя</TH>
+              <TH>Статус</TH>
               <TH>Game ID</TH>
-              <TH>Roles</TH>
-              <TH>Last seen</TH>
-              <TH align="right">Actions</TH>
+              <TH>Роли</TH>
+              <TH>Последний вход</TH>
+              <TH align="right">Действия</TH>
             </TR>
           </THead>
           <TBody>
@@ -288,7 +293,7 @@ export function UsersTable({
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span className="text-neutral-300">{row.gameId}</span>
                       {!row.gameIdVerified ? (
-                        <Badge tone="warn">Unverified</Badge>
+                        <Badge tone="warn">Не подтверждён</Badge>
                       ) : null}
                     </div>
                   ) : (

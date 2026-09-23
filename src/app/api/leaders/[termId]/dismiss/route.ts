@@ -36,7 +36,7 @@ export const POST = guard(
     const permission = "DISMISS_LEADER"; // refined below by term lookup
     const decision = can(auth.actor, permission, scope);
     if (!decision.allowed) {
-      throw errors.forbidden(`Missing permission: ${permission}.`, decision.reason ?? "FORBIDDEN");
+      throw errors.forbidden(`Нет разрешения: ${permission}.`, decision.reason ?? "FORBIDDEN");
     }
 
     const result = await dismissTerm(termId, body, auth.actor, getClientIp(req));

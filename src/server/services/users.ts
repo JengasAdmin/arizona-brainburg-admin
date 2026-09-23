@@ -197,7 +197,7 @@ export async function getUserDetail(userId: number, actor: Actor) {
       LIMIT 1
     `);
     const rows = (inScope as unknown as { rows?: unknown[] }).rows ?? [];
-    if (rows.length === 0) throw errors.forbidden("User is outside your scope.", "OUT_OF_SCOPE");
+    if (rows.length === 0) throw errors.forbidden("Пользователь вне вашей зоны доступа.", "OUT_OF_SCOPE");
   }
 
   const userRows = await db
@@ -206,7 +206,7 @@ export async function getUserDetail(userId: number, actor: Actor) {
     .where(eq(users.id, userId))
     .limit(1);
   const user = userRows[0];
-  if (!user) throw errors.notFound("User not found.");
+  if (!user) throw errors.notFound("Пользователь не найден.");
 
   const roleRows = await db
     .select({
@@ -265,7 +265,7 @@ export const updateProfileSchema = z.object({
   gameId: z
     .string()
     .trim()
-    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID must be 1-32 alphanumeric characters.")
+    .regex(/^[0-9A-Za-z_-]{1,32}$/, "Game ID должен содержать 1-32 буквенно-цифровых символа.")
     .nullable()
     .optional(),
 });
@@ -287,7 +287,7 @@ export async function updateProfile(
   ip: string | null,
 ) {
   const before = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!before[0]) throw errors.notFound("User not found.");
+  if (!before[0]) throw errors.notFound("Пользователь не найден.");
 
   const updates: Partial<typeof users.$inferInsert> = { updatedAt: new Date() };
   if (patch.displayName !== undefined) updates.displayName = patch.displayName;
@@ -333,7 +333,7 @@ export async function setUserStatus(
   actor: Actor,
   ip: string | null,
 ) {
-  if (userId === actor.userId) throw errors.conflict("You cannot change your own status.", "SELF_ACTION");
+  if (userId === actor.userId) throw errors.conflict("Вы не можете изменить собственный статус.", "SELF_ACTION");
   const targetRoles = await db
     .select({ level: roles.level })
     .from(userRoles)
@@ -341,11 +341,11 @@ export async function setUserStatus(
     .where(eq(userRoles.userId, userId));
   const targetLevel = targetRoles.reduce((max, r) => Math.max(max, r.level), 0);
   if (!isFounder(actor) && targetLevel >= maxLevel(actor)) {
-    throw errors.forbidden("You cannot change the status of an equal or higher administrator.", "HIERARCHY_VIOLATION");
+    throw errors.forbidden("Вы не можете изменить статус администратора равного или более высокого уровня.", "HIERARCHY_VIOLATION");
   }
 
   const before = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!before[0]) throw errors.notFound("User not found.");
+  if (!before[0]) throw errors.notFound("Пользователь не найден.");
 
   const updated = await db
     .update(users)
@@ -370,15 +370,15 @@ export async function setUserStatus(
     await notify({
       userId,
       type: "account_blocked",
-      title: `Account ${input.status}`,
-      body: `Your account has been set to ${input.status}. Reason: ${input.reason}`,
+      title: `Аккаунт: ${input.status}`,
+      body: `Ваш статус: ${input.status}. Причина: ${input.reason}`,
     });
   } else if (before[0].status === "blocked" || before[0].status === "suspended") {
     await notify({
       userId,
       type: "account_unblocked",
-      title: "Account restored",
-      body: `Your account status is now ${input.status}.`,
+      title: "Аккаунт восстановлен",
+      body: `Ваш статус: ${input.status}.`,
     });
   }
   return updated[0];
@@ -391,8 +391,8 @@ export async function verifyGameId(
   ip: string | null,
 ) {
   const before = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!before[0]) throw errors.notFound("User not found.");
-  if (!before[0].gameId) throw errors.conflict("The user has no Game ID to verify.", "NO_GAME_ID");
+  if (!before[0]) throw errors.notFound("Пользователь не найден.");
+  if (!before[0].gameId) throw errors.conflict("У пользователя нет Game ID для подтверждения.", "NO_GAME_ID");
 
   const updated = await db
     .update(users)
@@ -421,8 +421,8 @@ export async function verifyGameId(
     await notify({
       userId,
       type: "game_id_verified",
-      title: "Game ID verified",
-      body: `Your Game ID (${before[0].gameId}) has been verified by an administrator.`,
+      title: "Game ID подтверждён",
+      body: `Ваш Game ID (${before[0].gameId}) подтверждён администратором.`,
     });
   }
   return updated[0];
@@ -440,20 +440,20 @@ export async function assignRole(
   actor: Actor,
   ip: string | null,
 ) {
-  if (userId === actor.userId) throw errors.conflict("You cannot change your own roles.", "SELF_ACTION");
+  if (userId === actor.userId) throw errors.conflict("Вы не можете изменять собственные роли.", "SELF_ACTION");
 
   const roleRows = await db.select().from(roles).where(eq(roles.key, input.roleKey)).limit(1);
   const targetRole = roleRows[0];
-  if (!targetRole) throw errors.notFound("Role not found.");
+  if (!targetRole) throw errors.notFound("Роль не найдена.");
 
   const assignDecision = canAssignRole(actor, targetRole);
   if (!assignDecision.allowed) {
-    throw errors.forbidden(`Cannot assign role ${targetRole.name}.`, assignDecision.reason ?? "FORBIDDEN");
+    throw errors.forbidden(`Невозможно выдать роль «${targetRole.name}».`, assignDecision.reason ?? "FORBIDDEN");
   }
   if (targetRole.category === "administration") {
     const manageDecision = canManageAdminUsers(actor);
     if (!manageDecision.allowed) {
-      throw errors.forbidden("You cannot manage administrative roles.", manageDecision.reason ?? "FORBIDDEN");
+      throw errors.forbidden("Вы не можете управлять административными ролями.", manageDecision.reason ?? "FORBIDDEN");
     }
   }
 
@@ -468,7 +468,7 @@ export async function assignRole(
     const missing = granted.map((g) => g.key).filter((k) => !actorPerms.has(k));
     if (missing.length > 0) {
       throw errors.forbidden(
-        `You cannot grant permissions you do not hold: ${missing.join(", ")}.`,
+        `Вы не можете выдавать разрешения, которых у вас нет: ${missing.join(", ")}.`,
         "CANNOT_GRANT_PERMISSION",
       );
     }
@@ -481,16 +481,16 @@ export async function assignRole(
     .where(eq(userRoles.userId, userId));
   const targetLevel = targetRoles.reduce((max, r) => Math.max(max, r.level), 0);
   if (!isFounder(actor) && targetLevel >= maxLevel(actor)) {
-    throw errors.forbidden("You cannot modify an equal or higher administrator.", "HIERARCHY_VIOLATION");
+    throw errors.forbidden("Вы не можете изменять администратора равного или более высокого уровня.", "HIERARCHY_VIOLATION");
   }
 
   const userRows = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!userRows[0]) throw errors.notFound("User not found.");
+  if (!userRows[0]) throw errors.notFound("Пользователь не найден.");
 
   try {
     await db.insert(userRoles).values({ userId, roleId: targetRole.id, assignedBy: actor.userId });
   } catch {
-    throw errors.conflict("The user already has this role.", "ROLE_ALREADY_ASSIGNED");
+    throw errors.conflict("У пользователя уже есть эта роль.", "ROLE_ALREADY_ASSIGNED");
   }
 
   await writeAudit({
@@ -508,8 +508,8 @@ export async function assignRole(
   await notify({
     userId,
     type: "role_changed",
-    title: "Role assigned",
-    body: `You have been assigned the role “${targetRole.name}”.`,
+    title: "Роль выдана",
+    body: `Вам выдана роль «${targetRole.name}».`,
     link: "/settings?section=administration",
   });
 
@@ -517,18 +517,18 @@ export async function assignRole(
 }
 
 export async function removeRole(userId: number, roleKey: string, actor: Actor, ip: string | null) {
-  if (userId === actor.userId) throw errors.conflict("You cannot change your own roles.", "SELF_ACTION");
+  if (userId === actor.userId) throw errors.conflict("Вы не можете изменять собственные роли.", "SELF_ACTION");
 
   const roleRows = await db.select().from(roles).where(eq(roles.key, roleKey)).limit(1);
   const targetRole = roleRows[0];
-  if (!targetRole) throw errors.notFound("Role not found.");
+  if (!targetRole) throw errors.notFound("Роль не найдена.");
 
   const assignDecision = canAssignRole(actor, targetRole);
   if (!assignDecision.allowed) {
-    throw errors.forbidden(`Cannot remove role ${targetRole.name}.`, assignDecision.reason ?? "FORBIDDEN");
+    throw errors.forbidden(`Невозможно отозвать роль «${targetRole.name}».`, assignDecision.reason ?? "FORBIDDEN");
   }
   if (targetRole.category === "administration" && !canManageAdminUsers(actor).allowed) {
-    throw errors.forbidden("You cannot manage administrative roles.", "FORBIDDEN");
+    throw errors.forbidden("Вы не можете управлять административными ролями.", "FORBIDDEN");
   }
 
   const targetRoles = await db
@@ -538,14 +538,14 @@ export async function removeRole(userId: number, roleKey: string, actor: Actor, 
     .where(eq(userRoles.userId, userId));
   const targetLevel = targetRoles.reduce((max, r) => Math.max(max, r.level), 0);
   if (!isFounder(actor) && targetLevel >= maxLevel(actor)) {
-    throw errors.forbidden("You cannot modify an equal or higher administrator.", "HIERARCHY_VIOLATION");
+    throw errors.forbidden("Вы не можете изменять администратора равного или более высокого уровня.", "HIERARCHY_VIOLATION");
   }
 
   const removed = await db
     .delete(userRoles)
     .where(and(eq(userRoles.userId, userId), eq(userRoles.roleId, targetRole.id)))
     .returning();
-  if (removed.length === 0) throw errors.notFound("The user does not have this role.");
+  if (removed.length === 0) throw errors.notFound("У пользователя нет этой роли.");
 
   const userRows = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 
@@ -564,8 +564,8 @@ export async function removeRole(userId: number, roleKey: string, actor: Actor, 
   await notify({
     userId,
     type: "role_changed",
-    title: "Role removed",
-    body: `The role “${targetRole.name}” has been removed from your account.`,
+    title: "Роль отозвана",
+    body: `С вашего аккаунта снята роль «${targetRole.name}».`,
   });
 
   return { roleKey: targetRole.key };

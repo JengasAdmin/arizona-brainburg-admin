@@ -69,24 +69,24 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
   return (
     <div>
       <PageHeader
-        title="Activity"
-        description="Manual game session records"
+        title="Активность"
+        description="Ручные записи игровых сессий"
         actions={canLog ? <LogActivityDialog factions={factions.map((f) => ({ id: f.id, name: f.name }))} /> : null}
       />
 
       <Card className="mb-4">
         <form method="get" className="flex flex-wrap items-end gap-3 p-4">
           <div className="w-full max-w-[220px]">
-            <Label htmlFor="filter-action">Action (exact)</Label>
+            <Label htmlFor="filter-action">Действие (точное совпадение)</Label>
             <Input
               id="filter-action"
               name="action"
               defaultValue={action ?? ""}
-              placeholder="Patrol shift"
+              placeholder="Патрульная смена"
             />
           </div>
           <div className="w-full max-w-[160px]">
-            <Label htmlFor="filter-user">User ID</Label>
+            <Label htmlFor="filter-user">ID пользователя</Label>
             <Input
               id="filter-user"
               name="userId"
@@ -97,22 +97,22 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
             />
           </div>
           <div className="w-full max-w-[180px]">
-            <Label htmlFor="filter-source">Source</Label>
+            <Label htmlFor="filter-source">Источник</Label>
             <Select id="filter-source" name="source" defaultValue={source ?? ""}>
-              <option value="">All sources</option>
-              <option value="manual">Manual</option>
-              <option value="integration">Integration</option>
+              <option value="">Все источники</option>
+              <option value="manual">Вручную</option>
+              <option value="integration">Интеграция</option>
             </Select>
           </div>
           <div className="flex items-center gap-1.5">
             <Button type="submit" size="sm" variant="secondary">
-              Apply filters
+              Применить фильтры
             </Button>
             <Link
               href="/activity"
               className="inline-flex h-7 items-center px-2.5 text-xs text-neutral-500 transition-colors hover:text-white"
             >
-              Reset
+              Сбросить
             </Link>
           </div>
         </form>
@@ -120,27 +120,27 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
 
       <Card>
         <CardHeader
-          title="Records"
-          description={`${result.total} entr${result.total === 1 ? "y" : "ies"} in your scope`}
+          title="Записи"
+          description={`Записей в вашей области: ${result.total}`}
         />
         {result.items.length === 0 ? (
           <EmptyState
             icon={<Gamepad2 className="h-8 w-8" />}
-            title="No activity recorded"
-            description="Manual game session records will appear here once logged."
+            title="Активность пока не записана"
+            description="Записи игровых сессий появятся здесь после добавления."
           />
         ) : (
           <>
             <Table className="min-w-[860px]">
               <THead>
                 <TR>
-                  <TH>Date / time</TH>
-                  <TH>User</TH>
-                  <TH>Action</TH>
-                  <TH>Source</TH>
-                  <TH>Description</TH>
-                  <TH>Faction</TH>
-                  <TH>Recorded by</TH>
+                  <TH>Дата и время</TH>
+                  <TH>Пользователь</TH>
+                  <TH>Действие</TH>
+                  <TH>Источник</TH>
+                  <TH>Описание</TH>
+                  <TH>Фракция</TH>
+                  <TH>Кем записано</TH>
                 </TR>
               </THead>
               <TBody>
@@ -181,7 +181,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
             {pages > 1 ? (
               <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
                 <span className="text-xs text-neutral-500">
-                  Page {result.page} of {pages} — {result.total} entries
+                  Страница {result.page} из {pages} — записей: {result.total}
                 </span>
                 <div className="flex items-center gap-1.5">
                   <Link
@@ -193,7 +193,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
                         : "border-line bg-raised text-neutral-200 hover:bg-[#262626] hover:text-white"
                     }`}
                   >
-                    <ChevronLeft className="h-3.5 w-3.5" /> Previous
+                    <ChevronLeft className="h-3.5 w-3.5" /> Назад
                   </Link>
                   <Link
                     href={pageHref(result.page + 1, filters)}
@@ -204,7 +204,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Sea
                         : "border-line bg-raised text-neutral-200 hover:bg-[#262626] hover:text-white"
                     }`}
                   >
-                    Next <ChevronRight className="h-3.5 w-3.5" />
+                    Вперёд <ChevronRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               </div>

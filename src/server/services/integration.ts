@@ -11,9 +11,9 @@ import { getSetting } from "./settings";
 import { countOf } from "./count";
 
 export const INTEGRATION_STATUSES = {
-  NOT_CONNECTED: "Not connected",
-  CONNECTED: "Connected",
-  DISABLED: "Disabled",
+  NOT_CONNECTED: "Не подключено",
+  CONNECTED: "Подключено",
+  DISABLED: "Отключено",
 } as const;
 
 /**
@@ -51,8 +51,8 @@ export async function getIntegrationStatus(): Promise<{
     apiUrl,
     note:
       status === INTEGRATION_STATUSES.CONNECTED
-        ? "Integration API enabled with provisioned keys."
-        : "Game API integration is not connected yet. Manual administration is used instead.",
+        ? "API интеграции включён, ключи выпущены."
+        : "Интеграция с игровым API ещё не подключена. Используется ручное администрирование.",
   };
 }
 
@@ -123,7 +123,7 @@ export async function listIntegrationKeys() {
 
 export async function revokeIntegrationKey(id: number, actor: Actor, ip: string | null) {
   const rows = await db.select().from(integrationApiKeys).where(eq(integrationApiKeys.id, id));
-  if (!rows[0]) throw errors.notFound("API key not found.");
+  if (!rows[0]) throw errors.notFound("API-ключ не найден.");
   await db
     .update(integrationApiKeys)
     .set({ status: "disabled", updatedAt: new Date() })

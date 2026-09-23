@@ -64,14 +64,14 @@ export function PointsDialog({
     const parsed = Number(delta);
     let valid = true;
     if (!Number.isInteger(parsed) || parsed === 0) {
-      setDeltaError("Enter a non-zero whole number.");
+      setDeltaError("Введите ненулевое целое число.");
       valid = false;
     } else {
       setDeltaError(null);
     }
     const trimmed = reason.trim();
     if (trimmed.length < 3 || trimmed.length > 500) {
-      setReasonError("Reason must be 3–500 characters.");
+      setReasonError("Поле «Причина»: 3–500 символов.");
       valid = false;
     } else {
       setReasonError(null);
@@ -85,7 +85,7 @@ export function PointsDialog({
         body: { delta: parsed, reason: trimmed },
       });
       toast({
-        title: "Points updated",
+        title: "Баллы обновлены",
         description: `${result.difference > 0 ? "+" : ""}${result.difference} — ${result.oldValue} → ${result.newValue} · ${term.displayName}`,
         variant: "success",
       });
@@ -94,7 +94,7 @@ export function PointsDialog({
       onClose();
       router.refresh();
     } catch (err) {
-      toast({ title: "Points adjustment failed", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось изменить баллы", description: errorMessage(err), variant: "error" });
     } finally {
       setPending(false);
     }
@@ -104,21 +104,21 @@ export function PointsDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      title="Adjust leadership points"
-      description={`${term.displayName} — ${term.positionTitle}. Active terms only.`}
+      title="Изменение баллов руководства"
+      description={`${term.displayName} — ${term.positionTitle}. Только для активных сроков.`}
       footer={
         <>
           <Button variant="ghost" onClick={handleClose} disabled={pending}>
-            Cancel
+            Отмена
           </Button>
           <Button variant="primary" onClick={() => void submit()} loading={pending}>
-            Apply change
+            Применить изменения
           </Button>
         </>
       }
     >
       <div className="space-y-4">
-        <Field label="Points delta" htmlFor="points-delta" hint="Negative to remove" error={deltaError}>
+        <Field label="Изменение баллов" htmlFor="points-delta" hint="Отрицательное — списать" error={deltaError}>
           <div className="flex items-center gap-2">
             <Button
               type="button"
@@ -126,7 +126,7 @@ export function PointsDialog({
               size="sm"
               onClick={() => step(-1)}
               disabled={pending}
-              aria-label="Decrease points"
+              aria-label="Уменьшить баллы"
             >
               <Minus className="h-3.5 w-3.5" />
             </Button>
@@ -147,7 +147,7 @@ export function PointsDialog({
               size="sm"
               onClick={() => step(1)}
               disabled={pending}
-              aria-label="Increase points"
+              aria-label="Увеличить баллы"
             >
               <Plus className="h-3.5 w-3.5" />
             </Button>
@@ -155,14 +155,14 @@ export function PointsDialog({
         </Field>
 
         <Field
-          label="Reason"
+          label="Причина"
           htmlFor="points-reason"
-          hint="3–500 characters"
+          hint="3–500 символов"
           error={reasonError}
         >
           <Textarea
             id="points-reason"
-            placeholder="Why are the points changing?"
+            placeholder="Почему меняются баллы?"
             value={reason}
             onChange={(e) => {
               setReason(e.target.value);

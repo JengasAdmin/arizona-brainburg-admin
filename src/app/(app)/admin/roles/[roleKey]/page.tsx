@@ -24,9 +24,9 @@ function catalogRole(key: string): RoleDefinition | undefined {
 }
 
 const CATEGORY_LABEL: Record<string, string> = {
-  administration: "Administration",
-  supervision: "Supervision",
-  player: "Player",
+  administration: "Администрирование",
+  supervision: "Надзор",
+  player: "Игрок",
 };
 
 export default async function RoleDetailPage({
@@ -75,7 +75,7 @@ export default async function RoleDetailPage({
     base.every((k) => canGrantPermission(auth.actor, k).allowed);
   const canViewAudit = can(auth.actor, "VIEW_AUDIT_LOGS").allowed;
 
-  const scopeLabel = departmentName ? `Department · ${departmentName}` : "Global";
+  const scopeLabel = departmentName ? `Ведомство · ${departmentName}` : "Глобально";
 
   return (
     <div>
@@ -87,7 +87,7 @@ export default async function RoleDetailPage({
             href="/admin/roles"
             className="inline-flex h-7 items-center gap-1.5 rounded-md border border-line px-2.5 text-xs text-neutral-300 transition-colors hover:border-line2 hover:text-white"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> All roles
+            <ArrowLeft className="h-3.5 w-3.5" /> Все роли
           </Link>
         }
       />
@@ -96,60 +96,63 @@ export default async function RoleDetailPage({
         <code className="rounded border border-line bg-panel px-1.5 py-0.5 font-mono text-[11px] text-neutral-400">
           {role.key}
         </code>
-        <Badge tone={role.level >= 80 ? "info" : "neutral"}>Level {role.level}</Badge>
+        <Badge tone={role.level >= 80 ? "info" : "neutral"}>Уровень {role.level}</Badge>
         <Badge tone={departmentName ? "neutral" : "info"}>{scopeLabel}</Badge>
         <Badge>{CATEGORY_LABEL[role.category] ?? role.category}</Badge>
-        {founderProtected ? <Badge tone="warn">immutable</Badge> : null}
+        {founderProtected ? <Badge tone="warn">неизменяемая</Badge> : null}
         <Badge tone={assign.allowed ? "ok" : "danger"}>
           <span title={assign.allowed ? undefined : (assign.reason ?? "FORBIDDEN")}>
-            {assign.allowed ? "Assignable by you" : "Not assignable by you"}
+            {assign.allowed ? "Доступна для назначения" : "Недоступна для назначения"}
           </span>
         </Badge>
       </div>
 
       <Card>
-        <CardHeader title="Hierarchy rules" description="Static facts about this role and your access to it." />
+        <CardHeader title="Правила иерархии" description="Статические сведения об этой роли и вашем доступе к ней." />
         <CardBody>
           <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Level</dt>
+              <dt className="text-xs text-neutral-500">Уровень</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
-                {role.level} — may never manage or assign anything above its own level.
+                {role.level} — никогда не может управлять или назначать что-либо выше собственного
+                уровня.
               </dd>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Scope</dt>
+              <dt className="text-xs text-neutral-500">Область действия</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
                 {departmentName
-                  ? `Department — grants its permissions only inside ${departmentName}.`
-                  : "Global — grants its permissions in every department."}
+                  ? `Ведомство — выдаёт свои разрешения только внутри ${departmentName}.`
+                  : "Глобально — выдаёт свои разрешения во всех ведомствах."}
               </dd>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Members</dt>
+              <dt className="text-xs text-neutral-500">Участники</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
-                {role.memberCount.toLocaleString("en-US")} user{role.memberCount === 1 ? "" : "s"}
+                {role.memberCount.toLocaleString("en-US")}
               </dd>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Permissions</dt>
+              <dt className="text-xs text-neutral-500">Разрешения</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
-                {role.permissions.length} current
-                {catalog ? ` · ${base.length} catalog base` : " · custom role (no catalog base)"}
+                {role.permissions.length} действующих
+                {catalog
+                  ? ` · ${base.length} базовых в каталоге`
+                  : " · пользовательская роль (базы в каталоге нет)"}
               </dd>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Category</dt>
+              <dt className="text-xs text-neutral-500">Категория</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
                 {CATEGORY_LABEL[role.category] ?? role.category}
               </dd>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
-              <dt className="text-xs text-neutral-500">Assignment (your account)</dt>
+              <dt className="text-xs text-neutral-500">Назначение (ваша учётная запись)</dt>
               <dd className="mt-0.5 text-[13px] text-neutral-200">
                 {assign.allowed
-                  ? "You may assign and edit this role."
-                  : `Denied by the RBAC engine${assign.reason ? ` (${assign.reason})` : ""}.`}
+                  ? "Вы можете назначать и редактировать эту роль."
+                  : `Запрещено движком RBAC${assign.reason ? ` (${assign.reason})` : ""}.`}
               </dd>
             </div>
           </dl>
@@ -164,11 +167,11 @@ export default async function RoleDetailPage({
                 <Lock className="mt-0.5 h-4 w-4 shrink-0 text-neutral-500" />
                 <div>
                   <p className="text-[13px] text-neutral-200">
-                    The Founder permission set is immutable — this role is read-only.
+                    Набор разрешений Founder неизменяем — эта роль доступна только для чтения.
                   </p>
                   <p className="mt-0.5 text-xs text-neutral-600">
-                    The server rejects any edit with FOUNDER_ROLE_PROTECTED, so the permission
-                    editor is replaced by this banner.
+                    Сервер отклоняет любое изменение с кодом FOUNDER_ROLE_PROTECTED, поэтому
+                    редактор разрешений заменён этим сообщением.
                   </p>
                 </div>
               </div>

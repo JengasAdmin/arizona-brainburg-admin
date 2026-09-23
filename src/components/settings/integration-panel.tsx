@@ -35,8 +35,8 @@ export interface IntegrationStatusInfo {
 }
 
 function statusTone(status: string): "ok" | "warn" | "danger" {
-  if (status === "Connected") return "ok";
-  if (status === "Disabled") return "danger";
+  if (status === "Подключено") return "ok";
+  if (status === "Отключено") return "danger";
   return "warn";
 }
 
@@ -90,7 +90,7 @@ export function IntegrationPanel({
   const createKey = async () => {
     const trimmed = name.trim();
     if (trimmed.length < 2 || trimmed.length > 60) {
-      setNameError("Name must be 2–60 characters.");
+      setNameError("Поле «Название ключа»: 2–60 символов.");
       return;
     }
     setNameError(null);
@@ -113,11 +113,11 @@ export function IntegrationPanel({
     if (!created) return;
     try {
       await navigator.clipboard.writeText(created.key);
-      toast({ title: "Key copied to clipboard.", variant: "success" });
+      toast({ title: "Ключ скопирован в буфер обмена.", variant: "success" });
     } catch {
       toast({
-        title: "Copy failed.",
-        description: "Select the text in the box and copy it manually.",
+        title: "Не удалось скопировать.",
+        description: "Выделите текст в поле и скопируйте его вручную.",
         variant: "error",
       });
     }
@@ -128,11 +128,11 @@ export function IntegrationPanel({
     setRevoking(true);
     try {
       await api(`/api/integration/keys/${revokeTarget.id}`, { method: "DELETE" });
-      toast({ title: `Key “${revokeTarget.name}” revoked.`, variant: "success" });
+      toast({ title: `Ключ «${revokeTarget.name}» отозван.`, variant: "success" });
       setRevokeTarget(null);
       router.refresh();
     } catch (err) {
-      toast({ title: "Could not revoke the key.", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось отозвать ключ.", description: errorMessage(err), variant: "error" });
     } finally {
       setRevoking(false);
     }
@@ -141,30 +141,30 @@ export function IntegrationPanel({
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader title="Integration status" description={info.note} />
+        <CardHeader title="Статус интеграции" description={info.note} />
         <CardBody>
-          <Row label="Status">
+          <Row label="Статус">
             <Badge tone={statusTone(info.status)} dot>
               {info.status}
             </Badge>
           </Row>
-          <Row label="Enabled">{info.enabled ? "Yes" : "No"}</Row>
-          <Row label="API base URL">
+          <Row label="Включено">{info.enabled ? "Да" : "Нет"}</Row>
+          <Row label="Базовый URL API">
             <span className="font-mono text-[12px]">{info.apiUrl ?? "—"}</span>
           </Row>
-          <Row label="Active keys">{String(info.activeKeys)}</Row>
-          <Row label="Events received">{String(info.eventsReceived)}</Row>
+          <Row label="Активные ключи">{String(info.activeKeys)}</Row>
+          <Row label="Получено событий">{String(info.eventsReceived)}</Row>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader
-          title="API keys"
-          description="Only a SHA-256 hash of each key is stored — the plaintext is shown once at creation."
+          title="Ключи API"
+          description="Хранится только хеш SHA-256 каждого ключа — открытый ключ показывается один раз при создании."
           actions={
             canManage ? (
               <Button size="sm" variant="outline" onClick={() => setCreateOpen(true)}>
-                <Plus className="h-3.5 w-3.5" /> Create key
+                <Plus className="h-3.5 w-3.5" /> Создать ключ
               </Button>
             ) : undefined
           }
@@ -172,20 +172,20 @@ export function IntegrationPanel({
         {keys.length === 0 ? (
           <EmptyState
             icon={<KeyRound className="h-8 w-8" />}
-            title="No API keys provisioned yet"
-            description="Create a key so the game bot can authenticate against the integration API."
+            title="Ключи API ещё не созданы"
+            description="Создайте ключ, чтобы игровой бот мог проходить аутентификацию в API интеграции."
           />
         ) : (
           <Table className="min-w-[760px]">
             <THead>
               <TR>
-                <TH>Name</TH>
-                <TH>Prefix</TH>
-                <TH>Scopes</TH>
-                <TH>Status</TH>
-                <TH>Created</TH>
-                <TH>Last used</TH>
-                {canManage ? <TH align="right">Actions</TH> : null}
+                <TH>Название</TH>
+                <TH>Префикс</TH>
+                <TH>Зоны ответственности</TH>
+                <TH>Статус</TH>
+                <TH>Создан</TH>
+                <TH>Последнее использование</TH>
+                {canManage ? <TH align="right">Действия</TH> : null}
               </TR>
             </THead>
             <TBody>
@@ -207,7 +207,7 @@ export function IntegrationPanel({
                     </span>
                   </TD>
                   <TD>
-                    <StatusBadge status={key.status} label={key.status === "active" ? "Active" : "Disabled"} />
+                    <StatusBadge status={key.status} label={key.status === "active" ? "Активен" : "Отключено"} />
                   </TD>
                   <TD className="whitespace-nowrap text-neutral-400">{formatDateTime(key.createdAt)}</TD>
                   <TD className="whitespace-nowrap text-neutral-500">{formatDateTime(key.lastUsedAt)}</TD>
@@ -219,7 +219,7 @@ export function IntegrationPanel({
                           variant="danger"
                           onClick={() => setRevokeTarget({ id: key.id, name: key.name })}
                         >
-                          <Trash2 className="h-3.5 w-3.5" /> Revoke
+                          <Trash2 className="h-3.5 w-3.5" /> Отозвать
                         </Button>
                       ) : (
                         <span className="text-[11px] text-neutral-600">—</span>
@@ -235,8 +235,8 @@ export function IntegrationPanel({
 
       <Card>
         <CardHeader
-          title="Game API endpoints"
-          description="Bearer-authenticated routes for the game bot (Authorization: Bearer <key>)."
+          title="Эндпоинты игрового API"
+          description="Маршруты с Bearer-аутентификацией для игрового бота (Authorization: Bearer <key>)."
         />
         <CardBody>
           <div className="space-y-2">
@@ -245,7 +245,7 @@ export function IntegrationPanel({
                 POST /api/integration/game/events
               </code>
               <p className="mt-0.5 text-[11px] text-neutral-500">
-                Ingest game events — requires integration enabled and an active key.
+                Приём игровых событий — требуется включённая интеграция и активный ключ.
               </p>
             </div>
             <div className="rounded-md border border-line bg-panel px-3 py-2">
@@ -253,7 +253,7 @@ export function IntegrationPanel({
                 GET /api/integration/game/players
               </code>
               <p className="mt-0.5 text-[11px] text-neutral-500">
-                Player roster: Game ID, nickname, faction and rank (limit 500).
+                Список игроков: Game ID, никнейм, фракция и ранг (лимит 500).
               </p>
             </div>
           </div>
@@ -264,24 +264,24 @@ export function IntegrationPanel({
       <Dialog
         open={createOpen}
         onClose={closeCreate}
-        title={created ? "API key created" : "Create API key"}
+        title={created ? "Ключ API создан" : "Создание ключа API"}
         description={
           created
             ? undefined
-            : "The key will be generated with the default scopes: game:read, activity:write."
+            : "Ключ будет создан с зонами ответственности по умолчанию: game:read, activity:write."
         }
         footer={
           created ? (
             <Button variant="primary" onClick={closeCreate} disabled={creating}>
-              Done
+              Готово
             </Button>
           ) : (
             <>
               <Button variant="ghost" onClick={closeCreate} disabled={creating}>
-                Cancel
+                Отмена
               </Button>
               <Button variant="primary" loading={creating} onClick={() => void createKey()}>
-                Create key
+                Создать ключ
               </Button>
             </>
           )
@@ -290,13 +290,13 @@ export function IntegrationPanel({
         {created ? (
           <div className="space-y-3">
             <p className="rounded-md border border-[#3d3316] bg-[#211c0d] px-3 py-2 text-xs text-warn">
-              Store this key now — it will not be shown again.
+              Сохраните этот ключ сейчас — он больше не будет показан.
             </p>
             <pre className="overflow-x-auto rounded-md border border-line bg-panel p-3 font-mono text-[12px] text-neutral-200">
               {created.key}
             </pre>
             <Button variant="outline" size="sm" onClick={() => void copyKey()}>
-              <Copy className="h-3.5 w-3.5" /> Copy
+              <Copy className="h-3.5 w-3.5" /> Копировать
             </Button>
           </div>
         ) : (
@@ -307,13 +307,13 @@ export function IntegrationPanel({
               void createKey();
             }}
           >
-            <Field label="Key name" htmlFor="integration-key-name" error={nameError}>
+            <Field label="Название ключа" htmlFor="integration-key-name" error={nameError}>
               <Input
                 id="integration-key-name"
                 required
                 minLength={2}
                 maxLength={60}
-                placeholder="e.g. game-bot-prod"
+                placeholder="например, game-bot-prod"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -328,10 +328,10 @@ export function IntegrationPanel({
         request={
           revokeTarget
             ? {
-                title: "Revoke API key?",
-                description: "The key stops working immediately. This cannot be undone.",
-                fields: [{ label: "Key", value: revokeTarget.name }],
-                confirmLabel: "Revoke key",
+                title: "Отозвать ключ API?",
+                description: "Ключ перестанет работать немедленно. Это действие нельзя отменить.",
+                fields: [{ label: "Ключ", value: revokeTarget.name }],
+                confirmLabel: "Отозвать ключ",
                 danger: true,
               }
             : null

@@ -47,7 +47,7 @@ export function SecurityPanel({
     try {
       await api("/api/auth/logout", { method: "POST" });
     } catch (err) {
-      toast({ title: "Sign out failed.", description: errorMessage(err), variant: "error" });
+      toast({ title: "Не удалось выйти из системы.", description: errorMessage(err), variant: "error" });
       setPendingSignOut(false);
       return;
     }
@@ -60,7 +60,7 @@ export function SecurityPanel({
       await api("/api/auth/logout-all", { method: "POST" });
     } catch (err) {
       toast({
-        title: "Could not sign out of all devices.",
+        title: "Не удалось выйти из всех устройств.",
         description: errorMessage(err),
         variant: "error",
       });
@@ -75,30 +75,30 @@ export function SecurityPanel({
     <div className="space-y-4">
       <Card>
         <CardHeader
-          title="Session"
-          description="Details of your current sign-in session."
+          title="Сеанс"
+          description="Сведения о текущем сеансе входа."
         />
         <CardBody>
-          <Row label="Account created">{formatDateTime(createdAt)}</Row>
-          <Row label="Last sign-in">{formatDateTime(lastLoginAt)}</Row>
+          <Row label="Аккаунт создан">{formatDateTime(createdAt)}</Row>
+          <Row label="Последний вход">{formatDateTime(lastLoginAt)}</Row>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader
-          title="Connected sign-in providers"
-          description="Read-only view of the OAuth accounts linked to your profile."
+          title="Подключённые способы входа"
+          description="Только для просмотра: OAuth-аккаунты, привязанные к вашему профилю."
         />
         <CardBody>
           {providers.length === 0 ? (
-            <p className="text-[13px] text-neutral-500">No external accounts connected.</p>
+            <p className="text-[13px] text-neutral-500">Внешние аккаунты не подключены.</p>
           ) : (
             providers.map((p) => (
               <Row key={p.provider} label={p.provider === "vk" ? "VK" : "Discord"}>
                 <span className="flex items-center justify-end gap-2">
-                  <span className="truncate text-neutral-300">{p.username ?? "Connected"}</span>
+                  <span className="truncate text-neutral-300">{p.username ?? "Подключено"}</span>
                   <Badge tone="ok" dot>
-                    Linked
+                    Привязано
                   </Badge>
                 </span>
               </Row>
@@ -108,7 +108,7 @@ export function SecurityPanel({
       </Card>
 
       <Card>
-        <CardHeader title="Sign out" description="End this session or revoke every active session." />
+        <CardHeader title="Выход" description="Завершите этот сеанс или отзовите все активные сеансы." />
         <CardBody>
           <div className="flex flex-wrap gap-2">
             <Button
@@ -116,10 +116,10 @@ export function SecurityPanel({
               loading={pendingSignOut}
               onClick={() => void signOut()}
             >
-              <LogOut className="h-3.5 w-3.5" /> Sign out
+              <LogOut className="h-3.5 w-3.5" /> Выйти
             </Button>
             <Button variant="danger" onClick={() => setConfirmAll(true)}>
-              <MonitorSmartphone className="h-3.5 w-3.5" /> Sign out of all devices
+              <MonitorSmartphone className="h-3.5 w-3.5" /> Выйти из всех устройств
             </Button>
           </div>
         </CardBody>
@@ -129,10 +129,10 @@ export function SecurityPanel({
         open={confirmAll}
         loading={pendingAll}
         request={{
-          title: "Sign out of all devices?",
+          title: "Выйти из всех устройств?",
           description:
-            "Every active session for your account — including this one — will be revoked and you will be returned to the sign-in page.",
-          confirmLabel: "Sign out everywhere",
+            "Все активные сеансы вашего аккаунта — включая этот — будут отозваны, и вы вернётесь на страницу входа.",
+          confirmLabel: "Выйти везде",
           danger: true,
         }}
         onConfirm={() => void signOutAll()}

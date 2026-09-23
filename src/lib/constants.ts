@@ -1,9 +1,9 @@
 export const APP_NAME = "ARIZONA RP";
 export const APP_SUBTITLE = "BRAINBURG";
 export const SERVER_ID = 5;
-export const SERVER_LABEL = `Server #${SERVER_ID}`;
+export const SERVER_LABEL = `Сервер #${SERVER_ID}`;
 export const APP_DESCRIPTION =
-  "Closed leadership & administration management platform for Arizona RP — Brainburg, Server #5.";
+  "Закрытая платформа управления руководством и администрацией Arizona RP — Brainburg, Сервер #5.";
 
 export const USER_STATUSES = ["active", "suspended", "blocked", "inactive"] as const;
 export type UserStatus = (typeof USER_STATUSES)[number];
@@ -18,13 +18,13 @@ export const BUDGET_TYPES = ["deposit", "withdrawal"] as const;
 export type BudgetType = (typeof BUDGET_TYPES)[number];
 
 export const GAME_ACTIVITY_ACTIONS = [
-  "Promotion",
-  "Demotion",
-  "Transfer",
-  "Warning",
-  "Kick",
-  "Event",
-  "Custom",
+  "Повышение",
+  "Понижение",
+  "Перевод",
+  "Предупреждение",
+  "Кик",
+  "Событие",
+  "Другое",
 ] as const;
 
 export const NOTIFICATION_TYPES = [
@@ -43,4 +43,4 @@ export const NOTIFICATION_TYPES = [
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
-export const INTEGRATION_STATUS_NOT_CONNECTED = "Not connected";
+export const INTEGRATION_STATUS_NOT_CONNECTED = "Не подключено";

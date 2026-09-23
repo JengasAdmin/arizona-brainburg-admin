@@ -22,11 +22,11 @@ export function NotificationActions({ unread }: { unread: number }) {
     setPending(true);
     try {
       await api("/api/notifications", { method: "POST" });
-      toast({ title: "All notifications marked as read.", variant: "success" });
+      toast({ title: "Все уведомления отмечены как прочитанные.", variant: "success" });
       router.refresh();
     } catch (err) {
       toast({
-        title: "Could not mark notifications as read.",
+        title: "Не удалось отметить уведомления как прочитанные.",
         description: errorMessage(err),
         variant: "error",
       });
@@ -37,7 +37,7 @@ export function NotificationActions({ unread }: { unread: number }) {
 
   return (
     <Button size="sm" variant="outline" loading={pending} onClick={() => void markAll()}>
-      <CheckCheck className="h-3.5 w-3.5" /> Mark all read
+      <CheckCheck className="h-3.5 w-3.5" /> Отметить все прочитанными
     </Button>
   );
 }
@@ -55,7 +55,7 @@ export function NotificationMarkRead({ id }: { id: number }) {
       router.refresh();
     } catch (err) {
       toast({
-        title: "Could not mark the notification as read.",
+        title: "Не удалось отметить уведомление как прочитанное.",
         description: errorMessage(err),
         variant: "error",
       });
@@ -70,9 +70,9 @@ export function NotificationMarkRead({ id }: { id: number }) {
       variant="ghost"
       loading={pending}
       onClick={() => void markRead()}
-      aria-label="Mark as read"
+      aria-label="Отметить как прочитанное"
     >
-      <Check className="h-3.5 w-3.5" /> Mark read
+      <Check className="h-3.5 w-3.5" /> Отметить прочитанным
     </Button>
   );
 }

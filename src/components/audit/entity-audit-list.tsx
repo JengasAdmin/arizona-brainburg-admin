@@ -76,8 +76,8 @@ export function EntityAuditList({
       <Card>
         <EmptyState
           icon={<History className="h-8 w-8" />}
-          title="No history recorded yet"
-          description={error ?? "Audit entries for this entity will appear here."}
+          title="История пока не записана"
+          description={error ?? "Записи аудита для этой сущности появятся здесь."}
         />
       </Card>
     );
@@ -88,18 +88,18 @@ export function EntityAuditList({
       <Table className="min-w-[640px]">
         <THead>
           <TR>
-            <TH>Date</TH>
-            <TH>Actor</TH>
-            <TH>Action</TH>
-            <TH>Details</TH>
-            <TH>Reason</TH>
+            <TH>Дата</TH>
+            <TH>Автор</TH>
+            <TH>Действие</TH>
+            <TH>Подробности</TH>
+            <TH>Причина</TH>
           </TR>
         </THead>
         <TBody>
           {rows.map((row) => (
             <TR key={row.id}>
               <TD className="whitespace-nowrap text-neutral-500">{formatDateTime(row.createdAt)}</TD>
-              <TD>{row.actorName ?? "System"}</TD>
+              <TD>{row.actorName ?? "Система"}</TD>
               <TD>
                 <Badge tone="neutral">{row.action}</Badge>
               </TD>
