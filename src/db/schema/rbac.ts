@@ -102,7 +102,7 @@ export const userRoles = pgTable(
     roleId: integer("role_id")
       .notNull()
       .references(() => roles.id, { onDelete: "cascade" }),
-    assignedBy: integer("assigned_by").references((): AnyPgColumn => userRoles.userId, {
+    assignedBy: integer("assigned_by").references((): AnyPgColumn => usersRef.id, {
       onDelete: "set null",
     }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
